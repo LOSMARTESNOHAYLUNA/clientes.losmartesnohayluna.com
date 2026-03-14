@@ -632,7 +632,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
   );
 }
 
-function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onUpdateTopic,onAddCustom,onUpdateCustom,onDeleteCustom,defOpen}){
+function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onUpdateTopic,onAddCustom,onUpdateCustom,onDeleteCustom,onApprove,defOpen}){
   const[open,setOpen]=useState(defOpen);
   const allData=[...dataWeek.ig,...dataWeek.li,...(dataWeek.customIg||[]),...(dataWeek.customLi||[])];
   const apr=allData.filter(d=>d.status==='aprobado').length;
@@ -656,7 +656,7 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onUpdateTopic,o
           React.createElement('span',{className:'plat-name'},'Instagram'),
           React.createElement('span',{className:'plat-count'},(planWeek.ig.length+(dataWeek.customIg||[]).length)+' publicaciones')
         ),
-        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{key:'ig'+i,planCfg:cfg,data:{...dataWeek.ig[i],topic:dataWeek.ig[i].topic!==undefined?dataWeek.ig[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('ig',i,f,v)})),
+        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{key:'ig'+i,planCfg:cfg,data:{...dataWeek.ig[i],topic:dataWeek.ig[i].topic!==undefined?dataWeek.ig[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('ig',i,f,v),onApprove})),
         (dataWeek.customIg||[]).map((item,i)=>React.createElement(PostCard,{key:'cig'+i,planCfg:null,data:item,onUpdate:(f,v)=>onUpdateCustom('ig',i,f,v),onDelete:()=>onDeleteCustom('ig',i),onApprove})),
         React.createElement(AddButton,{plat:'ig',onAdd:type=>onAddCustom('ig',type)})
       ),
@@ -666,7 +666,7 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onUpdateTopic,o
           React.createElement('span',{className:'plat-name',style:{color:'#582D81'}},'LinkedIn'),
           React.createElement('span',{className:'plat-count'},(planWeek.li.length+(dataWeek.customLi||[]).length)+' publicaciones')
         ),
-        planWeek.li.map((cfg,i)=>React.createElement(PostCard,{key:'li'+i,planCfg:cfg,data:{...dataWeek.li[i],topic:dataWeek.li[i].topic!==undefined?dataWeek.li[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('li',i,f,v)})),
+        planWeek.li.map((cfg,i)=>React.createElement(PostCard,{key:'li'+i,planCfg:cfg,data:{...dataWeek.li[i],topic:dataWeek.li[i].topic!==undefined?dataWeek.li[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('li',i,f,v),onApprove})),
         (dataWeek.customLi||[]).map((item,i)=>React.createElement(PostCard,{key:'cli'+i,planCfg:null,data:item,onUpdate:(f,v)=>onUpdateCustom('li',i,f,v),onDelete:()=>onDeleteCustom('li',i),onApprove})),
         React.createElement(AddButton,{plat:'li',onAdd:type=>onAddCustom('li',type)})
       )
@@ -742,15 +742,17 @@ function App(){
   const fireToast=useCallback(()=>{
     const m=MESSAGES[Math.floor(Math.random()*MESSAGES.length)];
     const id=Date.now();
-    const newPts=points+m.pts;
-    setPoints(newPts);
-    try{localStorage.setItem('lmnhl_points',String(newPts));}catch(e){}
+    setPoints(prev=>{
+      const newPts=prev+m.pts;
+      try{localStorage.setItem('lmnhl_points',String(newPts));}catch(e){}
+      return newPts;
+    });
     setToasts(prev=>[...prev,{id,emoji:m.emoji,msg:m.msg,pts:m.pts,bye:false}]);
-    toastTimer.current[id]=setTimeout(()=>{
+    setTimeout(()=>{
       setToasts(prev=>prev.map(t=>t.id===id?{...t,bye:true}:t));
       setTimeout(()=>setToasts(prev=>prev.filter(t=>t.id!==id)),500);
     },2800);
-  },[points]);
+  },[]);
 
   // Milestone messages
   const MILESTONES={10:'¡10 posts aprobados! 🎊',25:'¡25 aprobados! Eres increíble 🏅',50:'¡50 posts! Leyenda del contenido 👑',100:'¡100 posts aprobados! LMNHL te ama 💜'};
