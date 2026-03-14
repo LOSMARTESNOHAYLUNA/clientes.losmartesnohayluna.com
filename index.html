@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Clientes — Los Martes No Hay Luna</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --purple:#582D81;--purple-dk:#3a1c57;--purple-lt:#6e3d9a;
+  --lime:#87B229;--pink:#e72078;--slate:#2a1f38;
+  --off:#f8f6f2;--light:#f4f0fa;--mid:#7a6f85;--rule:rgba(88,45,129,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:Poppins,sans-serif;background:var(--off);color:var(--slate);min-height:100vh}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:rgba(248,246,242,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.nav-logo{display:flex;flex-direction:column;text-decoration:none}
+.nav-logo-top{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.nav-logo-name{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple)}
+.nav-right{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid)}
+
+/* HERO */
+.hero{background:var(--purple-dk);padding:9rem 4rem 5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;border:70px solid rgba(135,178,41,.06);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-50px;left:8%;width:240px;height:240px;border-radius:50%;border:40px solid rgba(135,178,41,.04);pointer-events:none}
+.hero-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:3rem;flex-wrap:wrap}
+.hero-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);font-weight:700;display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.hero-eyebrow::before{content:'';width:18px;height:2px;background:var(--lime)}
+.hero h1{font-size:clamp(2.4rem,4.5vw,5rem);font-weight:800;color:#fff;letter-spacing:-.04em;line-height:.95;margin-bottom:.6rem}
+.hero h1 em{color:var(--lime);font-style:italic;font-weight:300}
+.hero-sub{font-size:.82rem;color:rgba(255,255,255,.4);max-width:360px;line-height:1.7}
+.hero-stat{text-align:right}
+.hero-stat-n{font-size:3rem;font-weight:800;color:rgba(255,255,255,.05);letter-spacing:-.04em;line-height:1}
+.hero-stat-l{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:.2rem}
+
+/* SEARCH */
+.search-bar{background:var(--purple);padding:.8rem 4rem;display:flex;align-items:center;gap:1rem;position:sticky;top:60px;z-index:40;border-bottom:1px solid rgba(255,255,255,.07)}
+.search-wrap{display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:.5rem 1rem;flex:1;max-width:400px}
+.search-wrap svg{width:13px;height:13px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:2;flex-shrink:0}
+.search-wrap input{background:none;border:none;outline:none;font-family:Poppins,sans-serif;font-size:.72rem;color:#fff;width:100%;font-weight:300}
+.search-wrap input::placeholder{color:rgba(255,255,255,.3)}
+.filter-pills{display:flex;gap:.5rem}
+.fpill{padding:.4rem .9rem;border:1px solid rgba(255,255,255,.15);background:none;color:rgba(255,255,255,.45);font-family:Poppins,sans-serif;font-size:8px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;font-weight:600;border-radius:2px}
+.fpill.on,.fpill:hover{background:var(--lime);border-color:var(--lime);color:var(--slate)}
+
+/* GRID */
+.grid-section{padding:3.5rem 4rem;max-width:1100px;margin:0 auto}
+.grid-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--rule)}
+.grid-header h2{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);font-weight:500}
+.grid-count{font-size:9px;color:var(--purple);font-weight:700;letter-spacing:.1em}
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+
+/* CLIENT CARD */
+.client-card{background:#fff;border:0.5px solid var(--rule);border-radius:10px;overflow:hidden;transition:transform .2s,box-shadow .2s;text-decoration:none;display:flex;flex-direction:column}
+.client-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(88,45,129,.1)}
+.card-top{padding:1.6rem 1.6rem 1rem;border-left:4px solid var(--purple)}
+.card-top.lime{border-left-color:var(--lime)}
+.card-top.pink{border-left-color:var(--pink)}
+.card-avatar{width:44px;height:44px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;margin-bottom:1rem;flex-shrink:0}
+.card-avatar.lime{background:var(--lime);color:var(--slate)}
+.card-avatar.pink{background:var(--pink)}
+.card-name{font-size:1rem;font-weight:700;color:var(--slate);margin-bottom:.2rem;letter-spacing:-.01em}
+.card-handle{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.8rem}
+.card-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.tag{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:.2rem .6rem;border-radius:2px;background:var(--light);color:var(--purple)}
+.tag.lime{background:#edf7d4;color:#3d6010}
+.tag.pink{background:#fce7f3;color:#b5005a}
+.card-bottom{padding:.8rem 1.6rem 1.2rem;background:var(--light);margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+.card-status{display:flex;align-items:center;gap:.5rem;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#ccc}
+.status-dot.active{background:#4ade80}
+.status-dot.prep{background:#fbbf24}
+.card-arrow{font-size:.7rem;color:var(--purple);font-weight:700;transition:transform .2s}
+.client-card:hover .card-arrow{transform:translateX(4px)}
+
+/* ADD CLIENT */
+.add-card{background:none;border:1px dashed rgba(88,45,129,.2);border-radius:10px;padding:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;cursor:pointer;transition:all .2s;text-decoration:none;min-height:200px}
+.add-card:hover{background:var(--light);border-color:var(--purple)}
+.add-icon-big{width:36px;height:36px;border-radius:50%;background:var(--light);border:1.5px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--purple);transition:all .2s}
+.add-card:hover .add-icon-big{background:var(--purple);color:#fff;border-color:var(--purple)}
+.add-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);font-weight:600}
+
+/* EMPTY STATE */
+.empty{display:none;text-align:center;padding:3rem;color:var(--mid);font-size:.8rem;grid-column:1/-1}
+
+/* HOW IT WORKS */
+.how{background:var(--purple);padding:4rem;margin-top:0}
+.how-inner{max-width:1100px;margin:0 auto}
+.how-eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);font-weight:700;display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.how-eyebrow::before{content:'';width:16px;height:2px;background:var(--lime)}
+.how h2{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:2rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.step{padding:1.5rem;background:rgba(255,255,255,.05);border-radius:8px;border-top:2px solid var(--lime)}
+.step-n{font-size:1.8rem;font-weight:800;color:rgba(255,255,255,.08);line-height:1;margin-bottom:.5rem}
+.step-t{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+.step-d{font-size:.72rem;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* FOOTER */
+footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+.ft-logo{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.ft-links{display:flex;gap:1.5rem}
+.ft-links a{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--lime)}
+.ft-copy{font-size:.6rem;color:rgba(255,255,255,.15);width:100%}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .hero,.grid-section{padding-left:1.5rem;padding-right:1.5rem}
+  .search-bar{padding:.8rem 1.5rem}
+  .how{padding:3rem 1.5rem}
+  .steps{grid-template-columns:1fr}
+  footer{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="nav-logo-top">Portal de clientes</span>
+    <span class="nav-logo-name">Los Martes No Hay Luna</span>
+  </a>
+  <span class="nav-right">clientes.losmartesnohayluna.com</span>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Acceso exclusivo</div>
+      <h1>Tus planes de<br><em>contenidos</em></h1>
+      <p class="hero-sub">Aquí encontrarás tu calendario editorial, los textos aprobados y los enlaces a tus carpetas de diseño. Actualizado cada semana por el equipo de LMNHL.</p>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n" id="totalClients">0</div>
+      <div class="hero-stat-l">Clientes activos</div>
+    </div>
+  </div>
+</header>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="Buscar cliente...">
+  </div>
+  <div class="filter-pills">
+    <button class="fpill on" data-filter="all">Todos</button>
+    <button class="fpill" data-filter="active">Activos</button>
+    <button class="fpill" data-filter="prep">En preparación</button>
+  </div>
+</div>
+
+<section class="grid-section">
+  <div class="grid-header">
+    <h2>Clientes</h2>
+    <span class="grid-count" id="visibleCount">2 clientes</span>
+  </div>
+  <div class="clients-grid" id="clientsGrid">
+
+    <!-- SHEILA -->
+    <a href="./sheila/" class="client-card" data-status="active" data-name="sheila aguilar">
+      <div class="card-top">
+        <div class="card-avatar">SA</div>
+        <div class="card-name">Sheila Aguilar</div>
+        <div class="card-handle">@losmartesnohayluna</div>
+        <div class="card-tags">
+          <span class="tag">Instagram</span>
+          <span class="tag lime">LinkedIn</span>
+          <span class="tag pink">IA & Marketing</span>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-status">
+          <span class="status-dot active"></span>
+          Plan activo · Abr–Dic 2026
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- DOCRYS -->
+    <a href="./docrys/" class="client-card" data-status="prep" data-name="docrys">
+      <div class="card-top lime">
+        <div class="card-avatar lime">DC</div>
+        <div class="card-name">Docrys</div>
+        <div class="card-handle">Cliente LMNHL</div>
+        <div class="card-tags">
+          <span class="tag">Instagram</span>
+          <span class="tag lime">LinkedIn</span>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-status">
+          <span class="status-dot prep"></span>
+          En preparación
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- ADD NEW CLIENT -->
+    <a href="mailto:hola@losmartesnohayluna.com?subject=Nuevo cliente portal" class="add-card">
+      <div class="add-icon-big">+</div>
+      <span class="add-label">Añadir cliente</span>
+    </a>
+
+    <div class="empty" id="emptyState">No hay clientes que coincidan con la búsqueda.</div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="how-inner">
+    <div class="how-eyebrow">Cómo funciona</div>
+    <h2>Tu plan de contenidos siempre actualizado</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-t">Accede a tu carpeta</div>
+        <div class="step-d">Entra en tu espacio personal con el enlace que te enviamos. Solo tú y tu equipo tienen acceso.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-t">Revisa y aprueba</div>
+        <div class="step-d">Encuentra los posts organizados por semana. Edita el texto, añade el enlace a tu diseño y cambia el estado a Aprobado.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-t">Tu equipo lo publica</div>
+        <div class="step-d">El equipo de LMNHL recibe la aprobación y coordina la publicación según el calendario acordado.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="ft-logo">Los Martes No Hay Luna</span>
+  <div class="ft-links">
+    <a href="https://losmartesnohayluna.com">Web</a>
+    <a href="mailto:hola@losmartesnohayluna.com">hola@losmartesnohayluna.com</a>
+    <a href="tel:34919997726">91 999 77 26</a>
+  </div>
+  <p class="ft-copy">© 2026 Los Martes No Hay Luna · Portal privado de clientes · Leganés, Madrid</p>
+</footer>
+
+<script>
+const cards = document.querySelectorAll('.client-card');
+const searchInput = document.getElementById('searchInput');
+const filterPills = document.querySelectorAll('.fpill');
+const visibleCount = document.getElementById('visibleCount');
+const emptyState = document.getElementById('emptyState');
+const totalClients = document.getElementById('totalClients');
+
+const activeCount = [...cards].filter(c=>c.dataset.status==='active').length;
+totalClients.textContent = activeCount;
+
+let currentFilter = 'all';
+
+function updateVisible(){
+  const q = searchInput.value.toLowerCase().trim();
+  let shown = 0;
+  cards.forEach(card => {
+    const name = card.dataset.name || '';
+    const status = card.dataset.status || '';
+    const matchSearch = !q || name.includes(q);
+    const matchFilter = currentFilter==='all' || status===currentFilter;
+    const show = matchSearch && matchFilter;
+    card.style.display = show ? '' : 'none';
+    if(show) shown++;
+  });
+  emptyState.style.display = shown===0 ? 'block' : 'none';
+  visibleCount.textContent = shown + (shown===1?' cliente':' clientes');
+}
+
+searchInput.addEventListener('input', updateVisible);
+filterPills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    filterPills.forEach(p=>p.classList.remove('on'));
+    pill.classList.add('on');
+    currentFilter = pill.dataset.filter;
+    updateVisible();
+  });
+});
+
+updateVisible();
+</script>
+</body>
+</html>
