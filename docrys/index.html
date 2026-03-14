@@ -3,50 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Docrys & DC — Plan Instagram 2026</title>
+<title>Docrys & DC — Plan Digital 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;min-height:100vh}
 
-/* HEADER */
+/* ── HEADER ── */
 .hdr{background:#0d0d0d;padding:14px 16px 0;position:sticky;top:0;z-index:50}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;flex-wrap:wrap}
 .hdr-brand{display:flex;flex-direction:column}
 .hdr-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#c9a84c;font-weight:700;margin-bottom:2px}
 .hdr-title{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2}
-.hdr-stats{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.stat{text-align:center;min-width:40px}
-.stat-n{font-size:18px;font-weight:700;line-height:1}
+.hdr-stats{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stat{text-align:center;min-width:36px}
+.stat-n{font-size:17px;font-weight:700;line-height:1}
 .stat-l{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:2px}
 .save-badge{font-size:10px;padding:3px 8px;border-radius:10px;letter-spacing:.06em;background:rgba(255,255,255,.08)}
+.pts-badge{display:flex;align-items:center;gap:5px;background:rgba(255,110,180,.12);border:1.5px solid #ff6eb4;padding:4px 10px;border-radius:20px}
+.pts-n{font-size:15px;font-weight:800;color:#ff6eb4;line-height:1}
+.pts-l{font-size:9px;font-weight:700;color:rgba(255,110,180,.7);letter-spacing:.1em;text-transform:uppercase}
 
-/* POINTS BADGE */
-.pts-badge{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#c9a84c,#f0c96a);padding:5px 12px;border-radius:20px;cursor:pointer}
-.pts-n{font-size:14px;font-weight:800;color:#0d0d0d;line-height:1}
-.pts-l{font-size:9px;font-weight:700;color:rgba(0,0,0,.6);letter-spacing:.1em;text-transform:uppercase}
-.pts-icon{font-size:16px}
+/* ── SECTION SWITCHER ── */
+.section-switcher{display:flex;gap:6px;padding:10px 0 0;overflow-x:auto;scrollbar-width:none}
+.section-switcher::-webkit-scrollbar{display:none}
+.sec-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid rgba(255,255,255,.12);border-radius:8px 8px 0 0;background:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);transition:all .2s;white-space:nowrap;border-bottom:none}
+.sec-btn:hover{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.25)}
+.sec-btn.on{background:#f5f0e8;color:#1a1205;border-color:#c9a84c;border-bottom-color:#f5f0e8}
+.sec-btn.on.seo{background:#f5f0e8;color:#1a4a48}
+.sec-btn.on.pub{background:#f5f0e8;color:#3a0066}
+.sec-icon{font-size:14px}
 
-/* LEVEL BAR */
-.level-bar{background:rgba(255,255,255,.08);border-radius:4px;height:4px;margin-bottom:2px;overflow:hidden;width:80px}
-.level-fill{height:100%;background:linear-gradient(90deg,#c9a84c,#f0c96a);border-radius:4px;transition:width .5s ease}
-.level-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.08em}
-
-.tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+/* ── MONTH TABS ── */
+.tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;background:#0d0d0d;padding:0 0 0}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:9px 14px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab{padding:8px 13px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
 .tab.on{color:#c9a84c;border-bottom-color:#c9a84c}
-.prog{height:3px;background:rgba(0,0,0,.1)}
-.prog-bar{height:3px;background:linear-gradient(90deg,#c9a84c,#f0c96a);transition:width .4s}
+.tab.on.seo-tab{color:#2c8e8a;border-bottom-color:#2c8e8a}
+.tab.on.pub-tab{color:#a855f7;border-bottom-color:#a855f7}
 
-/* BODY */
-.body{padding:16px;max-width:860px;margin:0 auto}
+.prog{height:3px;background:rgba(0,0,0,.1)}
+.prog-bar{height:3px;transition:width .4s}
+.prog-bar.rrss{background:linear-gradient(90deg,#c9a84c,#f0c96a)}
+.prog-bar.seo{background:linear-gradient(90deg,#2c8e8a,#4fd1cd)}
+.prog-bar.pub{background:linear-gradient(90deg,#a855f7,#d8b4fe)}
+
+/* ── BODY ── */
+.body{padding:16px;max-width:900px;margin:0 auto}
 .mth-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.mth-accent{width:4px;height:28px;background:#c9a84c;border-radius:2px;flex-shrink:0}
+.mth-accent{width:4px;height:28px;border-radius:2px;flex-shrink:0}
+.mth-accent.rrss{background:#c9a84c}
+.mth-accent.seo{background:#2c8e8a}
+.mth-accent.pub{background:#a855f7}
 .mth-name{font-size:18px;font-weight:700;color:#0d0d0d;letter-spacing:-.02em}
 .mth-sub{font-size:11px;color:#6b5f4e;letter-spacing:.06em;margin-top:1px}
 
-/* WEEK */
+/* ── WEEK (RRSS) ── */
 .week{border:1px solid rgba(201,168,76,.3);border-radius:10px;overflow:hidden;background:#fff;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .week-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;border:none;background:none;width:100%;font-family:inherit;gap:10px;transition:background .2s}
 .week-hdr:hover{background:#f5f0e8}
@@ -62,494 +74,422 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 .week-hdr.on .wbadge.tot{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4)}
 .wk-arrow{font-size:11px;color:#6b5f4e;transition:transform .25s;flex-shrink:0}
 .week-hdr.on .wk-arrow{color:rgba(255,255,255,.4);transform:rotate(180deg)}
-
-/* WEEK BODY */
 .week-body{padding:14px}
 .plat-hdr{display:flex;align-items:center;gap:6px;padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid #c9a84c}
 .plat-name{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#8b6914}
 .plat-count{font-size:10px;color:#6b5f4e;margin-left:auto;letter-spacing:.06em}
 .posts-grid{display:flex;flex-direction:column;gap:12px}
 
-/* CARD */
-.card{background:#fafaf8;border:1px solid rgba(201,168,76,.2);border-radius:10px;border-left:4px solid #ccc;padding:13px 14px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s}
-.card:hover{box-shadow:0 2px 12px rgba(201,168,76,.15)}
+/* ── CARD (shared) ── */
+.card{background:#fafaf8;border:1px solid rgba(201,168,76,.2);border-radius:10px;border-left:4px solid #ccc;padding:13px 14px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.card.approved{border-left-color:#22c55e !important;background:linear-gradient(135deg,#f0fdf4,#fafaf8)}
+.card.seo-card{border-color:rgba(44,142,138,.2)}
+.card.pub-card{border-color:rgba(168,85,247,.2)}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .card-badges{display:flex;flex-direction:column;gap:3px}
 .type-badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:4px;align-self:flex-start}
 .pillar-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8c7a68;font-weight:500}
 .st-btn{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:12px;cursor:pointer;border:1.5px solid;white-space:nowrap;flex-shrink:0;font-family:inherit;transition:all .15s}
 .st-btn:hover{transform:scale(1.05)}
-
-/* FORM FIELDS */
 .field-label{font-size:10px;color:#8c7a68;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase;display:block}
-.topic-input{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.25);border-radius:6px;font-family:inherit;font-size:13px;font-weight:500;color:#1a1205;line-height:1.5;outline:none;background:#f5f0e8;transition:all .2s}
+.topic-input{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.25);border-radius:6px;font-family:inherit;font-size:13px;font-weight:500;color:#1a1205;outline:none;background:#f5f0e8;transition:all .2s}
 .topic-input:focus{border-color:#c9a84c;background:#fff;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
-.post-textarea{width:100%;min-height:90px;padding:10px 12px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:12px;color:#1a1205;line-height:1.7;resize:vertical;outline:none;background:#fff;transition:all .2s}
+.topic-input.seo{border-color:rgba(44,142,138,.3);}
+.topic-input.seo:focus{border-color:#2c8e8a;box-shadow:0 0 0 3px rgba(44,142,138,.1)}
+.topic-input.pub{border-color:rgba(168,85,247,.3);}
+.topic-input.pub:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.1)}
+.post-textarea{width:100%;min-height:80px;padding:10px 12px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:12px;color:#1a1205;line-height:1.7;resize:vertical;outline:none;background:#fff;transition:all .2s}
 .post-textarea:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .post-textarea::placeholder{color:#bbb;font-size:11px}
 .firma-box{background:#0d0d0d;border-radius:6px;padding:8px 12px;font-size:11px;color:#c9a84c;letter-spacing:.04em;line-height:1.6;user-select:all}
 .hashtag-textarea{width:100%;min-height:44px;padding:9px 12px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:11px;color:#8b6914;line-height:1.6;resize:vertical;outline:none;background:#fff;transition:all .2s}
 .hashtag-textarea:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .hashtag-textarea::placeholder{color:#ccc;font-size:11px}
-
-/* DATE + LINK — full width stacked */
-.date-input{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:12px;color:#1a1205;outline:none;background:#fff;transition:all .2s}
-.date-input:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .link-input{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:12px;color:#8c7a68;outline:none;background:#fff;transition:all .2s}
 .link-input:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .link-input::placeholder{color:#ccc}
+.link-input.seo:focus{border-color:#2c8e8a;box-shadow:0 0 0 3px rgba(44,142,138,.1)}
+.link-input.pub:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.1)}
+.date-input{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.18);border-radius:6px;font-family:inherit;font-size:12px;color:#1a1205;outline:none;background:#fff;transition:all .2s}
+.date-input:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .fields-stack{display:flex;flex-direction:column;gap:10px}
-
-.card-footer{display:flex;justify-content:flex-end}
 .del-btn{font-size:10px;color:#ddd;background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 6px;transition:color .15s;border-radius:4px}
 .del-btn:hover{color:#c0392b;background:#fef2f2}
 
-/* ADD BUTTON */
+/* ── ADD BUTTON ── */
 .add-post-wrap{position:relative;margin-top:12px}
 .add-post-btn{display:flex;align-items:center;gap:7px;width:100%;padding:11px 14px;border:1.5px dashed rgba(201,168,76,.35);border-radius:8px;background:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8b6914;transition:all .2s}
 .add-post-btn:hover{background:#f5f0e8;border-color:#c9a84c}
-.add-icon{width:20px;height:20px;border-radius:50%;background:#c9a84c;color:#0d0d0d;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;line-height:1}
+.add-post-btn.seo{border-color:rgba(44,142,138,.35);color:#1a4a48}
+.add-post-btn.seo:hover{background:#f0fdfb;border-color:#2c8e8a}
+.add-post-btn.pub{border-color:rgba(168,85,247,.35);color:#3a0066}
+.add-post-btn.pub:hover{background:#faf5ff;border-color:#a855f7}
+.add-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;line-height:1}
+.add-icon.rrss{background:#c9a84c;color:#0d0d0d}
+.add-icon.seo{background:#2c8e8a;color:#fff}
+.add-icon.pub{background:#a855f7;color:#fff}
 .dropdown{position:absolute;bottom:calc(100% + 6px);left:0;z-index:200;background:#fff;border:1px solid rgba(201,168,76,.3);border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.15);min-width:200px;overflow:hidden}
 .dd-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#8c7a68;padding:10px 14px 7px;border-bottom:1px solid rgba(201,168,76,.15)}
 .dd-opt{display:flex;align-items:center;gap:10px;width:100%;padding:10px 16px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:#1a1205;text-align:left;transition:background .15s}
 .dd-opt:hover{background:#f5f0e8}
 .dd-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 
-/* FOOTER */
+/* ── SEO SECTION ── */
+.seo-section{display:flex;flex-direction:column;gap:16px}
+.seo-month-block{background:#fff;border:1px solid rgba(44,142,138,.25);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.seo-month-hdr{background:#0d3a38;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.seo-month-title{font-size:13px;font-weight:700;color:#4fd1cd;letter-spacing:.08em;text-transform:uppercase}
+.seo-report-row{display:flex;align-items:center;gap:8px}
+.seo-report-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.seo-report-input{padding:5px 10px;border:1px solid rgba(77,209,205,.3);border-radius:6px;background:rgba(255,255,255,.07);font-family:inherit;font-size:11px;color:#4fd1cd;outline:none;width:200px;transition:all .2s}
+.seo-report-input:focus{border-color:#4fd1cd;background:rgba(255,255,255,.12)}
+.seo-report-input::placeholder{color:rgba(77,209,205,.3)}
+.seo-report-link{font-size:10px;padding:5px 10px;border:1px solid #4fd1cd;border-radius:6px;background:none;color:#4fd1cd;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
+.seo-report-link:hover{background:rgba(77,209,205,.15)}
+.seo-body{padding:14px;display:flex;flex-direction:column;gap:12px}
+.seo-card{background:#f8fffe;border:1px solid rgba(44,142,138,.18);border-radius:10px;border-left:4px solid #2c8e8a;padding:13px 14px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s}
+.seo-card:hover{box-shadow:0 2px 10px rgba(44,142,138,.1)}
+.seo-card.approved{border-left-color:#22c55e;background:linear-gradient(135deg,#f0fdf4,#f8fffe)}
+.seo-type-badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:4px;background:#d8f0ee;color:#1a4a48}
+.seo-links-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.seo-links-row{grid-template-columns:1fr}}
+
+/* ── PUBLICIDAD SECTION ── */
+.pub-section{display:flex;flex-direction:column;gap:16px}
+.pub-plan-banner{background:#1a0033;border:1.5px solid rgba(168,85,247,.4);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.pub-plan-icon{font-size:20px}
+.pub-plan-info{flex:1}
+.pub-plan-title{font-size:12px;font-weight:700;color:#d8b4fe;letter-spacing:.1em;text-transform:uppercase}
+.pub-plan-sub{font-size:10px;color:rgba(216,180,254,.5);margin-top:2px}
+.pub-plan-input{padding:6px 12px;border:1px solid rgba(168,85,247,.4);border-radius:6px;background:rgba(255,255,255,.07);font-family:inherit;font-size:11px;color:#d8b4fe;outline:none;min-width:180px;flex:1;max-width:280px;transition:all .2s}
+.pub-plan-input:focus{border-color:#a855f7;background:rgba(255,255,255,.12)}
+.pub-plan-input::placeholder{color:rgba(216,180,254,.3)}
+.pub-plan-btn{font-size:10px;padding:6px 12px;border:1px solid #a855f7;border-radius:6px;background:none;color:#d8b4fe;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
+.pub-plan-btn:hover{background:rgba(168,85,247,.2)}
+.pub-month-block{background:#fff;border:1px solid rgba(168,85,247,.2);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.pub-month-hdr{background:#1a0033;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pub-month-title{font-size:13px;font-weight:700;color:#d8b4fe;letter-spacing:.08em;text-transform:uppercase}
+.pub-report-row{display:flex;align-items:center;gap:8px}
+.pub-report-label{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.pub-report-input{padding:5px 10px;border:1px solid rgba(168,85,247,.3);border-radius:6px;background:rgba(255,255,255,.07);font-family:inherit;font-size:11px;color:#d8b4fe;outline:none;width:200px;transition:all .2s}
+.pub-report-input:focus{border-color:#a855f7;background:rgba(255,255,255,.12)}
+.pub-report-input::placeholder{color:rgba(216,180,254,.3)}
+.pub-report-link{font-size:10px;padding:5px 10px;border:1px solid #a855f7;border-radius:6px;background:none;color:#d8b4fe;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
+.pub-report-link:hover{background:rgba(168,85,247,.15)}
+.pub-body{padding:14px;display:flex;flex-direction:column;gap:12px}
+.pub-card{background:#fdf8ff;border:1px solid rgba(168,85,247,.15);border-radius:10px;border-left:4px solid #a855f7;padding:13px 14px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s}
+.pub-card:hover{box-shadow:0 2px 10px rgba(168,85,247,.1)}
+.pub-card.approved{border-left-color:#22c55e;background:linear-gradient(135deg,#f0fdf4,#fdf8ff)}
+.pub-platform-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:4px}
+.pub-platform-badge.meta{background:#e8f0fe;color:#1a56db}
+.pub-platform-badge.google{background:#fef3dc;color:#8b4513}
+.pub-platform-badge.tiktok{background:#f0f0f0;color:#000}
+.pub-platform-badge.otras{background:#f5e8ff;color:#6b00cc}
+.pub-links-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.pub-links-row{grid-template-columns:1fr}}
+.platform-select{width:100%;padding:9px 11px;border:1.5px solid rgba(168,85,247,.25);border-radius:6px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#f8f5ff;transition:all .2s;cursor:pointer}
+.platform-select:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.1)}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.toast{position:absolute;background:#0d0d0d;color:#ff6eb4;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;padding:14px 28px;border-radius:40px;border:2px solid #ff6eb4;box-shadow:0 8px 40px rgba(255,110,180,.35);white-space:nowrap;letter-spacing:.03em;text-align:center;animation:toastFloat 3s cubic-bezier(.22,.61,.36,1) forwards}
+.toast-sub{display:block;font-size:12px;font-weight:600;color:rgba(255,110,180,.7);margin-top:2px;letter-spacing:.06em}
+@keyframes toastFloat{
+  0%{opacity:0;transform:translateY(40px) scale(.88)}
+  12%{opacity:1;transform:translateY(0px) scale(1.04)}
+  20%{opacity:1;transform:translateY(0px) scale(1)}
+  75%{opacity:1;transform:translateY(-30px) scale(1)}
+  100%{opacity:0;transform:translateY(-80px) scale(.94)}
+}
+
+/* ── FOOTER ── */
 .footer{margin-top:20px;padding:14px 16px;background:#0d0d0d;border-radius:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .ft-l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25)}
-.ft-r{font-size:11px;color:#c9a84c;letter-spacing:.08em}
+.ft-r{font-size:11px;color:#ff6eb4;letter-spacing:.08em}
 
-/* FLOATING TOAST */
-.toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
-.toast{background:#0d0d0d;color:#c9a84c;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:30px;border:1.5px solid #c9a84c;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:toastUp .6s ease forwards;white-space:nowrap;letter-spacing:.04em}
-@keyframes toastUp{
-  0%{opacity:0;transform:translateY(20px) scale(.92)}
-  20%{opacity:1;transform:translateY(0) scale(1)}
-  70%{opacity:1;transform:translateY(-6px) scale(1)}
-  100%{opacity:0;transform:translateY(-30px) scale(.95)}
-}
-
-/* CONFETTI */
-.confetti-piece{position:fixed;top:0;width:10px;height:10px;border-radius:2px;animation:confettiFall 1.2s ease-in forwards;pointer-events:none;z-index:9998}
-@keyframes confettiFall{
-  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
-  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
-}
-
-/* POINTS PANEL */
-.pts-panel{background:#0d0d0d;border:1.5px solid #c9a84c;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.pts-big{font-size:32px;font-weight:800;color:#c9a84c;line-height:1}
-.pts-info{flex:1}
-.pts-info-title{font-size:12px;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase}
-.pts-info-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
-.level-wrap{display:flex;flex-direction:column;gap:4px;min-width:120px}
-.level-badge{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:10px}
-
-/* APPROVED CARD GLOW */
-.card.approved{border-left-color:#22c55e !important;background:linear-gradient(135deg,#f0fdf4,#fafaf8)}
-
-@media(max-width:500px){
-  .hdr-title{font-size:14px}
-  .pts-big{font-size:26px}
-  .stat-n{font-size:16px}
-}
+@media(max-width:500px){.hdr-title{font-size:14px}.stat-n{font-size:15px}}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <div class="toast-container" id="toastContainer"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script>
 const {useState,useEffect,useRef,useCallback}=React;
 
-// ── CONSTANTS ──────────────────────────────────────────────────────────
+// ── SHARED CONSTANTS ───────────────────────────────────────────────────
 const MONTHS=[
-  {key:'2026-04',name:'Abril',weeks:['1–7 Abr','8–14 Abr','15–21 Abr','22–30 Abr']},
-  {key:'2026-05',name:'Mayo',weeks:['1–7 May','8–14 May','15–21 May','22–31 May']},
-  {key:'2026-06',name:'Junio',weeks:['1–7 Jun','8–14 Jun','15–21 Jun','22–30 Jun']},
-  {key:'2026-07',name:'Julio',weeks:['1–7 Jul','8–14 Jul','15–21 Jul','22–31 Jul']},
-  {key:'2026-08',name:'Agosto',weeks:['1–7 Ago','8–14 Ago','15–21 Ago','22–31 Ago']},
-  {key:'2026-09',name:'Sep',weeks:['1–7 Sep','8–14 Sep','15–21 Sep','22–30 Sep']},
-  {key:'2026-10',name:'Oct',weeks:['1–7 Oct','8–14 Oct','15–21 Oct','22–31 Oct']},
-  {key:'2026-11',name:'Nov',weeks:['1–7 Nov','8–14 Nov','15–21 Nov','22–30 Nov']},
-  {key:'2026-12',name:'Dic',weeks:['1–7 Dic','8–14 Dic','15–21 Dic','22–31 Dic']},
+  {key:'2026-04',name:'Abril',short:'Abr',weeks:['1–7 Abr','8–14 Abr','15–21 Abr','22–30 Abr']},
+  {key:'2026-05',name:'Mayo',short:'May',weeks:['1–7 May','8–14 May','15–21 May','22–31 May']},
+  {key:'2026-06',name:'Junio',short:'Jun',weeks:['1–7 Jun','8–14 Jun','15–21 Jun','22–30 Jun']},
+  {key:'2026-07',name:'Julio',short:'Jul',weeks:['1–7 Jul','8–14 Jul','15–21 Jul','22–31 Jul']},
+  {key:'2026-08',name:'Agosto',short:'Ago',weeks:['1–7 Ago','8–14 Ago','15–21 Ago','22–31 Ago']},
+  {key:'2026-09',name:'Sep',short:'Sep',weeks:['1–7 Sep','8–14 Sep','15–21 Sep','22–30 Sep']},
+  {key:'2026-10',name:'Oct',short:'Oct',weeks:['1–7 Oct','8–14 Oct','15–21 Oct','22–31 Oct']},
+  {key:'2026-11',name:'Nov',short:'Nov',weeks:['1–7 Nov','8–14 Nov','15–21 Nov','22–30 Nov']},
+  {key:'2026-12',name:'Dic',short:'Dic',weeks:['1–7 Dic','8–14 Dic','15–21 Dic','22–31 Dic']},
 ];
 
 const FIRMA='📞 91 307 12 07  |  📲 WhatsApp: 609 454 432  |  🌐 www.docrysdc.es';
 const DEFAULT_HASHTAGS='#DocrysDC #DiseñoDeInteriores #InteriorismoMadrid';
 
-const TC={
+const TOAST_MSGS=[
+  ['🚀 ¡Marchando publicación!','+5 puntos'],
+  ['🔥 ¡Eso es calidad pura!','+5 puntos'],
+  ['✨ ¡Post aprobado!','+5 puntos'],
+  ['💎 ¡Docrys style!','+5 puntos'],
+  ['⚡ ¡Listo para brillar!','+5 puntos'],
+  ['🎯 ¡Directo al target!','+5 puntos'],
+  ['🏅 ¡Reina del contenido!','+25 puntos — BONUS'],
+  ['👑 ¡El feed te lo agradecerá!','+5 puntos'],
+  ['🌟 ¡Imparable!','+5 puntos'],
+  ['🏆 ¡Contenido de lujo!','+5 puntos'],
+];
+let _toastCount=0;
+function showToast(){
+  const c=document.getElementById('toastContainer');
+  if(!c)return;
+  const idx=_toastCount%TOAST_MSGS.length; _toastCount++;
+  const[msg,sub]=TOAST_MSGS[idx];
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML=msg+'<span class="toast-sub">'+sub+'</span>';
+  c.appendChild(el);
+  setTimeout(()=>el.remove(),3000);
+}
+
+const LS_PFX='docrys26v3_';
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS_PFX+k)||'null');}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(LS_PFX+k,JSON.stringify(v));}catch(e){}}
+
+// ── RRSS DATA ──────────────────────────────────────────────────────────
+const TC_RRSS={
   reel:{label:'Reel',color:'#6b4a00',bg:'#fef3dc',border:'#c9a84c'},
   carrusel:{label:'Carrusel',color:'#3c2800',bg:'#f5e8c4',border:'#a07820'},
   historia:{label:'Historia',color:'#3c3028',bg:'#ede8e0',border:'#8c7a68'},
   blog:{label:'Blog + Carrusel',color:'#1a4a48',bg:'#d8f0ee',border:'#2c8e8a'},
 };
-
 const SC={
   pendiente:{label:'Pendiente',bg:'#f5f0e8',color:'#6b5f4e',bc:'rgba(201,168,76,.4)',next:'revision'},
   revision:{label:'En revisión',bg:'#fffbeb',color:'#92400e',bc:'#fcd34d',next:'aprobado'},
   aprobado:{label:'✓ Aprobado',bg:'#f0fdf4',color:'#166534',bc:'#86efac',next:'pendiente'},
 };
-
-const ADD_TYPES=[
+const ADD_TYPES_RRSS=[
   {type:'reel',label:'Reel',dot:'#c9a84c'},
   {type:'carrusel',label:'Carrusel',dot:'#a07820'},
   {type:'historia',label:'Historia',dot:'#8c7a68'},
   {type:'blog',label:'Blog + Carrusel',dot:'#2c8e8a'},
 ];
 
-const TOAST_MESSAGES=[
-  ['🚀 ¡Marchando publicación!','+10 puntos'],
-  ['🔥 ¡Eso es calidad!','+10 puntos'],
-  ['✨ ¡Contenido aprobado!','+10 puntos'],
-  ['🏆 ¡Un post más hacia el éxito!','+10 puntos'],
-  ['👑 ¡Increíble! ¡Ya falta menos!','+10 puntos'],
-  ['💎 ¡Docrys approve!','+10 puntos'],
-  ['⚡ ¡Post listo para brillar!','+10 puntos'],
-  ['🌟 ¡El feed te lo agradecerá!','+10 puntos'],
-  ['🎯 ¡Directo al target!','+10 puntos'],
-  ['🏅 ¡Eres la directora creativa!','+15 puntos — BONUS'],
-];
-
-const LEVELS=[
-  {min:0,max:49,name:'Empezando 🌱',color:'#8c7a68',bg:'rgba(140,122,104,.15)'},
-  {min:50,max:149,name:'En marcha 🔑',color:'#8b6914',bg:'rgba(139,105,20,.15)'},
-  {min:150,max:299,name:'Comprometida 🔥',color:'#c9a84c',bg:'rgba(201,168,76,.2)'},
-  {min:300,max:499,name:'Pro del contenido ⭐',color:'#d4af37',bg:'rgba(212,175,55,.2)'},
-  {min:500,max:799,name:'Reina del feed 👑',color:'#f0c96a',bg:'rgba(240,201,106,.25)'},
-  {min:800,max:99999,name:'Leyenda del interiorismo 💎',color:'#fff',bg:'rgba(255,255,255,.15)'},
-];
-
-function getLevel(pts){return LEVELS.find(l=>pts>=l.min&&pts<=l.max)||LEVELS[0];}
-
-// ── GAMIFICATION ──────────────────────────────────────────────────────
-let toastIdx=0;
-function showToast(msg,sub){
-  const container=document.getElementById('toastContainer');
-  if(!container)return;
-  const el=document.createElement('div');
-  el.className='toast';
-  el.textContent=msg+(sub?' — '+sub:'');
-  container.appendChild(el);
-  // confetti
-  for(let i=0;i<18;i++){
-    const c=document.createElement('div');
-    c.className='confetti-piece';
-    c.style.left=(10+Math.random()*80)+'vw';
-    c.style.background=['#c9a84c','#f0c96a','#fff','#0d0d0d','#a07820'][Math.floor(Math.random()*5)];
-    c.style.animationDelay=(Math.random()*.4)+'s';
-    c.style.animationDuration=(.8+Math.random()*.6)+'s';
-    c.style.width=(6+Math.random()*8)+'px';
-    c.style.height=(6+Math.random()*8)+'px';
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),1500);
-  }
-  setTimeout(()=>el.remove(),2200);
-}
-
-// ── PLAN DATA ──────────────────────────────────────────────────────────
-const PLAN={
+const PLAN_RRSS={
 '2026-04':[
-  {ig:[
-    {type:'reel',topic:'Proyecto cocina Santos Cashmere + Roble Natural: del render al resultado final',pillar:'Proyecto'},
-    {type:'carrusel',topic:'5 tendencias en cocinas de diseño que marcarán 2026',pillar:'Tendencias'},
-    {type:'historia',topic:'Encimera Neolith Himalaya Crystal: textura, luz y elegancia en cada detalle',pillar:'Materiales'},
-    {type:'blog',topic:'Cómo elegir la distribución perfecta para tu cocina: guía completa',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Timelapse de montaje: así nace una cocina Santos en Docrys & DC',pillar:'Marca'},
-    {type:'carrusel',topic:'Neolith vs Dekton vs Silestone: qué encimera elegir según tu proyecto',pillar:'Materiales'},
-    {type:'historia',topic:'¿Sabías que tardamos más de 30 horas diseñando cada proyecto antes de ejecutarlo?',pillar:'Marca'},
-    {type:'reel',topic:'Proyecto salón Boadilla del Monte: palillería, madera y luz estratégica',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Antes y después: reforma integral de cocina en Madrid — mismo espacio, otra vida',pillar:'Proyecto'},
-    {type:'carrusel',topic:'La importancia de la iluminación en diseño de interiores: 6 claves',pillar:'Educativo'},
-    {type:'historia',topic:'Grifería Veravent: diseño que se nota en cada uso del día a día',pillar:'Materiales'},
-    {type:'blog',topic:'Proyectos integrales vs reformas parciales: cuándo elegir cada opción',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Así diseñamos cocinas: de la primera reunión al proyecto 3D en Docrys & DC',pillar:'Servicios'},
-    {type:'carrusel',topic:'Cocinas con isla: diseño, funcionalidad y las preguntas que debes hacerte antes',pillar:'Tendencias'},
-    {type:'historia',topic:'El equipo Docrys & DC: 40 profesionales detrás de cada proyecto',pillar:'Marca'},
-    {type:'reel',topic:'Proyecto vestidor a medida: optimización, materiales y resultado final',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Cocina Santos Cashmere + Roble Natural: del render al resultado final',pillar:'Proyecto'},{type:'carrusel',topic:'5 tendencias en cocinas de diseño que marcarán 2026',pillar:'Tendencias'},{type:'historia',topic:'Encimera Neolith Himalaya Crystal: textura, luz y elegancia',pillar:'Materiales'},{type:'blog',topic:'Cómo elegir la distribución perfecta para tu cocina: guía completa',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Timelapse de montaje: así nace una cocina Santos en Docrys & DC',pillar:'Marca'},{type:'carrusel',topic:'Neolith vs Dekton vs Silestone: qué encimera elegir',pillar:'Materiales'},{type:'historia',topic:'¿Sabías que tardamos +30h diseñando cada proyecto antes de ejecutarlo?',pillar:'Marca'},{type:'reel',topic:'Proyecto salón Boadilla: palillería, madera y luz estratégica',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Antes y después: reforma integral de cocina en Madrid',pillar:'Proyecto'},{type:'carrusel',topic:'La importancia de la iluminación en diseño de interiores: 6 claves',pillar:'Educativo'},{type:'historia',topic:'Grifería Veravent: diseño que se nota en cada uso del día a día',pillar:'Materiales'},{type:'blog',topic:'Proyectos integrales vs reformas parciales: cuándo elegir cada opción',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Así diseñamos cocinas: de la primera reunión al proyecto 3D',pillar:'Servicios'},{type:'carrusel',topic:'Cocinas con isla: diseño, funcionalidad y las preguntas previas',pillar:'Tendencias'},{type:'historia',topic:'El equipo Docrys & DC: 40 profesionales detrás de cada proyecto',pillar:'Marca'},{type:'reel',topic:'Proyecto vestidor a medida: optimización, materiales y resultado',pillar:'Proyecto'}]},
 ],
 '2026-05':[
-  {ig:[
-    {type:'reel',topic:'Reforma de cocina en verde salvia con Neolith Himalaya: materiales y resultado',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Papel pintado en cocina: por qué funciona y cómo elegir el correcto',pillar:'Educativo'},
-    {type:'historia',topic:'Electrodomésticos Miele: tecnología que transforma la experiencia culinaria',pillar:'Materiales'},
-    {type:'blog',topic:'Cómo crear una cocina abierta al salón sin perder funcionalidad ni estilo',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Cocina en tonos blancos y madera: minimalismo cálido que enamora',pillar:'Proyecto'},
-    {type:'carrusel',topic:'¿Por qué necesitas un interiorista profesional? 5 beneficios reales',pillar:'Servicios'},
-    {type:'historia',topic:'Encimera Dekton REM en acabado Velvet: sofisticación y resistencia',pillar:'Materiales'},
-    {type:'reel',topic:'Proyecto baño principal: materiales premium y diseño que invita al descanso',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'De diseño 3D a realidad: cocina Santos en Cashmere y Nogal Tierra',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Tipos de apertura en cocinas Santos: tiradores, gola y push — cuál elegir',pillar:'Educativo'},
-    {type:'historia',topic:'Showrooms Docrys & DC: 4 espacios en Madrid para inspirarte',pillar:'Servicios'},
-    {type:'blog',topic:'Los mejores materiales para encimeras de cocina en 2026',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Salón con revestimiento y madera: diseño para zona de estufa con carácter',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Tendencias en baños de lujo: materiales, formatos y acabados para 2026',pillar:'Tendencias'},
-    {type:'historia',topic:'Campanas Falmec: diseño que equilibra estética y rendimiento',pillar:'Materiales'},
-    {type:'reel',topic:'Habitación principal con vestidor integrado: armonía y orden perfectos',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Cocina en verde salvia con Neolith Himalaya: materiales y resultado',pillar:'Proyecto'},{type:'carrusel',topic:'Papel pintado en cocina: por qué funciona y cómo elegir',pillar:'Educativo'},{type:'historia',topic:'Electrodomésticos Miele: tecnología que transforma la experiencia culinaria',pillar:'Materiales'},{type:'blog',topic:'Cocina abierta al salón sin perder funcionalidad ni estilo',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Cocina en tonos blancos y madera: minimalismo cálido',pillar:'Proyecto'},{type:'carrusel',topic:'¿Por qué necesitas un interiorista profesional? 5 beneficios',pillar:'Servicios'},{type:'historia',topic:'Encimera Dekton REM en acabado Velvet: sofisticación y resistencia',pillar:'Materiales'},{type:'reel',topic:'Proyecto baño principal: materiales premium y diseño',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'De diseño 3D a realidad: cocina Santos en Cashmere y Nogal Tierra',pillar:'Proyecto'},{type:'carrusel',topic:'Tipos de apertura Santos: tiradores, gola y push — cuál elegir',pillar:'Educativo'},{type:'historia',topic:'Showrooms Docrys & DC: 4 espacios en Madrid para inspirarte',pillar:'Servicios'},{type:'blog',topic:'Los mejores materiales para encimeras de cocina en 2026',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Salón con revestimiento y madera: diseño para zona de estufa',pillar:'Proyecto'},{type:'carrusel',topic:'Tendencias en baños de lujo: materiales y acabados para 2026',pillar:'Tendencias'},{type:'historia',topic:'Campanas Falmec: diseño que equilibra estética y rendimiento',pillar:'Materiales'},{type:'reel',topic:'Habitación principal con vestidor integrado: armonía y orden',pillar:'Proyecto'}]},
 ],
 '2026-06':[
-  {ig:[
-    {type:'reel',topic:'Proyecto recibidor: armario ELLE de Emede, espejo a medida y lámparas de diseño',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Cómo elegir el sofá ideal para tu salón: guía de Docrys & DC',pillar:'Educativo'},
-    {type:'historia',topic:'Vitrina Santos con LED integrado: almacenaje que también decora',pillar:'Materiales'},
-    {type:'blog',topic:'Errores de decoración que hacen que tu casa parezca más pequeña',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Cocina con isla y encimera de mármol natural: lujo que se vive a diario',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Iluminación en cocinas: carril de focos, LED bajo muebles y colgantes',pillar:'Educativo'},
-    {type:'historia',topic:'Vinoteca Dunavox Horizon en Cashmere: diseño premium para amantes del vino',pillar:'Materiales'},
-    {type:'reel',topic:'Proyecto hostal: cómo el interiorismo transforma la experiencia del huésped',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Antes y después en cocina: del espacio sin personalidad al diseño de autor',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Islas de cocina multifuncionales: usos, medidas y materiales recomendados',pillar:'Educativo'},
-    {type:'historia',topic:'Siemens cookConnect: cocción limpia sin campana a la vista',pillar:'Materiales'},
-    {type:'blog',topic:'Diseño con alma: cómo crear espacios que inspiran y transmiten emociones',pillar:'Tendencias'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Mesa extensible Ozzio Italia: funcionalidad y diseño italiano en tu comedor',pillar:'Materiales'},
-    {type:'carrusel',topic:'El proceso de diseño en Docrys & DC: del primer contacto al resultado final',pillar:'Servicios'},
-    {type:'historia',topic:'Proyecto 3D: así visualizamos tu espacio antes de ejecutarlo',pillar:'Servicios'},
-    {type:'reel',topic:'Proyecto cocina en tonos tierra: calidez, madera y materiales atemporales',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Recibidor: armario ELLE de Emede, espejo a medida y lámparas de diseño',pillar:'Proyecto'},{type:'carrusel',topic:'Cómo elegir el sofá ideal para tu salón: guía Docrys & DC',pillar:'Educativo'},{type:'historia',topic:'Vitrina Santos con LED integrado: almacenaje que también decora',pillar:'Materiales'},{type:'blog',topic:'Errores de decoración que hacen que tu casa parezca más pequeña',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Cocina con isla y encimera de mármol natural: lujo cotidiano',pillar:'Proyecto'},{type:'carrusel',topic:'Iluminación en cocinas: carril de focos, LED bajo muebles y colgantes',pillar:'Educativo'},{type:'historia',topic:'Vinoteca Dunavox Horizon en Cashmere: diseño premium para el vino',pillar:'Materiales'},{type:'reel',topic:'Proyecto hostal: cómo el interiorismo transforma la experiencia',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Antes y después en cocina: del espacio sin personalidad al diseño de autor',pillar:'Proyecto'},{type:'carrusel',topic:'Islas de cocina multifuncionales: usos, medidas y materiales',pillar:'Educativo'},{type:'historia',topic:'Siemens cookConnect: cocción limpia sin campana a la vista',pillar:'Materiales'},{type:'blog',topic:'Diseño con alma: espacios que inspiran y transmiten emociones',pillar:'Tendencias'}]},
+  {ig:[{type:'reel',topic:'Mesa extensible Ozzio Italia: funcionalidad y diseño italiano',pillar:'Materiales'},{type:'carrusel',topic:'El proceso de diseño en Docrys & DC: del primer contacto al resultado',pillar:'Servicios'},{type:'historia',topic:'Proyecto 3D: así visualizamos tu espacio antes de ejecutarlo',pillar:'Servicios'},{type:'reel',topic:'Proyecto cocina en tonos tierra: calidez y materiales atemporales',pillar:'Proyecto'}]},
 ],
 '2026-07':[
-  {ig:[
-    {type:'reel',topic:'Reforma integral de vivienda: cuando arquitectura y diseño van al mismo ritmo',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Cocinas abiertas o cerradas: cómo elegir según tu estilo de vida',pillar:'Educativo'},
-    {type:'historia',topic:'Cafetera empotrable Miele: café de barista desde tu cocina de diseño',pillar:'Materiales'},
-    {type:'blog',topic:'Smart kitchens: domótica aplicada al diseño de cocinas en 2026',pillar:'Tendencias'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Baño de invitados con mucha personalidad: materiales, color y detalles únicos',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Papeles pintados en el hogar: cómo elegir el correcto para cada estancia',pillar:'Educativo'},
-    {type:'historia',topic:'Placa de inducción Siemens: precisión y diseño en cada zona de cocción',pillar:'Materiales'},
-    {type:'reel',topic:'Proyecto comedor con mesa redonda: por qué esta forma cambia la experiencia',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Cocina Santos con casco grafeno y encimera Pietra Grey Silk: sofisticación total',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Dormitorios relajantes: claves para diseñar un espacio que invita al descanso',pillar:'Educativo'},
-    {type:'historia',topic:'Lámpara Sofì de Bonaldo: vidrio soplado y latón bruñido — arte en tu hogar',pillar:'Materiales'},
-    {type:'blog',topic:'Altura perfecta de los muebles de cocina según ergonomía y bienestar',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto Griñón — salón-comedor: muebles a medida, carril de iluminación y madera',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Mesas de comedor: redondas, cuadradas o rectangulares — cuál elegir',pillar:'Educativo'},
-    {type:'historia',topic:'Docrys & DC en verano: proyectos activos y fechas de atención en agosto',pillar:'Marca'},
-    {type:'reel',topic:'Timelapse de julio: obras en marcha y materiales que cobran vida',pillar:'Marca'},
-  ]},
+  {ig:[{type:'reel',topic:'Reforma integral de vivienda: arquitectura y diseño al mismo ritmo',pillar:'Proyecto'},{type:'carrusel',topic:'Cocinas abiertas o cerradas: cómo elegir según tu estilo de vida',pillar:'Educativo'},{type:'historia',topic:'Cafetera empotrable Miele: café de barista desde tu cocina',pillar:'Materiales'},{type:'blog',topic:'Smart kitchens: domótica aplicada al diseño de cocinas en 2026',pillar:'Tendencias'}]},
+  {ig:[{type:'reel',topic:'Baño de invitados con mucha personalidad: materiales y detalles únicos',pillar:'Proyecto'},{type:'carrusel',topic:'Papeles pintados en el hogar: cómo elegir el correcto para cada estancia',pillar:'Educativo'},{type:'historia',topic:'Placa de inducción Siemens: precisión y diseño en cada zona de cocción',pillar:'Materiales'},{type:'reel',topic:'Proyecto comedor con mesa redonda: por qué esta forma cambia la experiencia',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Cocina Santos con casco grafeno y encimera Pietra Grey Silk',pillar:'Proyecto'},{type:'carrusel',topic:'Dormitorios relajantes: claves para diseñar un espacio que invita al descanso',pillar:'Educativo'},{type:'historia',topic:'Lámpara Sofì de Bonaldo: vidrio soplado y latón bruñido',pillar:'Materiales'},{type:'blog',topic:'Altura perfecta de los muebles de cocina según ergonomía',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Proyecto Griñón — salón-comedor: muebles a medida y carril de iluminación',pillar:'Proyecto'},{type:'carrusel',topic:'Mesas de comedor: redondas, cuadradas o rectangulares — cuál elegir',pillar:'Educativo'},{type:'historia',topic:'Docrys & DC en verano: proyectos activos y fechas de atención',pillar:'Marca'},{type:'reel',topic:'Timelapse de julio: obras en marcha y materiales que cobran vida',pillar:'Marca'}]},
 ],
 '2026-08':[
-  {ig:[
-    {type:'reel',topic:'Proyecto habitación infantil: colores, funcionalidad y detalles que enamoran',pillar:'Proyecto'},
-    {type:'carrusel',topic:'5 soluciones de almacenaje para cocinas sin perder estilo ni espacio',pillar:'Educativo'},
-    {type:'historia',topic:'Frigorífico Siemens combi integrable: tecnología NoFrost con diseño total',pillar:'Materiales'},
-    {type:'blog',topic:'Muebles de baño suspendidos: estética minimalista y ventajas prácticas',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Docrys & DC: 30 años transformando hogares en Madrid — así empezó todo',pillar:'Marca'},
-    {type:'carrusel',topic:'Reforma de baño paso a paso: fases, plazos y materiales a considerar',pillar:'Educativo'},
-    {type:'historia',topic:'Quooker Cube: agua fría, caliente y con gas al instante desde tu grifo',pillar:'Materiales'},
-    {type:'reel',topic:'Proyecto salón: mueble TV a medida con vitrinas retroiluminadas y madera',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Avances de agosto: proyectos en obra y materiales que cobran vida',pillar:'Marca'},
-    {type:'carrusel',topic:'Checklist antes de reformar tu cocina: 10 puntos que debes tener claros',pillar:'Educativo'},
-    {type:'historia',topic:'4 showrooms en Madrid: ven a tocar y sentir los materiales de tu proyecto',pillar:'Servicios'},
-    {type:'blog',topic:'Tendencias de decoración de hogar para el segundo semestre de 2026',pillar:'Tendencias'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Septiembre a la vista: proyectos que arrancan y novedades en Docrys & DC',pillar:'Marca'},
-    {type:'carrusel',topic:'Palillería para dividir espacios: cuándo usarla y cómo integrarla',pillar:'Educativo'},
-    {type:'historia',topic:'Armario modelo ELLE de Emede: diseño que organiza sin sacrificar estética',pillar:'Materiales'},
-    {type:'reel',topic:'Habitaciones con identidad: proyectos donde el diseño habla del cliente',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Proyecto habitación infantil: colores, funcionalidad y detalles',pillar:'Proyecto'},{type:'carrusel',topic:'5 soluciones de almacenaje para cocinas sin perder estilo',pillar:'Educativo'},{type:'historia',topic:'Frigorífico Siemens combi integrable: tecnología NoFrost',pillar:'Materiales'},{type:'blog',topic:'Muebles de baño suspendidos: estética minimalista y ventajas prácticas',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Docrys & DC: 30 años transformando hogares en Madrid',pillar:'Marca'},{type:'carrusel',topic:'Reforma de baño paso a paso: fases, plazos y materiales',pillar:'Educativo'},{type:'historia',topic:'Quooker Cube: agua fría, caliente y con gas desde tu grifo',pillar:'Materiales'},{type:'reel',topic:'Proyecto salón: mueble TV a medida con vitrinas retroiluminadas',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Avances de agosto: proyectos en obra y materiales que cobran vida',pillar:'Marca'},{type:'carrusel',topic:'Checklist antes de reformar tu cocina: 10 puntos clave',pillar:'Educativo'},{type:'historia',topic:'4 showrooms en Madrid: ven a tocar y sentir los materiales',pillar:'Servicios'},{type:'blog',topic:'Tendencias de decoración de hogar para el segundo semestre de 2026',pillar:'Tendencias'}]},
+  {ig:[{type:'reel',topic:'Septiembre a la vista: proyectos que arrancan y novedades',pillar:'Marca'},{type:'carrusel',topic:'Palillería para dividir espacios: cuándo usarla y cómo integrarla',pillar:'Educativo'},{type:'historia',topic:'Armario ELLE de Emede: diseño que organiza sin sacrificar estética',pillar:'Materiales'},{type:'reel',topic:'Habitaciones con identidad: proyectos donde el diseño habla del cliente',pillar:'Proyecto'}]},
 ],
 '2026-09':[
-  {ig:[
-    {type:'reel',topic:'Vuelta a septiembre: proyectos de reforma que empiezan con el otoño en Madrid',pillar:'Servicios'},
-    {type:'carrusel',topic:'Cómo integrar cocina y salón sin perder la personalidad de cada espacio',pillar:'Educativo'},
-    {type:'historia',topic:'Encimera Ascale Lucca Gold en Velvet: mármol en estética, tecnología en durabilidad',pillar:'Materiales'},
-    {type:'blog',topic:'Interiorismo que revaloriza tu vivienda: lo que el diseño aporta al valor inmueble',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Caso real — reforma integral en Madrid: del primer plano al resultado final',pillar:'Proyecto'},
-    {type:'carrusel',topic:'El sofá como pieza protagonista: cómo elegir el ideal para tu salón',pillar:'Educativo'},
-    {type:'historia',topic:'Mesa RADO Keramik de Cattelan Italia: cerámica y madera de bosques renovables',pillar:'Materiales'},
-    {type:'reel',topic:'Proyecto cocina en negro y madera: contraste, carácter y función perfecta',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto lavadero Santos: funcionalidad, orden y diseño en cada detalle',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Cómo crear ambientes acogedores en tu vivienda: materiales, luz y texturas',pillar:'Tendencias'},
-    {type:'historia',topic:'Cajones Santos con extracción total y cierre suave: el interior también importa',pillar:'Materiales'},
-    {type:'blog',topic:'Qué estilo de cocina combina con tu personalidad: guía para acertar',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto baños de lujo: tres baños distintos, un mismo nivel de detalle',pillar:'Proyecto'},
-    {type:'carrusel',topic:'¿Por qué confiar en interioristas profesionales? 5 beneficios reales',pillar:'Servicios'},
-    {type:'historia',topic:'Docrys & DC en medios especializados: autoridad y presencia de marca',pillar:'Marca'},
-    {type:'reel',topic:'Cocina abierta al comedor: distribución, iluminación y materiales que unen',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Vuelta a septiembre: proyectos de reforma con el otoño en Madrid',pillar:'Servicios'},{type:'carrusel',topic:'Cómo integrar cocina y salón sin perder la personalidad de cada espacio',pillar:'Educativo'},{type:'historia',topic:'Encimera Ascale Lucca Gold en Velvet: mármol en estética, tecnología en durabilidad',pillar:'Materiales'},{type:'blog',topic:'Interiorismo que revaloriza tu vivienda',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Caso real — reforma integral: del primer plano al resultado final',pillar:'Proyecto'},{type:'carrusel',topic:'El sofá como pieza protagonista: cómo elegir el ideal',pillar:'Educativo'},{type:'historia',topic:'Mesa RADO Keramik de Cattelan Italia: cerámica y madera de bosques renovables',pillar:'Materiales'},{type:'reel',topic:'Proyecto cocina en negro y madera: contraste y función perfecta',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Proyecto lavadero Santos: funcionalidad, orden y diseño',pillar:'Proyecto'},{type:'carrusel',topic:'Cómo crear ambientes acogedores: materiales, luz y texturas',pillar:'Tendencias'},{type:'historia',topic:'Cajones Santos con extracción total y cierre suave',pillar:'Materiales'},{type:'blog',topic:'Qué estilo de cocina combina con tu personalidad',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Proyecto baños de lujo: tres baños distintos, un mismo nivel de detalle',pillar:'Proyecto'},{type:'carrusel',topic:'¿Por qué confiar en interioristas profesionales? 5 beneficios reales',pillar:'Servicios'},{type:'historia',topic:'Docrys & DC en medios especializados: autoridad y presencia de marca',pillar:'Marca'},{type:'reel',topic:'Cocina abierta al comedor: distribución, iluminación y materiales que unen',pillar:'Proyecto'}]},
 ],
 '2026-10':[
-  {ig:[
-    {type:'reel',topic:'Proyecto reforma integral de otoño: muebles a medida, luz y materiales nobles',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Espacios minimalistas: cómo lograr armonía visual con pocos elementos',pillar:'Tendencias'},
-    {type:'historia',topic:'Mesa Papel Keramik de Cattelan Italia: diseño escultórico y alma italiana',pillar:'Materiales'},
-    {type:'blog',topic:'Proyectos integrales de diseño: ventajas y resultados reales',pillar:'Servicios'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Cocinas Santos exportadas: Docrys & DC lleva sus proyectos más allá de Madrid',pillar:'Marca'},
-    {type:'carrusel',topic:'Cómo crear un dormitorio relajante: claves para descansar mejor cada noche',pillar:'Educativo'},
-    {type:'historia',topic:'Evento con marcas premium de electrodomésticos: Docrys & DC en vanguardia',pillar:'Marca'},
-    {type:'reel',topic:'Cocina con isla abierta: encimera efecto óxido y muebles sin tiradores',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto recibidor de lujo: primera impresión que dice todo sobre un hogar',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Tendencias en cocinas Santos para 2026: colores, acabados y novedades',pillar:'Tendencias'},
-    {type:'historia',topic:'Accesorios Santos: colmena en cristal Fumé y soluciones inteligentes',pillar:'Materiales'},
-    {type:'blog',topic:'Cocinas de lujo: diseño a medida, materiales premium y tendencias actuales',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Docrys & DC en feria de diseño: novedades y tendencias internacionales',pillar:'Marca'},
-    {type:'carrusel',topic:'Cabeceros de cama: tapizados, madera y panelados para dormitorios con carácter',pillar:'Educativo'},
-    {type:'historia',topic:'Reforma en marcha: así iniciamos la transformación de cada espacio',pillar:'Servicios'},
-    {type:'reel',topic:'Habitación de invitados: escritorio, papel pintado y madera a medida',pillar:'Proyecto'},
-  ]},
+  {ig:[{type:'reel',topic:'Reforma integral de otoño: muebles a medida, luz y materiales nobles',pillar:'Proyecto'},{type:'carrusel',topic:'Espacios minimalistas: cómo lograr armonía visual con pocos elementos',pillar:'Tendencias'},{type:'historia',topic:'Mesa Papel Keramik de Cattelan Italia: diseño escultórico italiano',pillar:'Materiales'},{type:'blog',topic:'Proyectos integrales de diseño: ventajas y resultados reales',pillar:'Servicios'}]},
+  {ig:[{type:'reel',topic:'Cocinas Santos exportadas: Docrys & DC lleva proyectos más allá de Madrid',pillar:'Marca'},{type:'carrusel',topic:'Dormitorio relajante: claves para descansar mejor cada noche',pillar:'Educativo'},{type:'historia',topic:'Evento con marcas premium de electrodomésticos: Docrys & DC en vanguardia',pillar:'Marca'},{type:'reel',topic:'Cocina con isla abierta: encimera efecto óxido y muebles sin tiradores',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Proyecto recibidor de lujo: primera impresión que dice todo',pillar:'Proyecto'},{type:'carrusel',topic:'Tendencias en cocinas Santos para 2026: colores, acabados y novedades',pillar:'Tendencias'},{type:'historia',topic:'Accesorios Santos: colmena en cristal Fumé y soluciones inteligentes',pillar:'Materiales'},{type:'blog',topic:'Cocinas de lujo: diseño a medida, materiales premium y tendencias',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Docrys & DC en feria de diseño: novedades y tendencias internacionales',pillar:'Marca'},{type:'carrusel',topic:'Cabeceros de cama: tapizados, madera y panelados con carácter',pillar:'Educativo'},{type:'historia',topic:'Reforma en marcha: así iniciamos la transformación de cada espacio',pillar:'Servicios'},{type:'reel',topic:'Habitación de invitados: escritorio, papel pintado y madera a medida',pillar:'Proyecto'}]},
 ],
 '2026-11':[
-  {ig:[
-    {type:'reel',topic:'Proyecto cocina contemporánea: materiales que equilibran modernidad y calidez',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Todo sobre las islas de cocina: tipos, medidas y materiales para acertar',pillar:'Educativo'},
-    {type:'historia',topic:'Grifo Gessi de Veravent: latón cepillado y líneas contemporáneas',pillar:'Materiales'},
-    {type:'blog',topic:'Decoración emocional: cómo tu entorno influye en tu bienestar diario',pillar:'Tendencias'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Cocina Santos en verde salvia: serenidad, Neolith Himalaya y electrodomésticos AEG',pillar:'Proyecto'},
-    {type:'carrusel',topic:'¿Qué ocurre en cada fase de tu proyecto de interiorismo con Docrys & DC?',pillar:'Servicios'},
-    {type:'historia',topic:'Estudio de Chamberí renovado: un espacio diseñado para inspirarte',pillar:'Marca'},
-    {type:'reel',topic:'Cocina en paralelo con madera hasta el techo: espacio estrecho, gran diseño',pillar:'Proyecto'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto reforma salón: materiales con propósito y diseño que resuelve y enamora',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Decoración nórdica: 10 claves para crear espacios luminosos y acogedores',pillar:'Tendencias'},
-    {type:'historia',topic:'Placa Siemens + extractor integrado: cocción limpia sin campana a la vista',pillar:'Materiales'},
-    {type:'blog',topic:'Espacios para sentir: el interiorismo como herramienta de bienestar',pillar:'Tendencias'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Proyecto cocina gris arena: de idea a resultado con el equipo Docrys & DC',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Top 5 materiales imprescindibles en cocinas modernas de 2026',pillar:'Educativo'},
-    {type:'historia',topic:'Balance de noviembre: proyectos entregados y clientes que confían en nosotros',pillar:'Marca'},
-    {type:'reel',topic:'Cocinas con vitrinas iluminadas: cómo convertir el almacenaje en decoración',pillar:'Educativo'},
-  ]},
+  {ig:[{type:'reel',topic:'Cocina contemporánea: materiales que equilibran modernidad y calidez',pillar:'Proyecto'},{type:'carrusel',topic:'Islas de cocina: tipos, medidas y materiales para acertar',pillar:'Educativo'},{type:'historia',topic:'Grifo Gessi de Veravent: latón cepillado y líneas contemporáneas',pillar:'Materiales'},{type:'blog',topic:'Decoración emocional: cómo tu entorno influye en tu bienestar',pillar:'Tendencias'}]},
+  {ig:[{type:'reel',topic:'Cocina Santos en verde salvia: serenidad, Neolith Himalaya y AEG',pillar:'Proyecto'},{type:'carrusel',topic:'¿Qué ocurre en cada fase de tu proyecto con Docrys & DC?',pillar:'Servicios'},{type:'historia',topic:'Estudio de Chamberí renovado: un espacio para inspirarte',pillar:'Marca'},{type:'reel',topic:'Cocina en paralelo con madera hasta el techo: espacio estrecho, gran diseño',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'Proyecto reforma salón: materiales con propósito que resuelven y enamoran',pillar:'Proyecto'},{type:'carrusel',topic:'Decoración nórdica: 10 claves para espacios luminosos y acogedores',pillar:'Tendencias'},{type:'historia',topic:'Placa Siemens + extractor integrado: cocción limpia sin campana',pillar:'Materiales'},{type:'blog',topic:'Espacios para sentir: el interiorismo como herramienta de bienestar',pillar:'Tendencias'}]},
+  {ig:[{type:'reel',topic:'Cocina gris arena: de idea a resultado con el equipo Docrys & DC',pillar:'Proyecto'},{type:'carrusel',topic:'Top 5 materiales imprescindibles en cocinas modernas de 2026',pillar:'Educativo'},{type:'historia',topic:'Balance de noviembre: proyectos entregados y clientes que confían',pillar:'Marca'},{type:'reel',topic:'Cocinas con vitrinas iluminadas: el almacenaje como decoración',pillar:'Educativo'}]},
 ],
 '2026-12':[
-  {ig:[
-    {type:'reel',topic:'Proyecto cocina con materiales atemporales: para un hogar que dura generaciones',pillar:'Proyecto'},
-    {type:'carrusel',topic:'Tendencias de interiorismo para 2027: lo que ya está pasando y debes conocer',pillar:'Tendencias'},
-    {type:'historia',topic:'Felicitación del equipo: los profesionales que hacen posible cada proyecto',pillar:'Marca'},
-    {type:'blog',topic:'Cómo preparar tu hogar para las fiestas con detalles de interiorismo',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Los proyectos más destacados de 2026 en Docrys & DC',pillar:'Marca'},
-    {type:'carrusel',topic:'El año en diseño: los proyectos que marcaron 2026 en Docrys & DC',pillar:'Marca'},
-    {type:'historia',topic:'Cerramos por vacaciones: fechas y cómo contactarnos en Navidad',pillar:'Marca'},
-    {type:'reel',topic:'Showrooms Docrys & DC: ven a inspirarte antes del año nuevo',pillar:'Servicios'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Feliz Navidad de parte de todo el equipo de Docrys & DC',pillar:'Marca'},
-    {type:'carrusel',topic:'Guía 2027: cómo planificar tu reforma integral con tiempo y sin estrés',pillar:'Servicios'},
-    {type:'historia',topic:'Tradición y diseño: felicitación navideña con proyecto destacado del año',pillar:'Marca'},
-    {type:'blog',topic:'Cocinas Santos: por qué esta firma española lidera el diseño de alta gama',pillar:'Educativo'},
-  ]},
-  {ig:[
-    {type:'reel',topic:'Feliz 2027: todo lo que Docrys & DC tiene preparado para el nuevo año',pillar:'Marca'},
-    {type:'carrusel',topic:'Predicciones de diseño de interiores para 2027: materiales, tendencias y colores',pillar:'Tendencias'},
-    {type:'historia',topic:'Gracias 2026: proyectos, clientes y un equipo que lo da todo',pillar:'Marca'},
-    {type:'blog',topic:'Objetivos de diseño para 2027: cómo transformar tu hogar el próximo año',pillar:'Educativo'},
-  ]},
+  {ig:[{type:'reel',topic:'Cocina con materiales atemporales: para un hogar que dura generaciones',pillar:'Proyecto'},{type:'carrusel',topic:'Tendencias de interiorismo para 2027: lo que ya está pasando',pillar:'Tendencias'},{type:'historia',topic:'Felicitación del equipo: los profesionales que hacen posible cada proyecto',pillar:'Marca'},{type:'blog',topic:'Cómo preparar tu hogar para las fiestas con detalles de interiorismo',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Los proyectos más destacados de 2026 en Docrys & DC',pillar:'Marca'},{type:'carrusel',topic:'El año en diseño: los proyectos que marcaron 2026',pillar:'Marca'},{type:'historia',topic:'Cerramos por vacaciones: fechas y cómo contactarnos en Navidad',pillar:'Marca'},{type:'reel',topic:'Showrooms Docrys & DC: ven a inspirarte antes del año nuevo',pillar:'Servicios'}]},
+  {ig:[{type:'reel',topic:'Feliz Navidad de parte de todo el equipo de Docrys & DC',pillar:'Marca'},{type:'carrusel',topic:'Guía 2027: cómo planificar tu reforma integral con tiempo y sin estrés',pillar:'Servicios'},{type:'historia',topic:'Tradición y diseño: felicitación navideña con proyecto destacado',pillar:'Marca'},{type:'blog',topic:'Cocinas Santos: por qué lidera el diseño de alta gama en España',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'Feliz 2027: todo lo que Docrys & DC tiene preparado',pillar:'Marca'},{type:'carrusel',topic:'Predicciones de diseño de interiores para 2027',pillar:'Tendencias'},{type:'historia',topic:'Gracias 2026: proyectos, clientes y un equipo que lo da todo',pillar:'Marca'},{type:'blog',topic:'Objetivos de diseño para 2027: cómo transformar tu hogar',pillar:'Educativo'}]},
 ],
 };
 
-// ── LOCAL STORAGE ─────────────────────────────────────────────────────
-const LS='docrys26v2_';
-function emptyPost(type){return {type,topic:'',text:'',hashtags:DEFAULT_HASHTAGS,link:'',date:'',status:'pendiente'};}
+// ── SEO PLAN ────────────────────────────────────────────────────────────
+const PLAN_SEO={
+'2026-04':[
+  {title:'Cómo elegir la distribución perfecta para tu cocina en Madrid',kw:'cocina a medida Madrid',type:'Blog'},
+  {title:'Proyectos integrales de diseño de interiores: ventajas y resultados',kw:'interiorismo integral Madrid',type:'Blog'},
+  {title:'Santos Cocinas: por qué es la marca líder en diseño de alta gama',kw:'cocinas Santos Madrid',type:'Ficha SEO'},
+],
+'2026-05':[
+  {title:'Cómo crear una cocina abierta al salón sin perder funcionalidad',kw:'cocina abierta salón Madrid',type:'Blog'},
+  {title:'Los mejores materiales para encimeras de cocina en 2026',kw:'encimeras cocina diseño',type:'Blog'},
+  {title:'Docrys & DC showrooms Madrid: visita nuestros estudios de interiorismo',kw:'showroom cocinas Madrid',type:'Ficha SEO'},
+],
+'2026-06':[
+  {title:'Diseño de cocinas de lujo en Madrid: materiales, precio y proceso',kw:'cocinas lujo Madrid',type:'Blog'},
+  {title:'Cómo integrar cocina y salón sin perder la identidad de cada espacio',kw:'cocina salón integrado diseño',type:'Blog'},
+  {title:'Errores de decoración que hacen que tu casa parezca más pequeña',kw:'decoración interiorismo errores',type:'Blog'},
+],
+'2026-07':[
+  {title:'Smart kitchens: domótica aplicada al diseño de cocinas modernas',kw:'cocinas inteligentes domotica',type:'Blog'},
+  {title:'Altura perfecta de los muebles de cocina según ergonomía y bienestar',kw:'ergonomia cocina muebles altura',type:'Blog'},
+  {title:'Cocinas Santos: guía completa de acabados, colores y configuraciones',kw:'colores cocinas Santos',type:'Ficha SEO'},
+],
+'2026-08':[
+  {title:'Muebles de baño suspendidos: estética minimalista y ventajas prácticas',kw:'muebles baño suspendidos diseño',type:'Blog'},
+  {title:'Tendencias de decoración de hogar para el segundo semestre de 2026',kw:'tendencias decoracion 2026',type:'Blog'},
+  {title:'Reforma de baño en Madrid: fases, plazos y materiales a considerar',kw:'reforma baño Madrid',type:'Blog'},
+],
+'2026-09':[
+  {title:'Interiorismo que revaloriza tu vivienda: lo que el diseño aporta al valor inmueble',kw:'interiorismo revalorizar vivienda',type:'Blog'},
+  {title:'Qué estilo de cocina combina con tu personalidad: guía para acertar',kw:'estilos cocina diseño personalidad',type:'Blog'},
+  {title:'Cocinas de lujo en Madrid: del proyecto al resultado final',kw:'cocinas lujo proyecto Madrid',type:'Ficha SEO'},
+],
+'2026-10':[
+  {title:'Proyectos integrales de diseño: ventajas y resultados reales en Madrid',kw:'proyecto integral interiorismo',type:'Blog'},
+  {title:'Cocinas de lujo: diseño a medida, materiales premium y tendencias 2026',kw:'cocinas premium Madrid',type:'Blog'},
+  {title:'Espacios minimalistas en interiorismo: cómo lograr armonía visual',kw:'interiorismo minimalista Madrid',type:'Blog'},
+],
+'2026-11':[
+  {title:'Decoración emocional: cómo tu entorno influye en tu bienestar diario',kw:'decoracion emocional bienestar hogar',type:'Blog'},
+  {title:'Espacios para sentir: el interiorismo como herramienta de calidad de vida',kw:'interiorismo bienestar espacios',type:'Blog'},
+  {title:'Top 5 materiales imprescindibles en cocinas modernas de 2026',kw:'materiales cocinas modernas',type:'Blog'},
+],
+'2026-12':[
+  {title:'Tendencias de interiorismo para 2027: lo que ya está pasando y debes conocer',kw:'tendencias interiorismo 2027',type:'Blog'},
+  {title:'Cómo planificar tu reforma integral en 2027 con tiempo y sin estrés',kw:'reforma integral planificacion 2027',type:'Blog'},
+  {title:'Docrys & DC 2026: año en proyectos y los aprendizajes del equipo',kw:'Docrys DC proyectos interiorismo',type:'Blog'},
+],
+};
 
-function buildDefault(){
+// ── PUBLICIDAD PLAN ─────────────────────────────────────────────────────
+const PLAN_PUB={
+'2026-04':[
+  {name:'Campaña Meta Ads — Cocinas a medida',platform:'meta',budget:'500€',objetivo:'Leads calificados para consulta de cocina'},
+  {name:'Google Ads — Búsqueda "cocinas Madrid"',platform:'google',objetivo:'Tráfico web cualificado y leads'},
+],
+'2026-05':[
+  {name:'Campaña Meta Ads — Reformas integrales',platform:'meta',budget:'500€',objetivo:'Captación de leads para reforma integral'},
+  {name:'Google Ads — Búsqueda "interiorismo Madrid"',platform:'google',objetivo:'Posicionamiento de marca y leads'},
+],
+'2026-06':[
+  {name:'Campaña Meta Ads — Showrooms Madrid',platform:'meta',budget:'400€',objetivo:'Visitas a showrooms y citas presenciales'},
+  {name:'Google Ads — Display retargeting web',platform:'google',objetivo:'Remarketing visitantes web'},
+],
+'2026-07':[
+  {name:'Campaña Meta Ads — Verano cocinas',platform:'meta',budget:'350€',objetivo:'Mantener visibilidad en temporada baja'},
+  {name:'Google Ads — Camping estival reducido',platform:'google',objetivo:'Leads para septiembre'},
+],
+'2026-08':[
+  {name:'Campaña Meta Ads — Pre-septiembre',platform:'meta',budget:'400€',objetivo:'Preparar captación de vuelta al cole'},
+  {name:'Google Ads — Campaña de reactivación',platform:'google',objetivo:'Leads para cierre Q3'},
+],
+'2026-09':[
+  {name:'Campaña Meta Ads — Reformas otoño',platform:'meta',budget:'600€',objetivo:'Máxima captación post-verano'},
+  {name:'Google Ads — Búsqueda estacional alta',platform:'google',objetivo:'Leads de alta intención en temporada alta'},
+],
+'2026-10':[
+  {name:'Campaña Meta Ads — Proyectos de lujo',platform:'meta',budget:'600€',objetivo:'Captación perfil alto para proyectos premium'},
+  {name:'Google Ads — Cocinas de diseño alto',platform:'google',objetivo:'Leads de alta cualificación'},
+],
+'2026-11':[
+  {name:'Campaña Meta Ads — Reformas para Navidad',platform:'meta',budget:'700€',objetivo:'Cerrar proyectos antes de fin de año'},
+  {name:'Google Ads — Retargeting cierre año',platform:'google',objetivo:'Conversión de leads calientes'},
+  {name:'Campaña TikTok Ads — Tendencias 2027',platform:'tiktok',objetivo:'Notoriedad y captación audiencia joven'},
+],
+'2026-12':[
+  {name:'Campaña Meta Ads — Diciembre brand',platform:'meta',budget:'400€',objetivo:'Visibilidad de marca y posicionamiento 2027'},
+  {name:'Google Ads — Campaña de Navidad',platform:'google',objetivo:'Leads para inicio de año'},
+],
+};
+
+// ── LOCAL STORAGE HELPERS ──────────────────────────────────────────────
+function buildDefaultRRSS(){
   const s={};
   for(const m of MONTHS){
-    s[m.key]=PLAN[m.key].map(w=>({
+    s[m.key]=PLAN_RRSS[m.key].map(w=>({
       ig:w.ig.map(c=>({topic:c.topic,text:'',hashtags:DEFAULT_HASHTAGS,link:'',date:'',status:'pendiente'})),
       customIg:[],
     }));
   }
   return s;
 }
-
-function loadLS(){
-  const d=buildDefault();
+function loadRRSS(){
+  const d=buildDefaultRRSS();
   for(const m of MONTHS){
-    try{
-      const r=localStorage.getItem(LS+m.key);
-      if(r){
-        const p=JSON.parse(r);
-        d[m.key]=p.map((w,wi)=>({
-          ig:(w.ig||[]).map((s,i)=>({
-            topic:s.topic!==undefined?s.topic:(PLAN[m.key][wi]?.ig[i]?.topic||''),
-            text:s.text||'',hashtags:s.hashtags||DEFAULT_HASHTAGS,
-            link:s.link||'',date:s.date||'',status:s.status||'pendiente'
-          })),
-          customIg:w.customIg||[],
-        }));
-      }
-    }catch(e){}
+    const r=lsGet('rrss_'+m.key);
+    if(r)d[m.key]=r.map((w,wi)=>({
+      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:s.text||'',hashtags:s.hashtags||DEFAULT_HASHTAGS,link:s.link||'',date:s.date||'',status:s.status||'pendiente'})),
+      customIg:w.customIg||[],
+    }));
   }
   return d;
 }
-
-function loadPts(){try{return parseInt(localStorage.getItem('docrys_pts')||'0',10);}catch(e){return 0;}}
-function savePts(p){try{localStorage.setItem('docrys_pts',p);}catch(e){}}
-
-function saveLS(state){
-  for(const m of MONTHS){
-    try{localStorage.setItem(LS+m.key,JSON.stringify(state[m.key]));}catch(e){}
-  }
+function buildDefaultSEO(){
+  const s={};
+  for(const m of MONTHS) s[m.key]={articles:PLAN_SEO[m.key].map(a=>({...a,notas:'',linkArticulo:'',status:'pendiente'})),reportLink:''};
+  return s;
 }
+function loadSEO(){
+  const d=buildDefaultSEO();
+  for(const m of MONTHS){const r=lsGet('seo_'+m.key);if(r)d[m.key]=r;}
+  return d;
+}
+function buildDefaultPUB(){
+  const s={};
+  for(const m of MONTHS) s[m.key]={campaigns:PLAN_PUB[m.key].map(c=>({...c,linkCampana:'',reportLink:'',status:'pendiente'})),planLink:''};
+  return s;
+}
+function loadPUB(){
+  const d=buildDefaultPUB();
+  for(const m of MONTHS){const r=lsGet('pub_'+m.key);if(r)d[m.key]=r;}
+  return d;
+}
+function loadPts(){return lsGet('pts')||0;}
 
-// ── COMPONENTS ────────────────────────────────────────────────────────
-function AddButton({onAdd}){
+// ── RRSS COMPONENTS ────────────────────────────────────────────────────
+function AddButton({onAdd,variant}){
   const[open,setOpen]=useState(false);
   const ref=useRef(null);
   useEffect(()=>{
     function h(e){if(ref.current&&!ref.current.contains(e.target))setOpen(false);}
-    document.addEventListener('mousedown',h);
-    return()=>document.removeEventListener('mousedown',h);
+    document.addEventListener('mousedown',h);return()=>document.removeEventListener('mousedown',h);
   },[]);
   return React.createElement('div',{className:'add-post-wrap',ref},
     React.createElement('button',{className:'add-post-btn',onClick:()=>setOpen(o=>!o)},
-      React.createElement('span',{className:'add-icon'},'+'),
+      React.createElement('span',{className:'add-icon rrss'},'+'),
       'Añadir publicación'
     ),
     open&&React.createElement('div',{className:'dropdown'},
       React.createElement('div',{className:'dd-title'},'Tipo de publicación'),
-      ADD_TYPES.map(o=>React.createElement('button',{key:o.type,className:'dd-opt',onClick:()=>{onAdd(o.type);setOpen(false);}},
+      ADD_TYPES_RRSS.map(o=>React.createElement('button',{key:o.type,className:'dd-opt',onClick:()=>{onAdd(o.type);setOpen(false);}},
         React.createElement('span',{className:'dd-dot',style:{background:o.dot}}),
         o.label
       ))
@@ -559,18 +499,11 @@ function AddButton({onAdd}){
 
 function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
   const type=planCfg?planCfg.type:(data.type||'reel');
-  const t=TC[type]||TC.reel;
+  const t=TC_RRSS[type]||TC_RRSS.reel;
   const s=SC[data.status]||SC.pendiente;
   const pillar=planCfg?planCfg.pillar:(data.pillar||'');
-  const isApproved=data.status==='aprobado';
-
-  function handleStatus(){
-    if(s.next==='aprobado') onApprove();
-    else onUpdate('status',s.next);
-  }
-
-  return React.createElement('div',{className:'card'+(isApproved?' approved':''),style:{borderLeftColor:isApproved?'#22c55e':t.border}},
-    // TOP ROW
+  function handleStatus(){if(s.next==='aprobado')onApprove();else onUpdate('status',s.next);}
+  return React.createElement('div',{className:'card'+(data.status==='aprobado'?' approved':''),style:{borderLeftColor:data.status==='aprobado'?'#22c55e':t.border}},
     React.createElement('div',{className:'card-top'},
       React.createElement('div',{className:'card-badges'},
         React.createElement('span',{className:'type-badge',style:{color:t.color,background:t.bg}},t.label),
@@ -578,26 +511,22 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatus},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete,title:'Eliminar'},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
       )
     ),
-    // TOPIC
     React.createElement('div',null,
-      React.createElement('label',{className:'field-label'},'Tema — editable'),
+      React.createElement('label',{className:'field-label'},'Tema'),
       React.createElement('input',{className:'topic-input',type:'text',value:data.topic,onChange:e=>onUpdate('topic',e.target.value),placeholder:'Escribe o edita el tema del post...'})
     ),
-    // COPY
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Copy del post'),
       React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el texto principal del post...'}),
       React.createElement('div',{className:'firma-box'},FIRMA)
     ),
-    // HASHTAGS
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Hashtags'),
-      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value),placeholder:'#DocrysDC #DiseñoDeInteriores ...'})
+      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value)})
     ),
-    // DATE + LINK stacked
     React.createElement('div',{className:'fields-stack'},
       React.createElement('div',null,
         React.createElement('label',{className:'field-label'},'Día de publicación'),
@@ -613,9 +542,9 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
 
 function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onAddCustom,onUpdateCustom,onDeleteCustom,onApprove,defOpen}){
   const[open,setOpen]=useState(defOpen);
-  const allData=[...dataWeek.ig,...(dataWeek.customIg||[])];
-  const apr=allData.filter(d=>d.status==='aprobado').length;
-  const rev=allData.filter(d=>d.status==='revision').length;
+  const all=[...dataWeek.ig,...(dataWeek.customIg||[])];
+  const apr=all.filter(d=>d.status==='aprobado').length;
+  const rev=all.filter(d=>d.status==='revision').length;
   const total=planWeek.ig.length+(dataWeek.customIg||[]).length;
   return React.createElement('div',{className:'week'},
     React.createElement('button',{className:'week-hdr '+(open?'on':''),onClick:()=>setOpen(o=>!o)},
@@ -636,105 +565,257 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onAddCustom,onU
         React.createElement('span',{className:'plat-count'},total+' publicaciones')
       ),
       React.createElement('div',{className:'posts-grid'},
-        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{
-          key:'ig'+i,planCfg:cfg,
-          data:{...dataWeek.ig[i],topic:dataWeek.ig[i]?.topic!==undefined?dataWeek.ig[i].topic:cfg.topic},
-          onUpdate:(f,v)=>onUpdate('ig',i,f,v),
-          onApprove:()=>onApprove('ig',i),
-        })),
-        (dataWeek.customIg||[]).map((item,i)=>React.createElement(PostCard,{
-          key:'cig'+i,planCfg:null,data:item,
-          onUpdate:(f,v)=>onUpdateCustom('ig',i,f,v),
-          onDelete:()=>onDeleteCustom('ig',i),
-          onApprove:()=>onApprove('custom',i),
-        }))
+        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{key:'ig'+i,planCfg:cfg,data:{...dataWeek.ig[i],topic:dataWeek.ig[i]?.topic!==undefined?dataWeek.ig[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('ig',i,f,v),onApprove:()=>onApprove('ig',i)})),
+        (dataWeek.customIg||[]).map((item,i)=>React.createElement(PostCard,{key:'cig'+i,planCfg:null,data:item,onUpdate:(f,v)=>onUpdateCustom('ig',i,f,v),onDelete:()=>onDeleteCustom('ig',i),onApprove:()=>onApprove('custom',i)}))
       ),
       React.createElement(AddButton,{onAdd:type=>onAddCustom('ig',type)})
     )
   );
 }
 
-// ── APP ────────────────────────────────────────────────────────────────
-function App(){
-  const[month,setMonth]=useState('2026-04');
-  const[state,setState]=useState(()=>loadLS());
-  const[saved,setSaved]=useState(true);
-  const[pts,setPts]=useState(()=>loadPts());
-  const[showPtsPanel,setShowPtsPanel]=useState(false);
-  const timer=useRef(null);
-  const toastCount=useRef(0);
+// ── SEO COMPONENTS ─────────────────────────────────────────────────────
+function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
+  const s=SC[data.status]||SC.pendiente;
+  function handleStatus(){if(s.next==='aprobado')onApprove();else onUpdate('status',s.next);}
+  return React.createElement('div',{className:'seo-card'+(data.status==='aprobado'?' approved':'')},
+    React.createElement('div',{className:'card-top'},
+      React.createElement('div',{className:'card-badges'},
+        React.createElement('span',{className:'seo-type-badge'},data.type||'Blog'),
+        data.kw&&React.createElement('span',{className:'pillar-tag',style:{color:'#2c8e8a'}},'🔑 '+data.kw)
+      ),
+      React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+        React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatus},s.label),
+        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+      )
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Título del artículo'),
+      React.createElement('input',{className:'topic-input seo',type:'text',value:data.title,onChange:e=>onUpdate('title',e.target.value),placeholder:'Título optimizado SEO...'})
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Keyword principal'),
+      React.createElement('input',{className:'topic-input seo',type:'text',value:data.kw||'',onChange:e=>onUpdate('kw',e.target.value),placeholder:'keyword principal, búsqueda objetivo...'})
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Notas / brief del artículo'),
+      React.createElement('textarea',{className:'post-textarea',style:{borderColor:'rgba(44,142,138,.2)'},value:data.notas||'',onChange:e=>onUpdate('notas',e.target.value),placeholder:'Estructura del artículo, puntos clave, CTA...'})
+    ),
+    React.createElement('div',{className:'seo-links-row'},
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Enlace al artículo publicado'),
+        React.createElement('input',{className:'link-input seo',type:'text',value:data.linkArticulo||'',onChange:e=>onUpdate('linkArticulo',e.target.value),placeholder:'https://docrysdc.es/blog/...'})
+      ),
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Fecha de publicación'),
+        React.createElement('input',{className:'date-input',style:{borderColor:'rgba(44,142,138,.2)'},type:'date',value:data.date||'',onChange:e=>onUpdate('date',e.target.value)})
+      )
+    )
+  );
+}
 
+function SEOMonth({mk,monthData,onUpdateArticle,onUpdateReport,onAddArticle,onDeleteArticle,onApprove,monthName}){
+  const[open,setOpen]=useState(true);
+  const apr=monthData.articles.filter(a=>a.status==='aprobado').length;
+  return React.createElement('div',{className:'seo-month-block'},
+    React.createElement('div',{className:'seo-month-hdr'},
+      React.createElement('div',{style:{display:'flex',alignItems:'center',gap:10,flexWrap:'wrap',flex:1}},
+        React.createElement('button',{onClick:()=>setOpen(o=>!o),style:{background:'none',border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:8}},
+          React.createElement('span',{className:'seo-month-title'},monthName+' 2026'),
+          React.createElement('span',{style:{color:'rgba(77,209,205,.5)',fontSize:11}},open?'▲':'▼')
+        ),
+        React.createElement('span',{style:{fontSize:10,color:'rgba(77,209,205,.5)',letterSpacing:'.06em'}},apr+'/'+monthData.articles.length+' aprobados')
+      ),
+      React.createElement('div',{className:'seo-report-row'},
+        React.createElement('span',{className:'seo-report-label'},'📊 Informe:'),
+        React.createElement('input',{className:'seo-report-input',type:'text',value:monthData.reportLink||'',onChange:e=>onUpdateReport(e.target.value),placeholder:'https://docs.google.com/...'}),
+        monthData.reportLink&&React.createElement('a',{className:'seo-report-link',href:monthData.reportLink,target:'_blank',rel:'noopener'},'Ver →')
+      )
+    ),
+    open&&React.createElement('div',{className:'seo-body'},
+      monthData.articles.map((art,i)=>React.createElement(SEOArticleCard,{key:i,data:art,onUpdate:(f,v)=>onUpdateArticle(i,f,v),onDelete:monthData.articles.length>1?()=>onDeleteArticle(i):null,onApprove:()=>onApprove(i)})),
+      React.createElement('button',{className:'add-post-btn seo',onClick:onAddArticle,style:{marginTop:4}},
+        React.createElement('span',{className:'add-icon seo'},'+'),
+        'Añadir artículo SEO'
+      )
+    )
+  );
+}
+
+// ── PUBLICIDAD COMPONENTS ──────────────────────────────────────────────
+const PLATFORM_LABELS={meta:'Meta Ads',google:'Google Ads',tiktok:'TikTok Ads',otras:'Otras'};
+
+function CampaignCard({data,onUpdate,onDelete,onApprove}){
+  const s=SC[data.status]||SC.pendiente;
+  function handleStatus(){if(s.next==='aprobado')onApprove();else onUpdate('status',s.next);}
+  const platClass=data.platform||'otras';
+  return React.createElement('div',{className:'pub-card'+(data.status==='aprobado'?' approved':'')},
+    React.createElement('div',{className:'card-top'},
+      React.createElement('div',{className:'card-badges'},
+        React.createElement('span',{className:'pub-platform-badge '+platClass},PLATFORM_LABELS[platClass]||'Campaña'),
+        data.budget&&React.createElement('span',{className:'pillar-tag',style:{color:'#6b00cc'}},'💰 '+data.budget)
+      ),
+      React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+        React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatus},s.label),
+        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+      )
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Nombre de la campaña'),
+      React.createElement('input',{className:'topic-input pub',type:'text',value:data.name,onChange:e=>onUpdate('name',e.target.value),placeholder:'Nombre de la campaña...'})
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Plataforma'),
+      React.createElement('select',{className:'platform-select',value:data.platform||'meta',onChange:e=>onUpdate('platform',e.target.value)},
+        Object.entries(PLATFORM_LABELS).map(([k,v])=>React.createElement('option',{key:k,value:k},v))
+      )
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Objetivo / presupuesto'),
+      React.createElement('textarea',{className:'post-textarea',style:{borderColor:'rgba(168,85,247,.2)',minHeight:60},value:data.objetivo||'',onChange:e=>onUpdate('objetivo',e.target.value),placeholder:'Objetivo de la campaña, KPIs esperados, presupuesto...'})
+    ),
+    React.createElement('div',{className:'pub-links-row'},
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Enlace al gestor de campaña'),
+        React.createElement('input',{className:'link-input pub',type:'text',value:data.linkCampana||'',onChange:e=>onUpdate('linkCampana',e.target.value),placeholder:'https://business.facebook.com/...'})
+      ),
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Informe mensual de campaña'),
+        React.createElement('input',{className:'link-input pub',type:'text',value:data.reportLink||'',onChange:e=>onUpdate('reportLink',e.target.value),placeholder:'https://docs.google.com/...'})
+      )
+    ),
+    data.reportLink&&React.createElement('a',{href:data.reportLink,target:'_blank',rel:'noopener',className:'pub-report-link',style:{alignSelf:'flex-start'}},'📊 Ver informe de campaña →')
+  );
+}
+
+function PubMonth({mk,monthData,onUpdateCampaign,onUpdateReport,onUpdatePlanLink,onAddCampaign,onDeleteCampaign,onApprove,monthName,planLink,onUpdateGlobalPlan}){
+  const[open,setOpen]=useState(true);
+  const apr=monthData.campaigns.filter(c=>c.status==='aprobado').length;
+  return React.createElement('div',{className:'pub-month-block'},
+    React.createElement('div',{className:'pub-month-hdr'},
+      React.createElement('div',{style:{display:'flex',alignItems:'center',gap:10,flexWrap:'wrap',flex:1}},
+        React.createElement('button',{onClick:()=>setOpen(o=>!o),style:{background:'none',border:'none',cursor:'pointer',display:'flex',alignItems:'center',gap:8}},
+          React.createElement('span',{className:'pub-month-title'},monthName+' 2026'),
+          React.createElement('span',{style:{color:'rgba(168,85,247,.5)',fontSize:11}},open?'▲':'▼')
+        ),
+        React.createElement('span',{style:{fontSize:10,color:'rgba(216,180,254,.5)',letterSpacing:'.06em'}},apr+'/'+monthData.campaigns.length+' aprobadas')
+      ),
+      React.createElement('div',{className:'pub-report-row'},
+        React.createElement('span',{className:'pub-report-label'},'📊 Informe:'),
+        React.createElement('input',{className:'pub-report-input',type:'text',value:monthData.reportLink||'',onChange:e=>onUpdateReport(e.target.value),placeholder:'https://docs.google.com/...'}),
+        monthData.reportLink&&React.createElement('a',{className:'pub-report-link',href:monthData.reportLink,target:'_blank',rel:'noopener'},'Ver →')
+      )
+    ),
+    open&&React.createElement('div',{className:'pub-body'},
+      monthData.campaigns.map((c,i)=>React.createElement(CampaignCard,{key:i,data:c,onUpdate:(f,v)=>onUpdateCampaign(i,f,v),onDelete:monthData.campaigns.length>1?()=>onDeleteCampaign(i):null,onApprove:()=>onApprove(i)})),
+      React.createElement('button',{className:'add-post-btn pub',onClick:onAddCampaign,style:{marginTop:4}},
+        React.createElement('span',{className:'add-icon pub'},'+'),
+        'Nueva campaña'
+      )
+    )
+  );
+}
+
+// ── MAIN APP ────────────────────────────────────────────────────────────
+function App(){
+  const[section,setSection]=useState('rrss');
+  const[month,setMonth]=useState('2026-04');
+  const[rrss,setRRSS]=useState(()=>loadRRSS());
+  const[seo,setSEO]=useState(()=>loadSEO());
+  const[pub,setPUB]=useState(()=>loadPUB());
+  const[pts,setPts]=useState(()=>loadPts());
+  const[saved,setSaved]=useState(true);
+  const timer=useRef(null);
+  const[pubPlanLink,setPubPlanLink]=useState(()=>lsGet('pub_plan_link')||'');
+
+  // autosave
   useEffect(()=>{
     setSaved(false);
-    if(timer.current)clearTimeout(timer.current);
-    timer.current=setTimeout(()=>{saveLS(state);setSaved(true);},800);
-    return()=>clearTimeout(timer.current);
-  },[state]);
+    clearTimeout(timer.current);
+    timer.current=setTimeout(()=>{
+      for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);}
+      lsSet('pts',pts);
+      setSaved(true);
+    },800);
+  },[rrss,seo,pub,pts]);
 
-  useEffect(()=>{savePts(pts);},[pts]);
+  useEffect(()=>{lsSet('pub_plan_link',pubPlanLink);},[pubPlanLink]);
 
-  const approve=useCallback((mk,wi,plat,pi,isCustom)=>{
-    const newPts=pts+10;
-    setPts(newPts);
-    const idx=toastCount.current%TOAST_MESSAGES.length;
-    toastCount.current++;
-    const[msg,sub]=TOAST_MESSAGES[idx];
-    showToast(msg,sub);
-    setState(prev=>{
-      const n=JSON.parse(JSON.stringify(prev));
-      if(isCustom){
-        if(n[mk][wi].customIg[pi])n[mk][wi].customIg[pi].status='aprobado';
-      } else {
-        if(n[mk][wi][plat][pi])n[mk][wi][plat][pi].status='aprobado';
-      }
-      return n;
-    });
+  // ── approve handler (shared)
+  function doApprove(){
+    setPts(p=>p+5);
+    showToast();
+  }
+
+  // ── RRSS handlers
+  const updateRRSS=useCallback((mk,wi,plat,pi,f,v)=>{
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk]?.[wi]?.[plat]?.[pi])n[mk][wi][plat][pi][f]=v;return n;});
+  },[]);
+  const addCustomRRSS=useCallback((mk,wi,plat,type)=>{
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[mk][wi].customIg)n[mk][wi].customIg=[];n[mk][wi].customIg.push({type,topic:'',text:'',hashtags:DEFAULT_HASHTAGS,link:'',date:'',status:'pendiente'});return n;});
+  },[]);
+  const updateCustomRRSS=useCallback((mk,wi,plat,ci,f,v)=>{
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk][wi].customIg?.[ci])n[mk][wi].customIg[ci][f]=v;return n;});
+  },[]);
+  const deleteCustomRRSS=useCallback((mk,wi,plat,ci)=>{
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk][wi].customIg.splice(ci,1);return n;});
+  },[]);
+  const approveRRSS=useCallback((mk,wi,plat,pi,isCustom)=>{
+    doApprove();
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));
+      if(isCustom){if(n[mk][wi].customIg?.[pi])n[mk][wi].customIg[pi].status='aprobado';}
+      else{if(n[mk][wi][plat]?.[pi])n[mk][wi][plat][pi].status='aprobado';}
+      return n;});
   },[pts]);
 
-  const update=useCallback((mk,wi,plat,pi,field,val)=>{
-    setState(prev=>{
-      const n=JSON.parse(JSON.stringify(prev));
-      if(n[mk]&&n[mk][wi]&&n[mk][wi][plat]&&n[mk][wi][plat][pi])n[mk][wi][plat][pi][field]=val;
-      return n;
-    });
+  // ── SEO handlers
+  const updateSEOArticle=useCallback((mk,i,f,v)=>{
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].articles[i][f]=v;return n;});
   },[]);
-
-  const addCustom=useCallback((mk,wi,plat,type)=>{
-    setState(prev=>{
-      const n=JSON.parse(JSON.stringify(prev));
-      if(!n[mk][wi].customIg)n[mk][wi].customIg=[];
-      n[mk][wi].customIg.push(emptyPost(type));
-      return n;
-    });
+  const updateSEOReport=useCallback((mk,v)=>{
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].reportLink=v;return n;});
   },[]);
-
-  const updateCustom=useCallback((mk,wi,plat,ci,field,val)=>{
-    setState(prev=>{
-      const n=JSON.parse(JSON.stringify(prev));
-      if(n[mk][wi].customIg&&n[mk][wi].customIg[ci])n[mk][wi].customIg[ci][field]=val;
-      return n;
-    });
+  const addSEOArticle=useCallback((mk)=>{
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].articles.push({title:'',kw:'',type:'Blog',notas:'',linkArticulo:'',date:'',status:'pendiente'});return n;});
   },[]);
-
-  const deleteCustom=useCallback((mk,wi,plat,ci)=>{
-    setState(prev=>{
-      const n=JSON.parse(JSON.stringify(prev));
-      if(n[mk][wi].customIg)n[mk][wi].customIg.splice(ci,1);
-      return n;
-    });
+  const deleteSEOArticle=useCallback((mk,i)=>{
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].articles.splice(i,1);return n;});
   },[]);
+  const approveSEO=useCallback((mk,i)=>{
+    doApprove();
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].articles[i].status='aprobado';return n;});
+  },[pts]);
 
-  const mData=state[month]||[];
-  const all=mData.flatMap(w=>[...w.ig,...(w.customIg||[])]);
-  const apr=all.filter(p=>p.status==='aprobado').length;
-  const rev=all.filter(p=>p.status==='revision').length;
-  const pct=all.length>0?Math.round((apr/all.length)*100):0;
-  const gAll=Object.values(state).flatMap(mw=>mw.flatMap(w=>[...w.ig,...(w.customIg||[])]));
-  const gApr=gAll.filter(p=>p.status==='aprobado').length;
+  // ── PUB handlers
+  const updatePubCampaign=useCallback((mk,i,f,v)=>{
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns[i][f]=v;return n;});
+  },[]);
+  const updatePubReport=useCallback((mk,v)=>{
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].reportLink=v;return n;});
+  },[]);
+  const addPubCampaign=useCallback((mk)=>{
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns.push({name:'Nueva campaña',platform:'meta',objetivo:'',budget:'',linkCampana:'',reportLink:'',status:'pendiente'});return n;});
+  },[]);
+  const deletePubCampaign=useCallback((mk,i)=>{
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns.splice(i,1);return n;});
+  },[]);
+  const approvePub=useCallback((mk,i)=>{
+    doApprove();
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns[i].status='aprobado';return n;});
+  },[pts]);
+
+  // ── STATS
   const mo=MONTHS.find(m=>m.key===month);
-  const lv=getLevel(pts);
-  const nextLv=LEVELS[LEVELS.indexOf(lv)+1];
-  const lvPct=nextLv?Math.round(((pts-lv.min)/(nextLv.min-lv.min))*100):100;
+  const mDataR=rrss[month]||[];
+  const allR=mDataR.flatMap(w=>[...w.ig,...(w.customIg||[])]);
+  const aprR=allR.filter(p=>p.status==='aprobado').length;
+  const revR=allR.filter(p=>p.status==='revision').length;
+  const mDataS=seo[month]||{articles:[]};
+  const aprS=mDataS.articles.filter(a=>a.status==='aprobado').length;
+  const mDataP=pub[month]||{campaigns:[]};
+  const aprP=mDataP.campaigns.filter(c=>c.status==='aprobado').length;
+  const pct=section==='rrss'?(allR.length>0?Math.round(aprR/allR.length*100):0):section==='seo'?(mDataS.articles.length>0?Math.round(aprS/mDataS.articles.length*100):0):(mDataP.campaigns.length>0?Math.round(aprP/mDataP.campaigns.length*100):0);
+
+  const tabClass=section==='seo'?'seo-tab':section==='pub'?'pub-tab':'';
 
   return React.createElement('div',null,
     // HEADER
@@ -742,81 +823,107 @@ function App(){
       React.createElement('div',{className:'hdr-top'},
         React.createElement('div',{className:'hdr-brand'},
           React.createElement('div',{className:'hdr-eyebrow'},'Docrys & DC · LMNHL'),
-          React.createElement('div',{className:'hdr-title'},'Plan Instagram 2026')
+          React.createElement('div',{className:'hdr-title'},'Plan Digital 2026')
         ),
         React.createElement('div',{className:'hdr-stats'},
-          React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#4ade80'}},apr),React.createElement('div',{className:'stat-l'},'Aprob. mes')),
-          React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#fbbf24'}},rev),React.createElement('div',{className:'stat-l'},'Revisión')),
-          React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#c9a84c'}},gApr),React.createElement('div',{className:'stat-l'},'Total ✓')),
-          // POINTS BADGE
-          React.createElement('div',{style:{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4}},
-            React.createElement('div',{className:'pts-badge',onClick:()=>setShowPtsPanel(p=>!p),title:'Ver nivel'},
-              React.createElement('span',{className:'pts-icon'},'🏆'),
-              React.createElement('div',null,
-                React.createElement('div',{className:'pts-n'},pts),
-                React.createElement('div',{className:'pts-l'},'puntos')
-              )
-            ),
-            React.createElement('div',{style:{textAlign:'right'}},
-              React.createElement('div',{className:'level-bar'},React.createElement('div',{className:'level-fill',style:{width:lvPct+'%'}})),
-              React.createElement('div',{className:'level-label'},lv.name)
+          section==='rrss'&&React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#4ade80'}},aprR),React.createElement('div',{className:'stat-l'},'Aprob.')),
+          section==='rrss'&&React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#fbbf24'}},revR),React.createElement('div',{className:'stat-l'},'Revisión')),
+          section==='seo'&&React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#4fd1cd'}},aprS),React.createElement('div',{className:'stat-l'},'Art. aprobados')),
+          section==='pub'&&React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#c084fc'}},aprP),React.createElement('div',{className:'stat-l'},'Campañas')),
+          React.createElement('div',{className:'pts-badge'},
+            React.createElement('span',null,'🏆'),
+            React.createElement('div',null,
+              React.createElement('div',{className:'pts-n'},pts),
+              React.createElement('div',{className:'pts-l'},'pts')
             )
           ),
           React.createElement('span',{className:'save-badge',style:{color:saved?'#4ade80':'#fbbf24'}},saved?'● Guardado':'● Guardando...')
         )
       ),
+      // SECTION SWITCHER
+      React.createElement('div',{className:'section-switcher'},
+        React.createElement('button',{className:'sec-btn '+(section==='rrss'?'on':''),onClick:()=>setSection('rrss')},
+          React.createElement('span',{className:'sec-icon'},'📸'),
+          'RRSS'
+        ),
+        React.createElement('button',{className:'sec-btn seo '+(section==='seo'?'on seo':''),onClick:()=>setSection('seo')},
+          React.createElement('span',{className:'sec-icon'},'🔍'),
+          'SEO'
+        ),
+        React.createElement('button',{className:'sec-btn pub '+(section==='pub'?'on pub':''),onClick:()=>setSection('pub')},
+          React.createElement('span',{className:'sec-icon'},'📣'),
+          'Publicidad'
+        )
+      ),
+      // MONTH TABS
       React.createElement('div',{className:'tabs'},
-        MONTHS.map(m=>React.createElement('button',{key:m.key,className:'tab '+(m.key===month?'on':''),onClick:()=>setMonth(m.key)},m.name))
+        MONTHS.map(m=>React.createElement('button',{key:m.key,className:'tab '+(m.key===month?'on '+tabClass:'')+' '+tabClass,onClick:()=>setMonth(m.key)},m.short))
       )
     ),
-    React.createElement('div',{className:'prog'},React.createElement('div',{className:'prog-bar',style:{width:pct+'%'}})),
+    React.createElement('div',{className:'prog'},React.createElement('div',{className:'prog-bar '+section,style:{width:pct+'%'}})),
 
+    // BODY
     React.createElement('div',{className:'body'},
-      // POINTS PANEL
-      showPtsPanel&&React.createElement('div',{className:'pts-panel'},
-        React.createElement('div',{className:'pts-big'},pts),
-        React.createElement('div',{className:'pts-info'},
-          React.createElement('div',{className:'pts-info-title'},'Tus puntos de contenido'),
-          React.createElement('div',{className:'pts-info-sub'},gApr+' posts aprobados · 10 pts cada uno')
-        ),
-        React.createElement('div',{className:'level-wrap'},
-          React.createElement('span',{className:'level-badge',style:{background:lv.bg,color:lv.color}},lv.name),
-          nextLv&&React.createElement('div',{style:{fontSize:10,color:'rgba(255,255,255,.4)',marginTop:4}},
-            'Faltan '+(nextLv.min-pts)+' pts para: '+nextLv.name
-          )
-        ),
-        React.createElement('button',{onClick:()=>setShowPtsPanel(false),style:{background:'none',border:'none',color:'rgba(255,255,255,.3)',cursor:'pointer',fontSize:18,padding:'4px'}},'✕')
-      ),
-
-      // MONTH HEADER
       React.createElement('div',{className:'mth-hd'},
-        React.createElement('div',{className:'mth-accent'}),
+        React.createElement('div',{className:'mth-accent '+section}),
         React.createElement('div',null,
           React.createElement('div',{className:'mth-name'},mo.name+' 2026'),
-          React.createElement('div',{className:'mth-sub'},pct+'% completado · '+(mo.weeks.length*4)+' posts base')
+          React.createElement('div',{className:'mth-sub'},
+            section==='rrss'?pct+'% completado · '+(mo.weeks.length*4)+' posts base':
+            section==='seo'?aprS+'/'+mDataS.articles.length+' artículos aprobados':
+            aprP+'/'+mDataP.campaigns.length+' campañas aprobadas'
+          )
         )
       ),
 
-      // WEEKS
-      mo.weeks.map((wl,wi)=>React.createElement(WeekSection,{
-        key:wi,mk:month,wi,
-        weekLabel:'Semana '+(wi+1)+' — '+wl,
-        planWeek:PLAN[month][wi],
-        dataWeek:mData[wi]||{ig:[],customIg:[]},
-        onUpdate:(plat,pi,f,v)=>update(month,wi,plat,pi,f,v),
-        onAddCustom:(plat,type)=>addCustom(month,wi,plat,type),
-        onUpdateCustom:(plat,ci,f,v)=>updateCustom(month,wi,plat,ci,f,v),
-        onDeleteCustom:(plat,ci)=>deleteCustom(month,wi,plat,ci),
-        onApprove:(plat,pi)=>{
-          const isCustom=plat==='custom';
-          approve(month,wi,isCustom?'customIg':'ig',pi,isCustom);
-        },
+      // ── RRSS CONTENT
+      section==='rrss'&&mo.weeks.map((wl,wi)=>React.createElement(WeekSection,{
+        key:wi,mk:month,wi,weekLabel:'Semana '+(wi+1)+' — '+wl,
+        planWeek:PLAN_RRSS[month][wi],
+        dataWeek:mDataR[wi]||{ig:[],customIg:[]},
+        onUpdate:(plat,pi,f,v)=>updateRRSS(month,wi,plat,pi,f,v),
+        onAddCustom:(plat,type)=>addCustomRRSS(month,wi,plat,type),
+        onUpdateCustom:(plat,ci,f,v)=>updateCustomRRSS(month,wi,plat,ci,f,v),
+        onDeleteCustom:(plat,ci)=>deleteCustomRRSS(month,wi,plat,ci),
+        onApprove:(plat,pi)=>approveRRSS(month,wi,plat==='custom'?'customIg':plat,pi,plat==='custom'),
         defOpen:wi===0,
       })),
 
+      // ── SEO CONTENT
+      section==='seo'&&React.createElement(SEOMonth,{
+        mk:month,monthData:mDataS,monthName:mo.name,
+        onUpdateArticle:(i,f,v)=>updateSEOArticle(month,i,f,v),
+        onUpdateReport:(v)=>updateSEOReport(month,v),
+        onAddArticle:()=>addSEOArticle(month),
+        onDeleteArticle:(i)=>deleteSEOArticle(month,i),
+        onApprove:(i)=>approveSEO(month,i),
+      }),
+
+      // ── PUBLICIDAD CONTENT
+      section==='pub'&&React.createElement('div',{className:'pub-section'},
+        // Plan publicitario global
+        React.createElement('div',{className:'pub-plan-banner'},
+          React.createElement('span',{className:'pub-plan-icon'},'📋'),
+          React.createElement('div',{className:'pub-plan-info'},
+            React.createElement('div',{className:'pub-plan-title'},'Plan Publicitario Global'),
+            React.createElement('div',{className:'pub-plan-sub'},'Enlace al documento maestro con la estrategia y planificación de publicidad')
+          ),
+          React.createElement('input',{className:'pub-plan-input',type:'text',value:pubPlanLink,onChange:e=>setPubPlanLink(e.target.value),placeholder:'https://docs.google.com/...'}),
+          pubPlanLink&&React.createElement('a',{className:'pub-plan-btn',href:pubPlanLink,target:'_blank',rel:'noopener'},'Abrir plan →')
+        ),
+        React.createElement(PubMonth,{
+          mk:month,monthData:mDataP,monthName:mo.name,
+          onUpdateCampaign:(i,f,v)=>updatePubCampaign(month,i,f,v),
+          onUpdateReport:(v)=>updatePubReport(month,v),
+          onAddCampaign:()=>addPubCampaign(month),
+          onDeleteCampaign:(i)=>deletePubCampaign(month,i),
+          onApprove:(i)=>approvePub(month,i),
+        })
+      ),
+
       React.createElement('div',{className:'footer'},
-        React.createElement('span',{className:'ft-l'},'Docrys & DC · Plan Instagram Abr–Dic 2026 · 144 posts base'),
-        React.createElement('span',{className:'ft-r'},'🏆 '+pts+' pts · '+lv.name)
+        React.createElement('span',{className:'ft-l'},'Docrys & DC · Plan Digital Abr–Dic 2026'),
+        React.createElement('span',{className:'ft-r'},'🏆 '+pts+' puntos acumulados')
       )
     )
   );
