@@ -1911,10 +1911,10 @@ function FormMarca({data,onChange}){
 // ── ONBOARDING SECTION COMPONENT ──────────────────────────────────────
 const ONBOARDING_TASKS=[
   {id:'contrato',    title:'Contrato firmado',                                  responsible:'sheila',label:'Sheila',   note:'Propuesta o contrato firmado en PDF con firma digital o física.',                           hasUrl:true, urlLabel:'Enlace al contrato firmado'},
-  {id:'rrss_li',     title:'Acceso RRSS: LinkedIn',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a LinkedIn del cliente.'},
-  {id:'rrss_ig',     title:'Acceso RRSS: Instagram',                            responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a Instagram del cliente.'},
-  {id:'rrss_fb',     title:'Acceso RRSS: Facebook',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso a Meta Business Suite del cliente.'},
-  {id:'rrss_tt',     title:'Acceso RRSS: TikTok',                               responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a TikTok del cliente.'},
+  {id:'rrss_li',     title:'Acceso RRSS: LinkedIn',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a LinkedIn del cliente.',                                        hasUrl:true, urlLabel:'URL del perfil de LinkedIn'},
+  {id:'rrss_ig',     title:'Acceso RRSS: Instagram',                            responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a Instagram del cliente.',                                       hasUrl:true, urlLabel:'URL del perfil de Instagram'},
+  {id:'rrss_fb',     title:'Acceso RRSS: Facebook',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso a Meta Business Suite del cliente.',                                        hasUrl:true, urlLabel:'URL de la página de Facebook'},
+  {id:'rrss_tt',     title:'Acceso RRSS: TikTok',                               responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a TikTok del cliente.',                                          hasUrl:true, urlLabel:'URL del perfil de TikTok'},
   {id:'hosting',     title:'Acceso: Hosting + Página web',                      responsible:'pm',    label:'PM',       note:'Solicitar accesos de hosting y CMS (WordPress, Joomla, etc.) si el servicio lo requiere.', hasUrl:true, urlLabel:'Enlace al panel de hosting / CMS'},
   {id:'gmb',         title:'Acceso: SEO – Google My Business',                  responsible:'jessy', label:'Jessy',    note:'Jessy gestiona la solicitud y verificación de acceso a Google My Business.',               hasUrl:true, urlLabel:'Enlace al perfil de Google My Business'},
   {id:'gads',        title:'Acceso: Publicidad – Google Ads',                   responsible:'paola', label:'Paola',    note:'Paola gestiona el acceso a la cuenta de Google Ads. Si no existe, se crea y vincula.',     hasUrl:true, urlLabel:'Enlace a la cuenta de Google Ads'},
@@ -2043,6 +2043,102 @@ function OnboardingSection({data,onToggle,onUpdateLink,onUpdateForm}){
               React.createElement(UrlInput,{value:links.presupuesto||'',onChange:function(v){onUpdateLink('presupuesto',v);},placeholder:'https://drive.google.com/...',variant:'rrss'})
             )
           )
+        ),
+        // Logotipo
+        React.createElement('div',{className:'ob-drive-card'},
+          React.createElement('div',null,
+            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:6,marginBottom:4}},
+              React.createElement('span',{className:'ob-drive-icon'},'✏️'),
+              React.createElement('div',null,
+                React.createElement('div',{className:'ob-drive-title'},'Logotipo del cliente'),
+                React.createElement('div',{className:'ob-drive-sub'},'Carpeta con el logotipo y archivos de identidad visual del cliente.')
+              )
+            ),
+            React.createElement('div',{className:'contact-field'},
+              React.createElement('label',null,'Enlace al logotipo'),
+              React.createElement(UrlInput,{value:links.logotipo||'',onChange:function(v){onUpdateLink('logotipo',v);},placeholder:'https://drive.google.com/...',variant:'rrss'})
+            )
+          )
+        )
+      )
+    ),
+
+    // META ADS — DATOS DE CUENTA
+    React.createElement('div',{className:'ob-block'},
+      React.createElement('div',{className:'ob-block-hdr'},
+        React.createElement('span',{className:'ob-block-title'},
+          React.createElement('span',null,'📘'),
+          'Datos de cuenta Meta Ads'
+        )
+      ),
+      React.createElement('div',{className:'ob-block-body',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}},
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'Número de cuenta publicitaria'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaAdAccount||'',onChange:function(e){onUpdateLink('metaAdAccount',e.target.value);},placeholder:'act_XXXXXXXXXXXXXXXX'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'Número de cuenta de pago'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaPaymentAccount||'',onChange:function(e){onUpdateLink('metaPaymentAccount',e.target.value);},placeholder:'ID de cuenta de pago'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'Número de socio comercial (BM ID)'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaBMId||'',onChange:function(e){onUpdateLink('metaBMId',e.target.value);},placeholder:'Business Manager ID'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de página de Facebook'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaPageId||'',onChange:function(e){onUpdateLink('metaPageId',e.target.value);},placeholder:'ID de la página'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de cuenta de Instagram'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaIgId||'',onChange:function(e){onUpdateLink('metaIgId',e.target.value);},placeholder:'ID de perfil de Instagram'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID del Píxel de Meta'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.metaPixelId||'',onChange:function(e){onUpdateLink('metaPixelId',e.target.value);},placeholder:'ID del Píxel'})
+        ),
+        React.createElement('div',{className:'contact-field',style:{gridColumn:'1/-1'}},
+          React.createElement('label',null,'Enlace a Meta Business Suite'),
+          React.createElement(UrlInput,{value:links.metaBMUrl||'',onChange:function(v){onUpdateLink('metaBMUrl',v);},placeholder:'https://business.facebook.com/...',variant:'rrss'})
+        )
+      )
+    ),
+
+    // GOOGLE ADS — DATOS DE CUENTA
+    React.createElement('div',{className:'ob-block'},
+      React.createElement('div',{className:'ob-block-hdr'},
+        React.createElement('span',{className:'ob-block-title'},
+          React.createElement('span',null,'🎯'),
+          'Datos de cuenta Google Ads'
+        )
+      ),
+      React.createElement('div',{className:'ob-block-body',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}},
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de cliente de Google Ads'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.gadsClientId||'',onChange:function(e){onUpdateLink('gadsClientId',e.target.value);},placeholder:'XXX-XXX-XXXX'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de cuenta de Google Analytics'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.gaId||'',onChange:function(e){onUpdateLink('gaId',e.target.value);},placeholder:'G-XXXXXXXXXX'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de Google Tag Manager'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.gtmId||'',onChange:function(e){onUpdateLink('gtmId',e.target.value);},placeholder:'GTM-XXXXXXX'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de Google Search Console'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.gscId||'',onChange:function(e){onUpdateLink('gscId',e.target.value);},placeholder:'Dominio o ID de propiedad'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'ID de Google My Business'),
+          React.createElement('input',{type:'text',className:'topic-input',style:{background:'#f5f0e8'},value:links.gmbId||'',onChange:function(e){onUpdateLink('gmbId',e.target.value);},placeholder:'ID del perfil de empresa'})
+        ),
+        React.createElement('div',{className:'contact-field'},
+          React.createElement('label',null,'Email de la cuenta Google asociada'),
+          React.createElement('input',{type:'email',className:'topic-input',style:{background:'#f5f0e8'},value:links.googleEmail||'',onChange:function(e){onUpdateLink('googleEmail',e.target.value);},placeholder:'cuenta@gmail.com'})
+        ),
+        React.createElement('div',{className:'contact-field',style:{gridColumn:'1/-1'}},
+          React.createElement('label',null,'Enlace al panel de Google Ads'),
+          React.createElement(UrlInput,{value:links.gadsUrl||'',onChange:function(v){onUpdateLink('gadsUrl',v);},placeholder:'https://ads.google.com/...',variant:'rrss'})
         )
       )
     ),
