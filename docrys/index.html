@@ -122,7 +122,39 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 .del-btn{font-size:10px;color:#ddd;background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 6px;transition:color .15s;border-radius:4px}
 .del-btn:hover{color:#c0392b;background:#fef2f2}
 
-/* ── BUDGET BLOCK ── */
+/* ── MEDIOS DIGITALES ── */
+.medios-section{display:flex;flex-direction:column;gap:16px}
+.medios-card{background:#fff;border:1px solid rgba(99,102,241,.2);border-left:4px solid #6366f1;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 8px rgba(99,102,241,.06)}
+.medios-card-hdr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.medios-badge{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:12px;background:#eef2ff;color:#4338ca}
+.medios-field label{font-size:10px;color:#6366f1;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;display:block}
+.medios-field input,.medios-field textarea{width:100%;padding:9px 11px;border:1.5px solid rgba(99,102,241,.2);border-radius:6px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#f5f5ff;transition:all .2s}
+.medios-field input:focus,.medios-field textarea:focus{border-color:#6366f1;background:#fff;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.medios-field textarea{resize:vertical;min-height:120px;line-height:1.7}
+.medios-field input::placeholder,.medios-field textarea::placeholder{color:#c7c7e0;font-size:11px}
+.medios-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.medios-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.medios-grid-2,.medios-grid-3{grid-template-columns:1fr}}
+.medios-titulares{display:flex;flex-direction:column;gap:8px;background:#f0f0ff;border:1.5px solid rgba(99,102,241,.15);border-radius:8px;padding:12px}
+.medios-titular-main input{font-weight:700;font-size:14px}
+.medios-titular-opt{opacity:.7}
+.medios-fotos-block{display:flex;flex-direction:column;gap:8px;background:#f5f5ff;border:1.5px solid rgba(99,102,241,.15);border-radius:8px;padding:12px}
+.medios-foto-row{display:flex;align-items:center;gap:8px}
+.medios-foto-num{font-size:10px;font-weight:800;color:#6366f1;min-width:18px}
+.medios-foto-selected{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:#eef2ff;color:#4338ca;white-space:nowrap}
+.medios-foto-check{width:18px;height:18px;border-radius:50%;border:2px solid #6366f1;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;background:#fff}
+.medios-foto-check.sel{background:#6366f1;border-color:#6366f1;color:#fff}
+.medios-add-btn{display:flex;align-items:center;gap:8px;width:100%;padding:12px 16px;border:1.5px dashed rgba(99,102,241,.35);border-radius:8px;background:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4338ca;transition:all .2s}
+.medios-add-btn:hover{background:#eef2ff;border-color:#6366f1}
+.medios-empty{text-align:center;padding:24px;color:#a5b4fc;font-size:12px}
+.tab.medios-tab{color:rgba(99,102,241,.5)}
+.tab.on.medios-tab{background:#6366f1;color:#fff;border-color:#4338ca}
+
+.sec-btn.medios.on{background:#f5f0e8;color:#4338ca;border-color:#6366f1;border-bottom-color:#f5f0e8}
+.mth-accent.medios{background:#6366f1}
+.prog-bar.medios{background:linear-gradient(90deg,#6366f1,#818cf8)}
+
+
 .budget-block{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:rgba(168,85,247,.04);border:1.5px solid rgba(168,85,247,.2);border-radius:8px;padding:10px 12px}
 @media(max-width:500px){.budget-block{grid-template-columns:1fr}}
 .budget-amount-wrap,.budget-tipo-wrap{display:flex;flex-direction:column;gap:4px}
@@ -263,7 +295,92 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 .agency-field input{width:100%;padding:7px 10px;border:1.5px solid rgba(201,168,76,.2);border-radius:6px;font-family:inherit;font-size:12px;color:#1a1205;outline:none;background:#f5f0e8;transition:all .2s}
 .agency-field input:focus{border-color:#c9a84c;background:#fff;box-shadow:0 0 0 2px rgba(201,168,76,.1)}
 
-/* ── ONBOARDING SECTION ── */
+.pdf-download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 20px;border-radius:8px;border:none;background:#0d0d0d;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;color:#c9a84c;letter-spacing:.1em;text-transform:uppercase;transition:all .2s}
+.pdf-download-btn:hover{background:#1a1a1a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+
+
+.negocio-step-hdr{display:flex;align-items:flex-start;gap:12px;padding:4px 0 8px}
+.negocio-step-emoji{font-size:32px;flex-shrink:0;line-height:1}
+.negocio-step-num{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#c9a84c;margin-bottom:2px}
+.negocio-step-title{font-size:16px;font-weight:800;color:#1a1205;line-height:1.2}
+.negocio-step-sub{font-size:12px;color:#8c7a68;margin-top:4px;line-height:1.5}
+.negocio-questions{display:flex;flex-direction:column;gap:16px}
+.negocio-q{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(201,168,76,.15);background:#fffdf7;transition:border-color .2s}
+.negocio-q.filled{border-color:rgba(201,168,76,.4);background:#fef9ee}
+.negocio-q-label{font-size:12px;font-weight:700;color:#5c4a1e;line-height:1.4}
+.negocio-q.filled .negocio-q-label{color:#8b6914}
+.negocio-q-input{width:100%;padding:10px 12px;border:1.5px solid rgba(201,168,76,.2);border-radius:8px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#fff;transition:all .2s;resize:vertical;line-height:1.7}
+.negocio-q-input:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.negocio-q-input::placeholder{color:#ccc;font-size:11px}
+.negocio-radio-group{display:flex;flex-direction:column;gap:6px}
+.negocio-radio-opt{font-size:12px;color:#5c4a1e;cursor:pointer;padding:7px 10px;border-radius:6px;border:1.5px solid rgba(201,168,76,.15);background:#fff;transition:all .2s;user-select:none}
+.negocio-radio-opt:hover{border-color:#c9a84c;background:#fef9ee}
+.negocio-radio-opt.sel{border-color:#c9a84c;background:#fef3dc;color:#6b4a00;font-weight:700}
+.negocio-dots{display:flex;justify-content:center;gap:8px;padding:8px 0}
+.negocio-dot{width:8px;height:8px;border-radius:50%;background:rgba(201,168,76,.2);transition:all .3s}
+.negocio-dot.active{background:#c9a84c;transform:scale(1.3)}
+.negocio-dot.done{background:#22c55e}
+.negocio-nav{display:flex;align-items:center;gap:10px;padding-top:4px}
+.negocio-prev-btn{padding:9px 16px;border-radius:8px;border:1.5px solid rgba(201,168,76,.3);background:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;color:#8b6914;transition:all .2s}
+.negocio-prev-btn:hover{background:#f5f0e8}
+.negocio-next-btn{padding:9px 20px;border-radius:8px;border:none;background:#c9a84c;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;color:#0d0d0d;letter-spacing:.04em;transition:all .2s}
+.negocio-next-btn:hover{background:#b8972e}
+.negocio-next-btn.disabled{background:#e5d9b6;color:#a09060;cursor:not-allowed}
+.negocio-next-btn.disabled:hover{background:#e5d9b6}
+.negocio-nav-hint{font-size:11px;color:#b09060;font-style:italic}
+
+.negocio-next-btn.done:hover{background:#16a34a}
+
+
+.marca-intro{background:#fef9ee;border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:12px 14px;font-size:12px;color:#5c4a1e;line-height:1.7;display:flex;flex-direction:column;gap:6px}
+.marca-section-hdr{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#c9a84c;padding:6px 0 2px;border-bottom:1.5px solid rgba(201,168,76,.2);margin-top:4px}
+.marca-q{display:flex;gap:12px;align-items:flex-start}
+.marca-q-num{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0}
+.marca-q-emoji{font-size:22px}
+.marca-q-n{font-size:10px;font-weight:800;color:#c9a84c;letter-spacing:.08em}
+.marca-q-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.marca-q-title{font-size:14px;font-weight:800;color:#1a1205}
+.marca-q-subtitle{font-size:11px;color:#8c7a68;font-style:italic}
+.marca-q-ask{font-size:13px;color:#2d2010;font-weight:600;line-height:1.5;background:rgba(201,168,76,.07);border-left:3px solid #c9a84c;padding:8px 10px;border-radius:0 6px 6px 0}
+.marca-q-tip{font-size:11px;color:#a07830;background:#fffdf0;padding:6px 10px;border-radius:6px;line-height:1.5}
+.marca-q-input{width:100%;padding:10px 12px;border:1.5px solid rgba(201,168,76,.25);border-radius:8px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#fff;transition:all .2s;resize:vertical;line-height:1.7}
+.marca-q-input:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.marca-q-input::placeholder{color:#ccc;font-size:12px}
+.marca-valores-counter{font-size:11px;font-weight:700;padding:4px 0}
+.marca-valores-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.marca-valor-btn{display:flex;flex-direction:column;gap:2px;padding:7px 11px;border-radius:8px;border:1.5px solid rgba(201,168,76,.25);background:#fff;cursor:pointer;font-family:inherit;transition:all .2s;text-align:left}
+.marca-valor-btn:hover:not(.disabled){border-color:#c9a84c;background:#fef9ee}
+.marca-valor-btn.sel{border-color:#c9a84c;background:#fef3dc}
+.marca-valor-btn.disabled{opacity:.35;cursor:not-allowed}
+.marca-valor-cat{font-size:9px;color:#a07830;letter-spacing:.06em;text-transform:uppercase}
+.marca-valor-label{font-size:12px;font-weight:600;color:#1a1205}
+.marca-valor-btn.sel .marca-valor-label{color:#6b4a00}
+
+
+.ob-form-card{background:#fff;border:1px solid rgba(201,168,76,.2);border-radius:10px;overflow:hidden}
+.ob-form-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:10px}
+.ob-form-card-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.ob-form-card-icon{font-size:22px;flex-shrink:0}
+.ob-form-card-info{flex:1;min-width:0}
+.ob-form-card-title{font-size:13px;font-weight:700;color:#1a1205}
+.ob-form-card-sub{font-size:11px;color:#8c7a68;margin-top:2px}
+.ob-form-progress{font-size:10px;font-weight:700;color:#22c55e;letter-spacing:.06em;white-space:nowrap}
+.ob-comenzar-btn{flex-shrink:0;padding:7px 16px;border-radius:20px;border:2px solid #c9a84c;background:#c9a84c;cursor:pointer;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#0d0d0d;transition:all .2s}
+.ob-comenzar-btn:hover{background:#b8972e;border-color:#b8972e}
+.ob-comenzar-btn.open{background:transparent;color:#8b6914;border-color:rgba(201,168,76,.4)}
+.ob-form-body{border-top:1px solid rgba(201,168,76,.1);padding:16px;display:flex;flex-direction:column;gap:14px;background:#fffdf7}
+.ob-form-section-title{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;margin-top:4px}
+.ob-form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.ob-form-grid-2{grid-template-columns:1fr}}
+.ob-form-field{display:flex;flex-direction:column;gap:4px}
+.ob-form-field label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8c7a68}
+.ob-form-field input,.ob-form-field textarea,.ob-form-field select{width:100%;padding:9px 11px;border:1.5px solid rgba(201,168,76,.2);border-radius:6px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#fff;transition:all .2s}
+.ob-form-field input:focus,.ob-form-field textarea:focus,.ob-form-field select:focus{border-color:#c9a84c;box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.ob-form-field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.ob-form-field input::placeholder,.ob-form-field textarea::placeholder{color:#ccc;font-size:11px}
+.ob-form-completado{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdf4;border:1px solid rgba(34,197,94,.2);border-radius:8px;font-size:11px;color:#16a34a;font-weight:600}
+
+
 .ob-section{display:flex;flex-direction:column;gap:16px}
 .ob-block{background:#fff;border:1px solid rgba(201,168,76,.25);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .ob-block-hdr{background:#0d0d0d;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -378,6 +495,7 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 <div class="toast-container" id="toastContainer"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const {useState,useEffect,useRef,useCallback}=React;
 
@@ -1113,11 +1231,686 @@ function AgencySection({data,onUpdate}){
   );
 }
 
+// ── MEDIOS DIGITALES COMPONENTS ────────────────────────────────────────
+function MediosArticleCard({data,idx,onUpdate,onDelete}){
+  const[open,setOpen]=useState(true);
+  function setFoto(i){onUpdate('fotoSeleccionada',i);}
+  return React.createElement('div',{className:'medios-card'},
+    React.createElement('div',{className:'medios-card-hdr'},
+      React.createElement('button',{
+        onClick:function(){setOpen(function(o){return !o;});},
+        style:{display:'flex',alignItems:'center',gap:8,background:'none',border:'none',cursor:'pointer'}
+      },
+        React.createElement('span',{className:'medios-badge'},'Artículo '+(idx+1)),
+        React.createElement('span',{style:{fontSize:11,color:'#a5b4fc',letterSpacing:'.06em'}},(data.titular||'Sin titular')+(open?'  ▲':'  ▼'))
+      ),
+      onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+    ),
+    open&&React.createElement('div',null,
+      // TITULARES
+      React.createElement('div',{className:'medios-titulares'},
+        React.createElement('div',{className:'medios-field medios-titular-main'},
+          React.createElement('label',null,'Titular principal'),
+          React.createElement('input',{type:'text',value:data.titular||'',onChange:function(e){onUpdate('titular',e.target.value);},placeholder:'Titular principal del artículo...'})
+        ),
+        React.createElement('div',{className:'medios-field medios-titular-opt'},
+          React.createElement('label',null,'Titular alternativo 1 (opcional)'),
+          React.createElement('input',{type:'text',value:data.titular2||'',onChange:function(e){onUpdate('titular2',e.target.value);},placeholder:'Segunda opción de titular...'})
+        ),
+        React.createElement('div',{className:'medios-field medios-titular-opt'},
+          React.createElement('label',null,'Titular alternativo 2 (opcional)'),
+          React.createElement('input',{type:'text',value:data.titular3||'',onChange:function(e){onUpdate('titular3',e.target.value);},placeholder:'Tercera opción de titular...'})
+        )
+      ),
+      // TEXTO
+      React.createElement('div',{className:'medios-field'},
+        React.createElement('label',null,'Texto del artículo'),
+        React.createElement('textarea',{value:data.texto||'',onChange:function(e){onUpdate('texto',e.target.value);},placeholder:'Redacción completa del artículo...'})
+      ),
+      // PALABRAS CLAVE
+      React.createElement('div',{className:'medios-field'},
+        React.createElement('label',null,'Palabras clave'),
+        React.createElement('input',{type:'text',value:data.keywords||'',onChange:function(e){onUpdate('keywords',e.target.value);},placeholder:'interiorismo Madrid, cocinas de diseño, reforma integral...'})
+      ),
+      // CONTACTO + WEB
+      React.createElement('div',{className:'medios-grid-2'},
+        React.createElement('div',{className:'medios-field'},
+          React.createElement('label',null,'Nombre persona de contacto'),
+          React.createElement('input',{type:'text',value:data.contactoNombre||'',onChange:function(e){onUpdate('contactoNombre',e.target.value);},placeholder:'Nombre y apellidos...'})
+        ),
+        React.createElement('div',{className:'medios-field'},
+          React.createElement('label',null,'Teléfono persona de contacto'),
+          React.createElement('input',{type:'tel',value:data.contactoTel||'',onChange:function(e){onUpdate('contactoTel',e.target.value);},placeholder:'+34 600 000 000'})
+        )
+      ),
+      React.createElement('div',{className:'medios-field'},
+        React.createElement('label',null,'Web a enlazar'),
+        React.createElement(UrlInput,{value:data.web||'',onChange:function(v){onUpdate('web',v);},placeholder:'https://docrysdc.es/...',variant:'rrss'})
+      ),
+      // FOTOS
+      React.createElement('div',{className:'medios-fotos-block'},
+        React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:4}},
+          React.createElement('label',{className:'field-label',style:{color:'#6366f1',margin:0}},'Fotos a acompañar el artículo'),
+          data.fotoSeleccionada!==undefined&&React.createElement('span',{className:'medios-foto-selected'},'Seleccionada: Foto '+(data.fotoSeleccionada+1))
+        ),
+        [0,1,2].map(function(i){
+          const val=data['foto'+(i+1)]||'';
+          const isSel=data.fotoSeleccionada===i;
+          return React.createElement('div',{key:i,className:'medios-foto-row'},
+            React.createElement('span',{className:'medios-foto-num'},i+1),
+            React.createElement('div',{style:{flex:1,minWidth:0}},
+              React.createElement(UrlInput,{
+                value:val,
+                onChange:function(v){onUpdate('foto'+(i+1),v);},
+                placeholder:'https://drive.google.com/... (foto '+(i+1)+')',
+                variant:'rrss'
+              })
+            ),
+            React.createElement('div',{
+              className:'medios-foto-check'+(isSel?' sel':''),
+              onClick:function(){setFoto(isSel?undefined:i);},
+              title:isSel?'Deseleccionar':'Seleccionar esta foto'
+            },isSel?'★':'☆')
+          );
+        })
+      )
+    )
+  );
+}
+
+function MediosSection({data,onUpdateArticle,onAddArticle,onDeleteArticle}){
+  const articles=data||[];
+  return React.createElement('div',{className:'medios-section'},
+    articles.length===0
+      ?React.createElement('div',{className:'medios-empty'},'Aún no hay artículos este mes. Añade el primero.')
+      :articles.map(function(art,i){
+        return React.createElement(MediosArticleCard,{
+          key:art.id||i, idx:i, data:art,
+          onUpdate:function(f,v){onUpdateArticle(i,f,v);},
+          onDelete:articles.length>0?function(){onDeleteArticle(i);}:null
+        });
+      }),
+    React.createElement('button',{className:'medios-add-btn',onClick:onAddArticle},
+      React.createElement('span',{className:'add-icon',style:{background:'#6366f1',color:'#fff',width:20,height:20,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,flexShrink:0}},'+'),
+      'Añadir artículo'
+    )
+  );
+}
+
+// ── PDF EXPORT ─────────────────────────────────────────────────────────
+function downloadFormPDF(title, subtitle, sections, filename){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210; const margin=18; const contentW=W-margin*2;
+  let y=margin;
+
+  // HEADER
+  doc.setFillColor(13,13,13);
+  doc.rect(0,0,W,28,'F');
+  doc.setTextColor(201,168,76);
+  doc.setFontSize(14);doc.setFont('helvetica','bold');
+  doc.text('Los Martes No Hay Luna',margin,12);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');
+  doc.setTextColor(180,180,180);
+  doc.text('Agencia de Marketing · Madrid · losmartesnohayluna.com',margin,19);
+  y=36;
+
+  // TITLE
+  doc.setTextColor(13,13,13);
+  doc.setFontSize(18);doc.setFont('helvetica','bold');
+  doc.text(title,margin,y);y+=7;
+  doc.setFontSize(10);doc.setFont('helvetica','normal');
+  doc.setTextColor(100,100,100);
+  doc.text(subtitle,margin,y);y+=3;
+
+  // DIVIDER
+  doc.setDrawColor(201,168,76);doc.setLineWidth(0.5);
+  doc.line(margin,y+2,W-margin,y+2);y+=8;
+
+  // DATE
+  const fecha=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+  doc.setFontSize(8);doc.setTextColor(150,150,150);
+  doc.text('Generado el '+fecha,margin,y);y+=8;
+
+  sections.forEach(function(sec){
+    // Section header
+    if(y>260){doc.addPage();y=margin;}
+    doc.setFillColor(245,240,232);
+    doc.roundedRect(margin,y,contentW,8,1,1,'F');
+    doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.setTextColor(139,105,20);
+    doc.text(sec.emoji+' '+sec.titulo.toUpperCase(),margin+3,y+5.5);
+    y+=12;
+
+    sec.preguntas.forEach(function(q){
+      if(y>265){doc.addPage();y=margin;}
+      // Question
+      doc.setFontSize(9);doc.setFont('helvetica','bold');
+      doc.setTextColor(40,30,10);
+      const qLines=doc.splitTextToSize(q.pregunta,contentW);
+      doc.text(qLines,margin,y);
+      y+=qLines.length*4.5+1;
+
+      // Answer
+      const answer=q.respuesta||(q.tipo==='valores'?q.respuesta:'Sin respuesta');
+      doc.setFontSize(10);doc.setFont('helvetica','normal');
+      doc.setTextColor(60,50,30);
+      if(answer&&answer!=='Sin respuesta'){
+        doc.setFillColor(255,253,247);
+        const aLines=doc.splitTextToSize(answer,contentW-6);
+        const boxH=aLines.length*5+5;
+        if(y+boxH>275){doc.addPage();y=margin;}
+        doc.roundedRect(margin,y,contentW,boxH,1,1,'F');
+        doc.setDrawColor(201,168,76);doc.setLineWidth(0.3);
+        doc.roundedRect(margin,y,contentW,boxH,1,1,'S');
+        doc.text(aLines,margin+3,y+4);
+        y+=boxH+5;
+      } else {
+        doc.setTextColor(180,180,180);
+        doc.setFontSize(9);
+        doc.text('—',margin+3,y);
+        y+=6;
+      }
+      if(y>265){doc.addPage();y=margin;}
+    });
+    y+=3;
+  });
+
+  // FOOTER on each page
+  const pages=doc.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFillColor(13,13,13);
+    doc.rect(0,287,W,10,'F');
+    doc.setFontSize(7);doc.setFont('helvetica','normal');
+    doc.setTextColor(150,150,150);
+    doc.text('Los Martes No Hay Luna · Confidencial',margin,293);
+    doc.text('Página '+i+' de '+pages,W-margin-15,293);
+  }
+
+  doc.save(filename);
+}
+
+// ── FORMULARIO CONOCIENDO TU NEGOCIO (WIZARD) ────────────────────────
+const NEGOCIO_STEPS=[
+  {
+    id:'quieneres',
+    emoji:'👋',
+    titulo:'¡Cuéntanos quién eres!',
+    subtitulo:'Nada de CVs ni frases hechas — queremos la versión real.',
+    preguntas:[
+      {key:'nombre',    tipo:'input', label:'Nombre y empresa',                      placeholder:'Ej: Ana García, Estudio García Arquitectura'},
+      {key:'frase',     tipo:'input', label:'En una frase, ¿a qué te dedicas?',      placeholder:'Ej: "Diseñamos cocinas con alma para gente exigente"'},
+      {key:'porque',    tipo:'text',  label:'¿Por qué montaste este negocio? La historia real, no la versión "bonita" del LinkedIn 😄', placeholder:'Qué pasó, qué te fastidiaba del sector, qué querías cambiar...'},
+      {key:'orgullo',   tipo:'text',  label:'¿De qué te sientes más orgulloso/a hasta hoy?', placeholder:'Ese logro que cuando lo piensas dices "mereció la pena todo"...'},
+    ]
+  },
+  {
+    id:'cliente',
+    emoji:'🎯',
+    titulo:'Tu cliente ideal',
+    subtitulo:'Cuanto más específico/a seas, mejor podremos ayudarte. ¡No tengas miedo de ser concreto/a!',
+    preguntas:[
+      {key:'clienteIdeal',  tipo:'text',  label:'Descríbeme a tu cliente ideal como si fuera una persona real', placeholder:'Edad, profesión, qué le quita el sueño, cómo toma decisiones, cuánto puede invertir...'},
+      {key:'problemaReal',  tipo:'text',  label:'¿Qué problema concreto le resuelves que antes no podía resolver solo?', placeholder:'No el problema técnico — el problema HUMANO detrás de eso'},
+      {key:'3minutos',      tipo:'text',  label:'Si tuvieras 3 minutos de atención total de tu cliente ideal, ¿qué le dirías sí o sí?', placeholder:'Sin presentación corporativa. Lo que le dirías de tú a tú'},
+      {key:'exito',         tipo:'text',  label:'¿Qué caso de éxito te ha hecho pensar "vale la pena todo esto"?',  placeholder:'Un cliente específico, qué problema tenía, qué cambió con vosotros...'},
+    ]
+  },
+  {
+    id:'mercado',
+    emoji:'⚔️',
+    titulo:'Tu mercado y competencia',
+    subtitulo:'Conocer el terreno de juego es clave para ganar.',
+    preguntas:[
+      {key:'competidores',    tipo:'text',  label:'¿Quiénes son tus 3 principales competidores? ¿Qué hacen bien?', placeholder:'Menciona nombres si puedes y di qué les funciona (sin miedo, ¡esto es confidencial!)'},
+      {key:'diferencia',      tipo:'text',  label:'¿Qué haces TÚ que ellos no hacen — o no hacen bien?', placeholder:'Tu ventaja real. No "mejor calidad" ni "mejor precio" — algo específico y concreto'},
+      {key:'enemigo',         tipo:'text',  label:'¿Qué práctica del sector os indigna a ti y a tus clientes?', placeholder:'Ej: "Los presupuestos opacos que luego se multiplican" / "Promesas que no se cumplen"'},
+      {key:'comoLlegan',      tipo:'radio', label:'¿Cómo llegan principalmente tus clientes ahora mismo?',
+        opciones:['Boca a boca / recomendaciones','Redes sociales','Google / SEO','Publicidad de pago','Eventos / networking','Mezcla de varios']},
+    ]
+  },
+  {
+    id:'numeros',
+    emoji:'💰',
+    titulo:'Los números que importan',
+    subtitulo:'Sin números no hay estrategia. Todo es confidencial y solo lo usamos para ayudarte mejor.',
+    preguntas:[
+      {key:'facturacion',     tipo:'input', label:'Facturación aproximada en los últimos 12 meses', placeholder:'Ej: 180.000 €'},
+      {key:'nuevosClientes',  tipo:'radio', label:'¿Qué porcentaje de tus ingresos vienen de clientes nuevos?',
+        opciones:['Casi todo (80-100%) son clientes existentes','Mitad y mitad','La mayoría son nuevos clientes','No lo sé con exactitud']},
+      {key:'marketingPct',    tipo:'radio', label:'¿Cuánto destinas actualmente a marketing y publicidad?',
+        opciones:['Casi nada (menos del 2%)','Poco (2-5%)','Algo (5-10%)','Bastante (más del 10%)','No tengo presupuesto definido']},
+      {key:'meta12',          tipo:'input', label:'¿Cuál es tu objetivo de facturación en los próximos 12 meses?', placeholder:'Ej: 250.000 € / Crecer un 30%'},
+    ]
+  },
+  {
+    id:'vision',
+    emoji:'🚀',
+    titulo:'Tu visión y cómo te comunicas',
+    subtitulo:'¿Hacia dónde vas y cómo quieres que el mundo te vea?',
+    preguntas:[
+      {key:'objetivos12',     tipo:'text',  label:'¿Qué 3 cosas quieres haber logrado en 12 meses?', placeholder:'Sé específico/a: clientes, facturación, presencia, equipo, paz mental...'},
+      {key:'referente',       tipo:'text',  label:'¿Qué marca o empresa (de cualquier sector) te inspira? ¿Qué te gusta de ella?', placeholder:'Ej: "Me inspira Patagonia por su autenticidad y coherencia entre discurso y acción"'},
+      {key:'comoTeVen',       tipo:'text',  label:'¿Cómo crees que te describen tus clientes actuales cuando te recomiendan?', placeholder:'Intenta recordar frases reales que te hayan dicho...'},
+      {key:'comoQuieres',     tipo:'text',  label:'¿Cómo QUIERES que te describan? ¿Qué te gustaría que dijeran de ti?', placeholder:'La versión ideal de cómo percibirte en la mente de tu cliente'},
+    ]
+  },
+  {
+    id:'final',
+    emoji:'✨',
+    titulo:'Lo que nadie más pregunta',
+    subtitulo:'Las respuestas más honestas suelen estar al final. ¡Ya queda poco!',
+    preguntas:[
+      {key:'noEntendido',     tipo:'text',  label:'¿Qué es lo que el mercado o los clientes NO entienden bien de tu negocio?', placeholder:'Esa cosa que tienes que explicar siempre y que te gustaría que fuera obvia...'},
+      {key:'frenosCrecer',    tipo:'text',  label:'¿Qué es lo que sientes que más te frena para crecer ahora mismo?', placeholder:'Sin filtros: tiempo, equipo, comunicación, dinero, confianza, claridad...'},
+      {key:'cambiar1',        tipo:'text',  label:'Si pudieras cambiar UNA sola cosa de cómo te comunicas hoy, ¿cuál sería?', placeholder:'Esa cosa que cuando la piensas dices "si eso funcionara bien, todo cambiaría"'},
+      {key:'libreNegocio',    tipo:'text',  label:'¿Algo más que quieras contarnos y que no te hemos preguntado?',           placeholder:'Tu espacio libre. Cuéntanos lo que sea — a veces lo más importante sale aquí 😊'},
+    ]
+  },
+];
+
+function FormNegocio({data,onChange}){
+  const d=data||{};
+  const[open,setOpen]=useState(false);
+  const[step,setStep]=useState(0);
+
+  const totalPreguntas=NEGOCIO_STEPS.reduce(function(acc,s){return acc+s.preguntas.length;},0);
+  const filled=NEGOCIO_STEPS.reduce(function(acc,s){
+    return acc+s.preguntas.filter(function(p){return !!(d[p.key]&&String(d[p.key]).trim());}).length;
+  },0);
+  const pct=Math.round(filled/totalPreguntas*100);
+
+  const current=NEGOCIO_STEPS[step];
+  const isLast=step===NEGOCIO_STEPS.length-1;
+  const stepFilled=current.preguntas.filter(function(p){return !!(d[p.key]&&String(d[p.key]).trim());}).length;
+
+  return React.createElement('div',{className:'ob-form-card'},
+    // HEADER
+    React.createElement('div',{className:'ob-form-card-hdr'},
+      React.createElement('div',{className:'ob-form-card-left'},
+        React.createElement('span',{className:'ob-form-card-icon'},'🧠'),
+        React.createElement('div',{className:'ob-form-card-info'},
+          React.createElement('div',{className:'ob-form-card-title'},'Conociendo tu negocio'),
+          React.createElement('div',{className:'ob-form-card-sub'},open?'Paso '+(step+1)+' de '+NEGOCIO_STEPS.length+' — '+current.titulo:'6 pasos · ~8 min · Todo lo que necesitamos saber')
+        )
+      ),
+      filled>0&&React.createElement('span',{className:'ob-form-progress'},pct+'% completado'),
+      React.createElement('button',{className:'ob-comenzar-btn'+(open?' open':''),onClick:function(){setOpen(function(o){return !o;});}},open?'Cerrar':'Comenzar')
+    ),
+
+    // PROGRESS BAR (only when open)
+    open&&React.createElement('div',{style:{height:3,background:'rgba(201,168,76,.12)'}},
+      React.createElement('div',{style:{height:3,background:'linear-gradient(90deg,#c9a84c,#f0c96a)',width:((step/NEGOCIO_STEPS.length*100))+'%',transition:'width .4s'}})
+    ),
+
+    // STEP CONTENT
+    open&&React.createElement('div',{className:'ob-form-body'},
+
+      // STEP HEADER
+      React.createElement('div',{className:'negocio-step-hdr'},
+        React.createElement('div',{className:'negocio-step-emoji'},current.emoji),
+        React.createElement('div',null,
+          React.createElement('div',{className:'negocio-step-num'},'Paso '+(step+1)+' de '+NEGOCIO_STEPS.length),
+          React.createElement('div',{className:'negocio-step-title'},current.titulo),
+          React.createElement('div',{className:'negocio-step-sub'},current.subtitulo)
+        )
+      ),
+
+      // QUESTIONS
+      React.createElement('div',{className:'negocio-questions'},
+        current.preguntas.map(function(p){
+          return React.createElement('div',{key:p.key,className:'negocio-q'+(d[p.key]?' filled':'')},
+            React.createElement('label',{className:'negocio-q-label'},
+              d[p.key]?'✓ ':null,
+              p.label
+            ),
+            p.tipo==='radio'
+              ?React.createElement('div',{className:'negocio-radio-group'},
+                p.opciones.map(function(op){
+                  return React.createElement('label',{key:op,className:'negocio-radio-opt'+(d[p.key]===op?' sel':'')},
+                    React.createElement('input',{type:'radio',name:p.key,value:op,checked:d[p.key]===op,onChange:function(){onChange(p.key,op);},style:{display:'none'}}),
+                    d[p.key]===op?'● ':'○ ',
+                    op
+                  );
+                })
+              )
+              :p.tipo==='input'
+                ?React.createElement('input',{className:'negocio-q-input',type:'text',value:d[p.key]||'',onChange:function(e){onChange(p.key,e.target.value);},placeholder:p.placeholder})
+                :React.createElement('textarea',{className:'negocio-q-input',value:d[p.key]||'',onChange:function(e){onChange(p.key,e.target.value);},placeholder:p.placeholder,rows:4})
+          );
+        })
+      ),
+
+      // STEP PROGRESS DOTS
+      React.createElement('div',{className:'negocio-dots'},
+        NEGOCIO_STEPS.map(function(s,i){
+          const isDone=NEGOCIO_STEPS[i].preguntas.every(function(p){return !!(d[p.key]&&String(d[p.key]).trim());});
+          return React.createElement('div',{key:i,className:'negocio-dot'+(i===step?' active':'')+(isDone?' done':'')});
+        })
+      ),
+
+      // NAVIGATION
+      React.createElement('div',{className:'negocio-nav'},
+        step>0&&React.createElement('button',{className:'negocio-prev-btn',onClick:function(){setStep(function(s){return s-1;});}}, '← Anterior'),
+        React.createElement('div',{style:{flex:1}}),
+        stepFilled<current.preguntas.length&&React.createElement('span',{className:'negocio-nav-hint'},'Responde todas las preguntas para continuar'),
+        !isLast
+          ?React.createElement('button',{
+              className:'negocio-next-btn'+(stepFilled<current.preguntas.length?' disabled':''),
+              disabled:stepFilled<current.preguntas.length,
+              onClick:function(){if(stepFilled>=current.preguntas.length)setStep(function(s){return s+1;});}
+            },'Siguiente →'
+          )
+          :React.createElement('button',{
+              className:'negocio-next-btn done'+(stepFilled<current.preguntas.length?' disabled':''),
+              disabled:stepFilled<current.preguntas.length,
+              onClick:function(){if(stepFilled>=current.preguntas.length)setOpen(false);}
+            },'¡Listo! Guardar respuestas ✓'
+          )
+      ),
+
+      pct===100&&React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:10}},
+        React.createElement('div',{className:'ob-form-completado'},'🎉 ¡Cuestionario completado al 100%! Gracias, tenemos todo lo que necesitamos.'),
+        React.createElement('button',{
+          className:'pdf-download-btn',
+          onClick:function(){
+            const sections=NEGOCIO_STEPS.map(function(s){
+              return {
+                emoji:s.emoji, titulo:s.titulo,
+                preguntas:s.preguntas.map(function(p){
+                  return {
+                    pregunta:p.label,
+                    respuesta:p.tipo==='radio'?d[p.key]:d[p.key]||'',
+                    tipo:p.tipo
+                  };
+                })
+              };
+            });
+            downloadFormPDF(
+              'Conociendo tu negocio',
+              'Cuestionario estratégico completado por el cliente',
+              sections,
+              'conociendo-tu-negocio.pdf'
+            );
+          }
+        },'⬇️ Descargar PDF')
+      ),
+    )
+  );
+}
+
+const VALORES_LISTA=[
+  {id:'v1', cat:'💎 Excelencia', label:'Perfeccionismo constructivo'},
+  {id:'v2', cat:'💎 Excelencia', label:'Atención al detalle'},
+  {id:'v3', cat:'💎 Excelencia', label:'Rigor técnico'},
+  {id:'v4', cat:'💎 Excelencia', label:'Compromiso con la calidad'},
+  {id:'v5', cat:'💎 Excelencia', label:'Diseño con propósito'},
+  {id:'v6', cat:'💎 Excelencia', label:'Mejora continua'},
+  {id:'v7', cat:'💎 Excelencia', label:'Hacerlo bien, aunque lleve más tiempo'},
+  {id:'v8', cat:'🤝 Trato humano', label:'Transparencia radical'},
+  {id:'v9', cat:'🤝 Trato humano', label:'Honestidad sin filtros'},
+  {id:'v10',cat:'🤝 Trato humano', label:'Cercanía auténtica'},
+  {id:'v11',cat:'🤝 Trato humano', label:'Escucha activa'},
+  {id:'v12',cat:'🤝 Trato humano', label:'Empatía con el cliente'},
+  {id:'v13',cat:'🤝 Trato humano', label:'Sin sorpresas: todo claro desde el principio'},
+  {id:'v14',cat:'🤝 Trato humano', label:'Trato humano, sin jerarquías'},
+  {id:'v15',cat:'🌱 Ética', label:'Sostenibilidad real (no de postureo)'},
+  {id:'v16',cat:'🌱 Ética', label:'Respeto por los materiales y el entorno'},
+  {id:'v17',cat:'🌱 Ética', label:'Ética en la cadena de valor'},
+  {id:'v18',cat:'🌱 Ética', label:'Compromiso con la comunidad'},
+  {id:'v19',cat:'🌱 Ética', label:'Minimizar el impacto ambiental'},
+  {id:'v20',cat:'🎯 Visión', label:'Pensar a largo plazo'},
+  {id:'v21',cat:'🎯 Visión', label:'Ser referentes en nuestro sector'},
+  {id:'v22',cat:'🎯 Visión', label:'Coherencia entre lo que decimos y lo que entregamos'},
+  {id:'v23',cat:'🎯 Visión', label:'Elegancia sin ostentación'},
+  {id:'v24',cat:'🔧 Día a día', label:'Puntualidad como respeto'},
+  {id:'v25',cat:'🔧 Día a día', label:'Cero improvisación'},
+  {id:'v26',cat:'🔧 Día a día', label:'Claridad en los presupuestos'},
+  {id:'v27',cat:'🔧 Día a día', label:'Disponibilidad y respuesta rápida'},
+  {id:'v28',cat:'🔧 Día a día', label:'Flexibilidad con sentido común'},
+];
+
+const MARCA_STEPS=[
+  {
+    id:'mision',
+    emoji:'🔥',
+    titulo:'El corazón de tu marca',
+    subtitulo:'No busques respuestas "correctas". Busca la verdad que mueve tu empresa.',
+    preguntas:[
+      {key:'indignacion', tipo:'text',
+        label:'¿Qué te hizo decir "¡Basta, esto tiene que cambiar!" y por eso montaste esta empresa?',
+        placeholder:'Ej: "Estaba harto de ver cómo las agencias trataban a los clientes como números..."',
+        tip:'Piensa en algo del sector que te parece injusto, anticuado o absurdo. Cuanto más específico, mejor.'},
+      {key:'enemigo', tipo:'text',
+        label:'¿Qué cosa molesta tanto a tus clientes como a ti, y contra la cual lucháis juntos?',
+        placeholder:'Ej: "Luchamos contra los proyectos que prometen una cosa y entregan otra."',
+        tip:'No pienses en un competidor. Piensa en una práctica o mentalidad que perjudica a tu audiencia.'},
+    ]
+  },
+  {
+    id:'proposito',
+    emoji:'🌟',
+    titulo:'Tu propósito y visión',
+    subtitulo:'Las marcas que conectan tienen algo que las mueve más allá del dinero.',
+    preguntas:[
+      {key:'proposito', tipo:'text',
+        label:'¿Para qué existe realmente tu empresa, más allá de ganar dinero?',
+        placeholder:'Ej: "Queremos que la gente viva en espacios que les hagan sentir orgullosos cada vez que abren la puerta."',
+        tip:'Imagina que ya eres millonario. ¿Seguirías haciendo esto? ¿Por qué?'},
+      {key:'vision', tipo:'input',
+        label:'Si tu empresa fuera una serie de Netflix, ¿qué título tendría?',
+        placeholder:'Ej: "Los arquitectos del alma" / "Diseño sin mentiras"',
+        tip:'No digas "ser los mejores". Di qué cosa concreta quieres liderar o transformar.'},
+    ]
+  },
+  {
+    id:'personaje',
+    emoji:'🦸',
+    titulo:'La personalidad de tu marca',
+    subtitulo:'Las marcas memorables tienen carácter propio. ¿Cómo es el vuestro?',
+    preguntas:[
+      {key:'personaje', tipo:'input',
+        label:'Si tu marca fuera una persona, ¿quién sería y qué papel cumple para tus clientes?',
+        placeholder:'Ej: "El arquitecto de confianza de la familia: dice la verdad y nunca te deja tirado."',
+        tip:'Piensa en un rol: mentor, rebelde, cuidador, geek, sabio, colega... ¿A quién representarías?'},
+      {key:'comoDescribirte', tipo:'text',
+        label:'¿Cómo te gustaría que describieran tu empresa si fuera una persona?',
+        placeholder:'Ej: "Cercana, firme y resolutiva. Detallista sin ser obsesiva. Alguien en quien confías."',
+        tip:'Piensa en adjetivos que NO usaría cualquier empresa. Cuanto más específicos, mejor.'},
+    ]
+  },
+  {
+    id:'valores',
+    emoji:'🧭',
+    titulo:'Los 3 valores que os guían',
+    subtitulo:'Cuando tengáis que tomar una decisión difícil, ¿en qué os apoyáis? Elige exactamente 3.',
+    preguntas:[
+      {key:'valores', tipo:'valores',
+        label:'Selecciona exactamente 3 valores que representen cómo trabajáis y quiénes sois',
+        tip:'Si la decisión que tienes pendiente se compara con estos valores, el camino se vuelve claro.'},
+    ]
+  },
+  {
+    id:'incoherencia',
+    emoji:'🔍',
+    titulo:'La prueba de fuego',
+    subtitulo:'Nadie es perfecto. Las marcas más sólidas aprenden de sus incoherencias.',
+    preguntas:[
+      {key:'incoherencia', tipo:'text',
+        label:'¿Recuerdas una situación en la que actuaste contra esos valores? ¿Qué aprendiste?',
+        placeholder:'Ej: "Aceptamos a un cliente que no encajaba y quemamos al equipo. Aprendimos a decir no a tiempo."',
+        tip:'No es para juzgarte. Es para entender cómo reforzar vuestra cultura desde la experiencia real.'},
+    ]
+  },
+];
+
+function FormMarca({data,onChange}){
+  const d=data||{};
+  const[open,setOpen]=useState(false);
+  const[step,setStep]=useState(0);
+  const valores=d.valores||[];
+
+  function toggleValor(id){
+    const sel=valores.includes(id)?valores.filter(function(v){return v!==id;}):[...valores,id];
+    if(sel.length<=3)onChange('valores',sel);
+  }
+
+  const totalPreguntas=MARCA_STEPS.reduce(function(acc,s){return acc+s.preguntas.length;},0);
+  const filled=MARCA_STEPS.reduce(function(acc,s){
+    return acc+s.preguntas.filter(function(p){
+      if(p.tipo==='valores')return valores.length===3;
+      return !!(d[p.key]&&String(d[p.key]).trim());
+    }).length;
+  },0);
+  const pct=Math.round(filled/totalPreguntas*100);
+
+  const current=MARCA_STEPS[step];
+  const isLast=step===MARCA_STEPS.length-1;
+  const stepFilled=current.preguntas.filter(function(p){
+    if(p.tipo==='valores')return valores.length===3;
+    return !!(d[p.key]&&String(d[p.key]).trim());
+  }).length;
+
+  return React.createElement('div',{className:'ob-form-card'},
+    // HEADER
+    React.createElement('div',{className:'ob-form-card-hdr'},
+      React.createElement('div',{className:'ob-form-card-left'},
+        React.createElement('span',{className:'ob-form-card-icon'},'🎨'),
+        React.createElement('div',{className:'ob-form-card-info'},
+          React.createElement('div',{className:'ob-form-card-title'},'Identidad de marca'),
+          React.createElement('div',{className:'ob-form-card-sub'},open?'Paso '+(step+1)+' de '+MARCA_STEPS.length+' — '+current.titulo:'5 pasos · ~10 min · Metodología PQC')
+        )
+      ),
+      filled>0&&React.createElement('span',{className:'ob-form-progress'},pct+'% completado'),
+      React.createElement('button',{className:'ob-comenzar-btn'+(open?' open':''),onClick:function(){setOpen(function(o){return !o;});}},open?'Cerrar':'Comenzar')
+    ),
+
+    // PROGRESS BAR
+    open&&React.createElement('div',{style:{height:3,background:'rgba(201,168,76,.12)'}},
+      React.createElement('div',{style:{height:3,background:'linear-gradient(90deg,#c9a84c,#f0c96a)',width:((step/MARCA_STEPS.length*100))+'%',transition:'width .4s'}})
+    ),
+
+    // CONTENT
+    open&&React.createElement('div',{className:'ob-form-body'},
+      // STEP HEADER
+      React.createElement('div',{className:'negocio-step-hdr'},
+        React.createElement('div',{className:'negocio-step-emoji'},current.emoji),
+        React.createElement('div',null,
+          React.createElement('div',{className:'negocio-step-num'},'Paso '+(step+1)+' de '+MARCA_STEPS.length),
+          React.createElement('div',{className:'negocio-step-title'},current.titulo),
+          React.createElement('div',{className:'negocio-step-sub'},current.subtitulo)
+        )
+      ),
+
+      // QUESTIONS
+      React.createElement('div',{className:'negocio-questions'},
+        current.preguntas.map(function(p){
+          const isFilled=p.tipo==='valores'?valores.length===3:!!(d[p.key]&&String(d[p.key]).trim());
+          return React.createElement('div',{key:p.key,className:'negocio-q'+(isFilled?' filled':'')},
+            React.createElement('label',{className:'negocio-q-label'},isFilled?'✓ ':null,p.label),
+            p.tip&&React.createElement('div',{className:'marca-q-tip'},'💡 ',p.tip),
+            p.tipo==='valores'
+              ?React.createElement('div',null,
+                  React.createElement('div',{className:'marca-valores-counter',style:{color:valores.length===3?'#16a34a':'#b45309'}},
+                    valores.length===3?'✅ 3 valores seleccionados':'Seleccionados: '+valores.length+'/3 — elige exactamente 3'
+                  ),
+                  React.createElement('div',{className:'marca-valores-grid'},
+                    VALORES_LISTA.map(function(v){
+                      const sel=valores.includes(v.id);
+                      const disabled=!sel&&valores.length>=3;
+                      return React.createElement('button',{
+                        key:v.id,
+                        className:'marca-valor-btn'+(sel?' sel':'')+(disabled?' disabled':''),
+                        onClick:function(){if(!disabled)toggleValor(v.id);},
+                        disabled:disabled
+                      },
+                        React.createElement('span',{className:'marca-valor-cat'},v.cat),
+                        React.createElement('span',{className:'marca-valor-label'},v.label)
+                      );
+                    })
+                  )
+                )
+              :p.tipo==='input'
+                ?React.createElement('input',{className:'negocio-q-input',type:'text',value:d[p.key]||'',onChange:function(e){onChange(p.key,e.target.value);},placeholder:p.placeholder})
+                :React.createElement('textarea',{className:'negocio-q-input',value:d[p.key]||'',onChange:function(e){onChange(p.key,e.target.value);},placeholder:p.placeholder,rows:4})
+          );
+        })
+      ),
+
+      // DOTS
+      React.createElement('div',{className:'negocio-dots'},
+        MARCA_STEPS.map(function(s,i){
+          const isDone=MARCA_STEPS[i].preguntas.every(function(p){
+            if(p.tipo==='valores')return valores.length===3;
+            return !!(d[p.key]&&String(d[p.key]).trim());
+          });
+          return React.createElement('div',{key:i,className:'negocio-dot'+(i===step?' active':'')+(isDone?' done':'')});
+        })
+      ),
+
+      // NAV
+      React.createElement('div',{className:'negocio-nav'},
+        step>0&&React.createElement('button',{className:'negocio-prev-btn',onClick:function(){setStep(function(s){return s-1;});}}, '← Anterior'),
+        React.createElement('div',{style:{flex:1}}),
+        stepFilled<current.preguntas.length&&React.createElement('span',{className:'negocio-nav-hint'},'Responde todas las preguntas para continuar'),
+        !isLast
+          ?React.createElement('button',{
+              className:'negocio-next-btn'+(stepFilled<current.preguntas.length?' disabled':''),
+              disabled:stepFilled<current.preguntas.length,
+              onClick:function(){if(stepFilled>=current.preguntas.length)setStep(function(s){return s+1;});}
+            },'Siguiente →')
+          :React.createElement('button',{
+              className:'negocio-next-btn done'+(stepFilled<current.preguntas.length?' disabled':''),
+              disabled:stepFilled<current.preguntas.length,
+              onClick:function(){if(stepFilled>=current.preguntas.length)setOpen(false);}
+            },'¡Listo! Guardar respuestas ✓')
+      ),
+
+      pct===100&&React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:10}},
+        React.createElement('div',{className:'ob-form-completado'},'🎉 ¡Identidad de marca completada! Vuestra esencia está lista para trabajar.'),
+        React.createElement('button',{
+          className:'pdf-download-btn',
+          onClick:function(){
+            const valoresTexto=valores.map(function(id){
+              const v=VALORES_LISTA.find(function(x){return x.id===id;});
+              return v?v.cat+' — '+v.label:'';
+            }).join(' | ');
+            const allFields=[
+              {key:'indignacion',label:'La gran indignación'},
+              {key:'enemigo',label:'El enemigo compartido'},
+              {key:'proposito',label:'El propósito superior'},
+              {key:'vision',label:'Visión de marca'},
+              {key:'comoDescribirte',label:'Personalidad de marca'},
+              {key:'incoherencia',label:'La prueba de la incoherencia'},
+            ];
+            const sections=MARCA_STEPS.map(function(s){
+              return {
+                emoji:s.emoji, titulo:s.titulo,
+                preguntas:s.preguntas.map(function(p){
+                  const fieldDef=allFields.find(function(f){return f.key===p.key;});
+                  const label=fieldDef?fieldDef.label:p.label;
+                  const respuesta=p.tipo==='valores'?valoresTexto:(d[p.key]||'');
+                  return {pregunta:label,respuesta:respuesta,tipo:p.tipo};
+                })
+              };
+            });
+            downloadFormPDF(
+              'Identidad de marca',
+              'Cuestionario estratégico PQC completado por el cliente',
+              sections,
+              'identidad-de-marca.pdf'
+            );
+          }
+        },'⬇️ Descargar PDF')
+      ),
+    )
+  );
+}
+
 // ── ONBOARDING SECTION COMPONENT ──────────────────────────────────────
 const ONBOARDING_TASKS=[
   {id:'contrato',    title:'Contrato firmado',                                  responsible:'sheila',label:'Sheila',   note:'Propuesta o contrato firmado en PDF con firma digital o física.',                           hasUrl:true, urlLabel:'Enlace al contrato firmado'},
-  {id:'formulario1', title:'Formulario: Identidad de Marca',                    responsible:'pm',    label:'PM',       note:'Enviar y recopilar el formulario de identidad visual y posicionamiento de marca.',           hasUrl:true, urlLabel:'Enlace al formulario / respuestas'},
-  {id:'formulario2', title:'Formulario: Conociendo tu Negocio',                 responsible:'pm',    label:'PM',       note:'Enviar formulario para recopilar contexto, público objetivo, competencia y objetivos.',     hasUrl:true, urlLabel:'Enlace al formulario / respuestas'},
   {id:'rrss_li',     title:'Acceso RRSS: LinkedIn',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a LinkedIn del cliente.'},
   {id:'rrss_ig',     title:'Acceso RRSS: Instagram',                            responsible:'pm',    label:'PM',       note:'Solicitar acceso de gestión a Instagram del cliente.'},
   {id:'rrss_fb',     title:'Acceso RRSS: Facebook',                             responsible:'pm',    label:'PM',       note:'Solicitar acceso a Meta Business Suite del cliente.'},
@@ -1134,13 +1927,34 @@ const ONBOARDING_TASKS=[
   {id:'account',     title:'Account responsable comunicado al cliente',         responsible:'pm',    label:'PM',       note:'Confirmar por escrito quién es el account de referencia y cómo contactarle.'},
 ];
 
-function OnboardingSection({data,onToggle,onUpdateLink}){
+function OnboardingSection({data,onToggle,onUpdateLink,onUpdateForm}){
   const checks=data.checks||{};
   const links=data.links||{};
+  const forms=data.forms||{};
   const done=Object.values(checks).filter(Boolean).length;
   const pct=Math.round((done/ONBOARDING_TASKS.length)*100);
 
   return React.createElement('div',{className:'ob-section'},
+    // FORMULARIOS A RELLENAR POR EL CLIENTE
+    React.createElement('div',{className:'ob-block'},
+      React.createElement('div',{className:'ob-block-hdr'},
+        React.createElement('span',{className:'ob-block-title'},
+          React.createElement('span',null,'📋'),
+          'Formularios a rellenar por el cliente'
+        )
+      ),
+      React.createElement('div',{className:'ob-block-body'},
+        React.createElement(FormNegocio,{
+          data:forms.negocio||{},
+          onChange:function(f,v){onUpdateForm('negocio',f,v);}
+        }),
+        React.createElement(FormMarca,{
+          data:forms.marca||{},
+          onChange:function(f,v){onUpdateForm('marca',f,v);}
+        })
+      )
+    ),
+
     // CARPETAS DRIVE — primero, son lo más operativo
     React.createElement('div',{className:'ob-block'},
       React.createElement('div',{className:'ob-block-hdr'},
@@ -1211,6 +2025,22 @@ function OnboardingSection({data,onToggle,onUpdateLink}){
             React.createElement('div',{className:'contact-field'},
               React.createElement('label',null,'Enlace al proyecto'),
               React.createElement(UrlInput,{value:links.morningmate||'',onChange:function(v){onUpdateLink('morningmate',v);},placeholder:'https://morningmate.com/...',variant:'rrss'})
+            )
+          )
+        ),
+        // Presupuesto
+        React.createElement('div',{className:'ob-drive-card'},
+          React.createElement('div',null,
+            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:6,marginBottom:4}},
+              React.createElement('span',{className:'ob-drive-icon'},'💼'),
+              React.createElement('div',null,
+                React.createElement('div',{className:'ob-drive-title'},'Presupuesto enviado al cliente'),
+                React.createElement('div',{className:'ob-drive-sub'},'Enlace al documento de presupuesto o propuesta enviada.')
+              )
+            ),
+            React.createElement('div',{className:'contact-field'},
+              React.createElement('label',null,'Enlace al presupuesto'),
+              React.createElement(UrlInput,{value:links.presupuesto||'',onChange:function(v){onUpdateLink('presupuesto',v);},placeholder:'https://drive.google.com/...',variant:'rrss'})
             )
           )
         )
@@ -1411,8 +2241,13 @@ function App(){
   const[seo,setSEO]=useState(()=>loadSEO());
   const[pub,setPUB]=useState(()=>loadPUB());
   const[contact,setContact]=useState(()=>lsGet('contact')||{fiscal:{},contacts:[],files:[]});
-  const[onboarding,setOnboarding]=useState(()=>lsGet('onboarding')||{checks:{},links:{}});
+  const[onboarding,setOnboarding]=useState(()=>lsGet('onboarding')||{checks:{},links:{},forms:{}});
   const[agency,setAgency]=useState(()=>lsGet('agency')||{});
+  const[medios,setMedios]=useState(()=>{
+    const d={};
+    for(const m of MONTHS)d[m.key]=lsGet('medios_'+m.key)||[];
+    return d;
+  });
   const[pts,setPts]=useState(()=>loadPts());
   const[saved,setSaved]=useState(true);
   const timer=useRef(null);
@@ -1423,11 +2258,11 @@ function App(){
     setSaved(false);
     clearTimeout(timer.current);
     timer.current=setTimeout(()=>{
-      for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);}
+      for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);lsSet('medios_'+m.key,medios[m.key]);}
       lsSet('pts',pts); lsSet('contact',contact); lsSet('onboarding',onboarding); lsSet('agency',agency);
       setSaved(true);
     },800);
-  },[rrss,seo,pub,pts,contact,onboarding,agency]);
+  },[rrss,seo,pub,pts,contact,onboarding,agency,medios]);
 
   useEffect(()=>{lsSet('pub_plan_link',pubPlanLink);},[pubPlanLink]);
 
@@ -1496,8 +2331,14 @@ function App(){
 
   const updateAgency=useCallback(function(id,field,val){setAgency(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[id])n[id]={};n[id][field]=val;return n;});  },[]);
 
+  // ── MEDIOS handlers
+  const updateMediosArticle=useCallback(function(mk,i,f,v){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk][i][f]=v;return n;});  },[]);
+  const addMediosArticle=useCallback(function(mk){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk]=[...(n[mk]||[]),{id:Date.now(),titular:'',titular2:'',titular3:'',texto:'',keywords:'',contactoNombre:'',contactoTel:'',web:'',foto1:'',foto2:'',foto3:'',fotoSeleccionada:undefined}];return n;});  },[]);
+  const deleteMediosArticle=useCallback(function(mk,i){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].splice(i,1);return n;});  },[]);
+
   const toggleOnboarding=useCallback(function(id){setOnboarding(prev=>{const n=JSON.parse(JSON.stringify(prev));n.checks[id]=!n.checks[id];return n;});  },[]);
   const updateOnboardingLink=useCallback(function(key,val){setOnboarding(prev=>{const n=JSON.parse(JSON.stringify(prev));n.links[key]=val;return n;});  },[]);
+  const updateOnboardingForm=useCallback(function(formKey,field,val){setOnboarding(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n.forms)n.forms={};if(!n.forms[formKey])n.forms[formKey]={};n.forms[formKey][field]=val;return n;});  },[]);
 
   // ── CONTACT handlers
   const updateFiscal=useCallback(function(f,v){setContact(prev=>{const n=JSON.parse(JSON.stringify(prev));n.fiscal[f]=v;return n;});  },[]);
@@ -1520,7 +2361,7 @@ function App(){
   const aprP=mDataP.campaigns.filter(c=>c.status==='aprobado').length;
   const pct=section==='rrss'?(allR.length>0?Math.round(aprR/allR.length*100):0):section==='seo'?(mDataS.articles.length>0?Math.round(aprS/mDataS.articles.length*100):0):(mDataP.campaigns.length>0?Math.round(aprP/mDataP.campaigns.length*100):0);
 
-  const tabClass=section==='seo'?'seo-tab':section==='pub'?'pub-tab':'';
+  const tabClass=section==='seo'?'seo-tab':section==='pub'?'pub-tab':section==='medios'?'medios-tab':'';
 
   return React.createElement('div',null,
     // HEADER
@@ -1565,6 +2406,10 @@ function App(){
         React.createElement('button',{className:'sec-btn pub '+(section==='pub'?'on pub':''),onClick:()=>setSection('pub')},
           React.createElement('span',{className:'sec-icon'},'📣'),
           'Publicidad'
+        ),
+        React.createElement('button',{className:'sec-btn medios '+(section==='medios'?'on medios':''),onClick:()=>setSection('medios')},
+          React.createElement('span',{className:'sec-icon'},'📰'),
+          'Medios'
         )
       ),
       // MONTH TABS — hidden in contacto
@@ -1583,6 +2428,7 @@ function App(){
           React.createElement('div',{className:'mth-sub'},
             section==='rrss'?pct+'% completado · '+(mo.weeks.length*4)+' posts base':
             section==='seo'?aprS+'/'+mDataS.articles.length+' artículos aprobados':
+            section==='medios'?(medios[month]||[]).length+' artículo'+(((medios[month]||[]).length!==1)?'s':''):
             aprP+'/'+mDataP.campaigns.length+' campañas aprobadas'
           )
         )
@@ -1632,6 +2478,14 @@ function App(){
         })
       ),
 
+      // ── MEDIOS DIGITALES CONTENT
+      section==='medios'&&React.createElement(MediosSection,{
+        data:medios[month]||[],
+        onUpdateArticle:function(i,f,v){updateMediosArticle(month,i,f,v);},
+        onAddArticle:function(){addMediosArticle(month);},
+        onDeleteArticle:function(i){deleteMediosArticle(month,i);},
+      }),
+
       // ── AGENCIA CONTENT
       section==='agencia'&&React.createElement(AgencySection,{
         data:agency,
@@ -1643,6 +2497,7 @@ function App(){
         data:onboarding,
         onToggle:toggleOnboarding,
         onUpdateLink:updateOnboardingLink,
+        onUpdateForm:updateOnboardingForm,
       }),
 
       // ── CONTACTO CONTENT
