@@ -197,6 +197,18 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .historial-arrow{font-size:14px;color:#7C3AED;font-weight:700;transition:transform .2s;margin-left:6px;line-height:1}
 .historial-arrow.open{transform:rotate(180deg)}
 .historial-older{margin-top:4px;border-top:1px dashed rgba(124,58,237,.15);padding-top:4px}
+.delete-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.delete-modal{background:#fff;border-radius:14px;padding:28px 24px;max-width:380px;width:100%;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.delete-modal-title{font-size:16px;font-weight:800;color:#1A0B2E;margin:0}
+.delete-modal-sub{font-size:12px;color:#8C7A9C;margin-top:4px}
+.delete-confirm-input{padding:9px 12px;border:2px solid rgba(124,58,237,.2);border-radius:7px;font-family:inherit;font-size:13px;color:#1A0B2E;outline:none;width:100%;transition:all .2s}
+.delete-confirm-input.ok{border-color:#22c55e;background:#f0fdf4}
+.delete-confirm-input:focus{border-color:#7C3AED}
+.delete-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.delete-cancel-btn{padding:9px 18px;border-radius:7px;border:1.5px solid rgba(124,58,237,.2);background:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#8C7A9C}
+.delete-confirm-btn{padding:9px 18px;border-radius:7px;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;background:#ef4444;color:#fff;opacity:.4;transition:all .2s}
+.delete-confirm-btn:not(:disabled){opacity:1}
+.delete-confirm-btn:not(:disabled):hover{background:#dc2626}
 
 
 .util-nav{display:flex;gap:8px;padding:10px 16px 8px;background:#3D1785;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
@@ -282,6 +294,29 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .pub-card{background:#fdf8ff;border:1px solid rgba(168,85,247,.15);border-radius:10px;border-left:4px solid #a855f7;padding:13px 14px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s}
 .pub-card:hover{box-shadow:0 2px 10px rgba(168,85,247,.1)}
 .pub-card.approved{border-left-color:#22c55e;background:linear-gradient(135deg,#f0fdf4,#fdf8ff)}
+.salud-block{display:flex;flex-direction:column;gap:6px}
+.salud-btns{display:flex;flex-wrap:wrap;gap:5px}
+.salud-btn{padding:5px 12px;border-radius:20px;border:1.5px solid rgba(168,85,247,.2);background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#4C3A6B;transition:all .15s;font-family:inherit}
+.salud-btn:hover{border-color:#a855f7}
+.salud-btn.sel-azul{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8}
+.salud-btn.sel-verde{background:#f0fdf4;border-color:#22c55e;color:#15803d}
+.salud-btn.sel-amarillo{background:#fefce8;border-color:#eab308;color:#854d0e}
+.salud-btn.sel-rojo{background:#fef2f2;border-color:#ef4444;color:#b91c1c}
+.optim-block{display:flex;flex-direction:column;gap:8px}
+.optim-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:700;color:#8C7A9C;user-select:none;padding:2px 0}
+.optim-toggle:hover{color:#a855f7}
+.optim-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:#fdf8ff;border-radius:7px;border:1px solid rgba(168,85,247,.12)}
+.optim-item-text{flex:1;font-size:11px;color:#3a0066;line-height:1.5}
+.optim-item-date{font-size:10px;color:#a855f7;white-space:nowrap}
+.optim-del{font-size:10px;color:#ccc;background:none;border:none;cursor:pointer;padding:0 3px;flex-shrink:0}
+.optim-del:hover{color:#c0392b}
+.optim-add-row{display:flex;flex-direction:column;gap:6px;padding:8px 10px;background:#f9f5ff;border-radius:7px;border:1.5px dashed rgba(168,85,247,.25)}
+.optim-tipo-btns{display:flex;flex-wrap:wrap;gap:4px}
+.optim-tipo-btn{padding:4px 9px;border-radius:12px;border:1.5px solid rgba(168,85,247,.2);background:#fff;cursor:pointer;font-size:10px;font-weight:600;color:#6b21a8;font-family:inherit;transition:all .15s}
+.optim-tipo-btn:hover,.optim-tipo-btn.sel{background:#a855f7;color:#fff;border-color:#a855f7}
+.optim-otros-input{padding:6px 10px;border:1.5px solid rgba(168,85,247,.25);border-radius:6px;font-size:11px;font-family:inherit;color:#1A0B2E;outline:none;background:#fff;width:100%}
+.optim-add-btn{padding:5px 12px;border-radius:6px;background:#a855f7;color:#fff;border:none;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;align-self:flex-end}
+.optim-add-btn:hover{background:#9333ea}
 .pub-platform-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:4px}
 .pub-platform-badge.meta{background:#e8f0fe;color:#1a56db}
 .pub-platform-badge.google{background:#E9E3FB;color:#8b4513}
@@ -944,7 +979,7 @@ function loadSEO(){
 }
 function buildDefaultPUB(){
   const s={};
-  for(const m of MONTHS) s[m.key]={campaigns:PLAN_PUB[m.key].map(c=>({...c,linkCampana:'',reportLink:'',status:'pendiente'})),planLink:''};
+  for(const m of MONTHS) s[m.key]={campaigns:PLAN_PUB[m.key].map(c=>({...c,linkCampana:'',reportLink:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',historial:[],saludCampana:'',optimizaciones:[],linkCreatividades:'',linkMaterial:'',linkLeads:'',budgetAmount:'',budgetTipo:'total',correcciones:[]})),planLink:''};
   return s;
 }
 function loadPUB(){
@@ -984,6 +1019,46 @@ function AddButton({onAdd,variant}){
         React.createElement('span',{className:'dd-dot',style:{background:o.dot}}),
         o.label
       ))
+    )
+  );
+}
+
+function DeleteModal({titulo,onConfirm,onCancel}){
+  const[texto,setTexto]=useState('');
+  const[nombre,setNombre]=useState('');
+  const ok=texto==='Borrar'&&nombre;
+  return React.createElement('div',{className:'delete-modal-overlay',onClick:function(e){if(e.target===e.currentTarget)onCancel();}},
+    React.createElement('div',{className:'delete-modal'},
+      React.createElement('div',null,
+        React.createElement('div',{className:'delete-modal-title'},'🗑️ Eliminar elemento'),
+        React.createElement('div',{className:'delete-modal-sub'},'Vas a eliminar: ',React.createElement('strong',null,titulo))
+      ),
+      React.createElement('div',null,
+        React.createElement('div',{className:'confirm-section-label',style:{marginBottom:6}},'¿Quién lo borra?'),
+        React.createElement('div',{className:'nombre-btns'},
+          AGENCIA_NOMBRES.map(function(n){
+            return React.createElement('button',{key:n,className:'nombre-btn'+(nombre===n?' sel':''),onClick:function(){setNombre(n);}},n);
+          })
+        )
+      ),
+      React.createElement('div',null,
+        React.createElement('div',{className:'confirm-section-label',style:{marginBottom:6}},'Escribe "Borrar" para confirmar'),
+        React.createElement('input',{
+          className:'delete-confirm-input'+(texto==='Borrar'?' ok':''),
+          type:'text',autoFocus:true,
+          placeholder:'Borrar',
+          value:texto,
+          onChange:e=>setTexto(e.target.value)
+        })
+      ),
+      React.createElement('div',{className:'delete-modal-actions'},
+        React.createElement('button',{className:'delete-cancel-btn',onClick:onCancel},'Cancelar'),
+        React.createElement('button',{
+          className:'delete-confirm-btn',
+          disabled:!ok,
+          onClick:function(){if(ok)onConfirm(nombre);}
+        },'Eliminar definitivamente')
+      )
     )
   );
 }
@@ -1033,6 +1108,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
   const[selectedNombre,setSelectedNombre]=useState('');
   const[numRevision,setNumRevision]=useState('1ª');
   const[enviarOpen,setEnviarOpen]=useState(false);
+  const[showDelete,setShowDelete]=useState(false);
   const[emailPara,setEmailPara]=useState('');
   const[emailCC,setEmailCC]=useState('');
   const[newCorr,setNewCorr]=useState('');
@@ -1294,6 +1370,7 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onAddCustom,onU
 
 // ── SEO COMPONENTS ─────────────────────────────────────────────────────
 function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
+  const[showDeleteSeo,setShowDeleteSeo]=useState(false);
   const s=SC[data.status]||SC.pendiente;
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
@@ -1317,9 +1394,11 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',style:{fontSize:14},onClick:()=>setShowDeleteCamp(true)},'🗑️')
       )
     ),
+    showDeleteCamp&&React.createElement(DeleteModal,{titulo:data.name||'Campaña sin título',onCancel:()=>setShowDeleteCamp(false),onConfirm:function(n){onDelete();setShowDeleteCamp(false);}}),
+    showDeleteSeo&&React.createElement(DeleteModal,{titulo:data.title||'Artículo sin título',onCancel:()=>setShowDeleteSeo(false),onConfirm:function(n){onDelete();setShowDeleteSeo(false);}}),
     (data.revisionBy||data.approvedBy)&&React.createElement('div',{className:'registry'},
       data.revisionBy&&React.createElement('div',{className:'reg-tag rev'},React.createElement('span',{className:'reg-icon'},'📤'),'Enviado a revisión por ',React.createElement('strong',null,data.revisionBy),' · ',data.revisionAt),
       data.approvedBy&&React.createElement('div',{className:'reg-tag apr'},React.createElement('span',{className:'reg-icon'},'✅'),'Aprobado por ',React.createElement('strong',null,data.approvedBy),' · ',data.approvedAt)
@@ -1410,18 +1489,53 @@ const PLATFORM_LABELS={meta:'Meta Ads',google:'Google Ads',tiktok:'TikTok Ads',o
 function CampaignCard({data,onUpdate,onDelete,onApprove}){
   const s=SC[data.status]||SC.pendiente;
   const[confirming,setConfirming]=useState(null);
+  const[selectedNombre,setSelectedNombre]=useState('');
+  const[numRevision,setNumRevision]=useState('1ª');
   const[nameInput,setNameInput]=useState('');
+  const[optimOpen,setOptimOpen]=useState(false);
+  const[optimTipo,setOptimTipo]=useState('');
+  const[optimOtros,setOptimOtros]=useState('');
+  const[enviarOpen,setEnviarOpen]=useState(false);
+  const[emailPara,setEmailPara]=useState('');
+  const[emailCC,setEmailCC]=useState('');
+  const[newCorr,setNewCorr]=useState('');
+  const[showDeleteCamp,setShowDeleteCamp]=useState(false);
+  const OPTIM_TIPOS=['🧪 Test A/B de nuevo anuncio emocional','🎯 Ajuste de segmentación por poder adquisitivo','✏️ Mejora copy de formulario','💰 Redistribución de presupuesto a conjunto ganador','📝 Otros'];
+  const SALUD_OPTS=[{k:'aprendizaje',label:'🔵 En etapa de aprendizaje',cls:'azul'},{k:'excelente',label:'🟢 Excelente rendimiento',cls:'verde'},{k:'estable',label:'🟡 Rendimiento estable',cls:'amarillo'},{k:'inestable',label:'🔴 Rendimiento inestable',cls:'rojo'}];
+  const correcciones=data.correcciones||[];
+  const pendientes=correcciones.filter(function(c){return !c.done;}).length;
+  function addCorreccion(){const txt=newCorr.trim();if(!txt)return;onUpdate('correcciones',[...correcciones,{id:Date.now(),texto:txt,done:false}]);setNewCorr('');}
+  function toggleCorreccion(id){onUpdate('correcciones',correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;}));}
+  function deleteCorreccion(id){onUpdate('correcciones',correcciones.filter(function(c){return c.id!==id;}));}
+  function addOptimizacion(){
+    const tipo=optimTipo==='📝 Otros'?optimOtros.trim():optimTipo;
+    if(!tipo)return;
+    const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit'});
+    onUpdate('optimizaciones',[...(data.optimizaciones||[]),{id:Date.now(),texto:tipo,fecha:now}]);
+    setOptimTipo('');setOptimOtros('');
+  }
   function handleStatusClick(){
-    if(data.status==='pendiente'){setConfirming('revision');setNameInput('');}
-    else if(data.status==='revision'){setConfirming('aprobado');setNameInput('');}
-    else{onUpdate('status','pendiente');setConfirming(null);}
+    if(data.status==='pendiente'){setConfirming('revision');setSelectedNombre('');setNumRevision('1ª');}
+    else if(data.status==='revision'){setConfirming('aprobado');setSelectedNombre('');setNameInput('');}
+    else{setConfirming('devolucion');setSelectedNombre('');setNumRevision('1ª');}
   }
   function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const name=nameInput.trim()||'Sin nombre';
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','revision',name,now,data.nombre||'Campaña sin título');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('pub','aprobado',name,now,data.nombre||'Campaña sin título');}
-    setConfirming(null);setNameInput('');
+    const name=confirming==='aprobado'?(nameInput.trim()||'Cliente'):(selectedNombre||'Sin nombre');
+    const label=confirming==='revision'?('['+numRevision+' revisión] '+name):confirming==='devolucion'?('['+numRevision+' revisión devuelta] '+name):name;
+    const evento={accion:confirming,nombre:label,fecha:now};
+    const nuevoHistorial=[...(data.historial||[]),evento];
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',label);onUpdate('revisionAt',now);onUpdate('historial',nuevoHistorial);sendEmail('pub','revision',label,now,data.name||'Campaña sin título');}
+    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onUpdate('historial',nuevoHistorial);onApprove();sendEmail('pub','aprobado',name,now,data.name||'Campaña sin título');}
+    else if(confirming==='devolucion'){onUpdate('status','revision');onUpdate('revisionBy',label);onUpdate('revisionAt',now);onUpdate('approvedBy','');onUpdate('approvedAt','');onUpdate('historial',nuevoHistorial);sendEmail('pub','devolucion',label,now,data.name||'Campaña sin título');}
+    setConfirming(null);setSelectedNombre('');setNameInput('');
+  }
+  function handleEnviarCliente(){
+    if(!emailPara)return;
+    saveFrecuente(emailPara);
+    if(emailCC){emailCC.split(',').forEach(function(e){saveFrecuente(e.trim());});}
+    sendEmailCliente(emailPara,emailCC?emailCC.split(',').map(function(e){return e.trim();}):[],'pub',data.name||'Campaña sin título');
+    setEnviarOpen(false);setEmailPara('');setEmailCC('');
   }
   const platClass=data.platform||'otras';
   return React.createElement('div',{className:'pub-card'+(data.status==='aprobado'?' approved':'')},
@@ -1493,7 +1607,112 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
         React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Informe mensual de campaña'),
         React.createElement(UrlInput,{value:data.reportLink||'',onChange:v=>onUpdate('reportLink',v),placeholder:'https://docs.google.com/...',className:'link-input pub',variant:'pub'})
       )
-    )
+    ),
+    // SEGUIMIENTO LEADS
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'🔗 Seguimiento de leads'),
+      React.createElement(UrlInput,{value:data.linkLeads||'',onChange:v=>onUpdate('linkLeads',v),placeholder:'https://docs.google.com/spreadsheets/...',variant:'pub'})
+    ),
+    // SALUD DE CAMPAÑA
+    React.createElement('div',{className:'salud-block'},
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Salud de la campaña'),
+      React.createElement('div',{className:'salud-btns'},
+        SALUD_OPTS.map(function(o){
+          const isSel=data.saludCampana===o.k;
+          return React.createElement('button',{
+            key:o.k,
+            className:'salud-btn'+(isSel?' sel-'+o.cls:''),
+            onClick:function(){onUpdate('saludCampana',isSel?'':o.k);}
+          },o.label);
+        })
+      )
+    ),
+    // CREATIVIDADES + MATERIAL
+    React.createElement('div',{className:'pub-links-row'},
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'🎨 Creatividades activas (Drive)'),
+        React.createElement(UrlInput,{value:data.linkCreatividades||'',onChange:v=>onUpdate('linkCreatividades',v),placeholder:'https://drive.google.com/...',variant:'pub'})
+      ),
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'📁 Material del cliente (Drive)'),
+        React.createElement(UrlInput,{value:data.linkMaterial||'',onChange:v=>onUpdate('linkMaterial',v),placeholder:'https://drive.google.com/...',variant:'pub'})
+      )
+    ),
+    // HISTORIAL OPTIMIZACIONES
+    React.createElement('div',{className:'optim-block'},
+      React.createElement('div',{className:'optim-toggle',onClick:()=>setOptimOpen(o=>!o)},
+        React.createElement('span',null,optimOpen?'▾':'▸'),
+        ' ⚙️ Historial de optimizaciones',
+        (data.optimizaciones&&data.optimizaciones.length>0)&&React.createElement('span',{style:{marginLeft:6,fontSize:9,background:'rgba(168,85,247,.12)',color:'#a855f7',borderRadius:8,padding:'1px 6px',fontWeight:700}},data.optimizaciones.length)
+      ),
+      optimOpen&&React.createElement('div',{style:{marginTop:6,display:'flex',flexDirection:'column',gap:6}},
+        (data.optimizaciones||[]).map(function(o){
+          return React.createElement('div',{key:o.id,className:'optim-item'},
+            React.createElement('div',{className:'optim-item-text'},o.texto),
+            React.createElement('span',{className:'optim-item-date'},o.fecha),
+            React.createElement('button',{className:'optim-del',onClick:function(){onUpdate('optimizaciones',(data.optimizaciones||[]).filter(function(x){return x.id!==o.id;}));}},'✕')
+          );
+        }),
+        React.createElement('div',{className:'optim-add-row'},
+          React.createElement('div',{className:'optim-tipo-btns'},
+            OPTIM_TIPOS.map(function(t){
+              return React.createElement('button',{key:t,className:'optim-tipo-btn'+(optimTipo===t?' sel':''),onClick:function(){setOptimTipo(t);}},t);
+            })
+          ),
+          optimTipo==='📝 Otros'&&React.createElement('input',{
+            className:'optim-otros-input',type:'text',placeholder:'Describe la optimización...',
+            value:optimOtros,onChange:e=>setOptimOtros(e.target.value)
+          }),
+          React.createElement('button',{className:'optim-add-btn',onClick:addOptimizacion,disabled:!optimTipo||(optimTipo==='📝 Otros'&&!optimOtros.trim())},'+ Añadir')
+        )
+      )
+    ),
+    // CORRECCIONES DEL CLIENTE
+    React.createElement('div',{className:'corr-section'},
+      React.createElement('div',{className:'corr-header'},
+        React.createElement('span',{className:'corr-title'},'✏️ Correcciones del cliente'),
+        pendientes>0&&React.createElement('span',{className:'corr-badge'},pendientes+' pendiente'+(pendientes>1?'s':''))
+      ),
+      correcciones.map(function(c){
+        return React.createElement('div',{key:c.id,className:'corr-item'+(c.done?' done':'')},
+          React.createElement('div',{className:'corr-check',onClick:function(){toggleCorreccion(c.id);}},c.done?'✓':''),
+          React.createElement('div',{className:'corr-text'},c.texto),
+          React.createElement('button',{className:'corr-del',onClick:function(){deleteCorreccion(c.id);}},'✕')
+        );
+      }),
+      React.createElement('div',{className:'corr-add-row'},
+        React.createElement('input',{className:'corr-input',type:'text',value:newCorr,placeholder:'Añadir corrección...',
+          onChange:function(e){setNewCorr(e.target.value);},
+          onKeyDown:function(e){if(e.key==='Enter')addCorreccion();}}),
+        React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
+      )
+    ),
+    // ENVIAR AL CLIENTE
+    data.status==='revision'&&React.createElement('div',{className:'enviar-cliente-accordion'},
+      React.createElement('div',{className:'enviar-cliente-toggle',onClick:()=>setEnviarOpen(o=>!o)},
+        React.createElement('span',null,enviarOpen?'▾':'▸'),
+        ' 📨 Enviar al cliente para revisar'
+      ),
+      enviarOpen&&React.createElement('div',{className:'enviar-cliente-body'},
+        React.createElement('div',{className:'enviar-cliente-field'},
+          React.createElement('label',null,'Para'),
+          React.createElement('input',{className:'enviar-cliente-input',type:'email',placeholder:'email@cliente.com',value:emailPara,onChange:e=>setEmailPara(e.target.value)}),
+          getFrecuentes().length>0&&React.createElement('div',{className:'frecuentes'},
+            getFrecuentes().map(function(e){return React.createElement('span',{key:e,className:'frecuente-tag',onClick:function(){setEmailPara(e);}},e);})
+          )
+        ),
+        React.createElement('div',{className:'enviar-cliente-field'},
+          React.createElement('label',null,'CC'),
+          React.createElement('input',{className:'enviar-cliente-input',type:'text',placeholder:'cc@email.com',value:emailCC,onChange:e=>setEmailCC(e.target.value)})
+        ),
+        React.createElement('div',{className:'enviar-cliente-actions'},
+          React.createElement('button',{className:'enviar-cliente-cancel',onClick:()=>setEnviarOpen(false)},'Descartar'),
+          React.createElement('button',{className:'enviar-cliente-btn',onClick:handleEnviarCliente,disabled:!emailPara},'📨 Enviar')
+        )
+      )
+    ),
+    // HISTORIAL
+    (data.historial&&data.historial.length>0)&&React.createElement(HistorialBlock,{historial:data.historial})
   );
 }
 
@@ -1580,6 +1799,7 @@ function AgencySection({data,onUpdate}){
 // ── MEDIOS DIGITALES COMPONENTS ────────────────────────────────────────
 function MediosArticleCard({data,idx,onUpdate,onDelete}){
   const[open,setOpen]=useState(true);
+  const[showDeleteMedios,setShowDeleteMedios]=useState(false);
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
   function setFoto(i){onUpdate('fotoSeleccionada',i);}
@@ -2884,7 +3104,7 @@ function App(){
     setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].reportLink=v;return n;});
   },[]);
   const addPubCampaign=useCallback((mk)=>{
-    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns.push({name:'Nueva campaña',platform:'meta',objetivo:'',budget:'',linkCampana:'',reportLink:'',status:'pendiente'});return n;});
+    setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns.push({name:'Nueva campaña',platform:'meta',objetivo:'',budget:'',budgetAmount:'',budgetTipo:'total',linkCampana:'',reportLink:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',historial:[],saludCampana:'',optimizaciones:[],linkCreatividades:'',linkMaterial:'',linkLeads:'',correcciones:[]});return n;});
   },[]);
   const deletePubCampaign=useCallback((mk,i)=>{
     setPUB(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].campaigns.splice(i,1);return n;});
