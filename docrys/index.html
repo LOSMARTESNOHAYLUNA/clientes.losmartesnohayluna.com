@@ -596,11 +596,10 @@ const EMAIL_TO={
 };
 async function sendEmail(seccion,accion,nombre,fecha,titulo){
   try{
-    const dest=EMAIL_TO[seccion]||EMAIL_TO.rrss;
     await fetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({seccion,accion,nombre,fecha,titulo,to:dest.to,cc:dest.cc,cliente:'Docrys & DC'})
+      body:JSON.stringify({seccion,accion,nombre,fecha,titulo,cliente:'docrys'})
     });
   }catch(e){}
 }
@@ -885,14 +884,14 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     onUpdate('historial',hist);
     if(confirming==='revision'){
       onUpdate('status','revision'); onUpdate('revisionBy',name); onUpdate('revisionAt',now);
-      sendEmail('rrss','En revisión',name,now,data.topic||'Post RRSS');
+      sendEmail('rrss','revision',name,now,data.topic||'Post RRSS');
     } else if(confirming==='aprobado'){
       onUpdate('status','aprobado'); onUpdate('approvedBy',name); onUpdate('approvedAt',now);
       onApprove();
-      sendEmail('rrss','Aprobado',name,now,data.topic||'Post RRSS');
+      sendEmail('rrss','aprobado',name,now,data.topic||'Post RRSS');
     } else if(confirming==='devuelto'){
       onUpdate('status','revision'); onUpdate('revisionBy',name); onUpdate('revisionAt',now);
-      sendEmail('rrss','Devuelto a revisión',name,now,data.topic||'Post RRSS');
+      sendEmail('rrss','devolucion',name,now,data.topic||'Post RRSS');
     }
     setConfirming(null); setNameInput('');
   }
@@ -1056,9 +1055,9 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
     const name=nameInput.trim()||'Sin nombre';
     const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','En revisión',name,now,data.title||'Artículo SEO');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('seo','Aprobado',name,now,data.title||'Artículo SEO');}
-    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','Devuelto a revisión',name,now,data.title||'Artículo SEO');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','revision',name,now,data.title||'Artículo SEO');}
+    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('seo','aprobado',name,now,data.title||'Artículo SEO');}
+    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','devolucion',name,now,data.title||'Artículo SEO');}
     setConfirming(null);setNameInput('');
   }
   const confirmLabels={revision:'📤 ¿Quién lo envía a revisión?',aprobado:'✅ ¿Quién aprueba?',devuelto:'↩️ ¿Quién lo devuelve a revisión?'};
@@ -1174,9 +1173,9 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     const name=nameInput.trim()||'Sin nombre';
     const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','En revisión',name,now,data.name||'Campaña');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('pub','Aprobado',name,now,data.name||'Campaña');}
-    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','Devuelto a revisión',name,now,data.name||'Campaña');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','revision',name,now,data.name||'Campaña');}
+    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('pub','aprobado',name,now,data.name||'Campaña');}
+    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','devolucion',name,now,data.name||'Campaña');}
     setConfirming(null);setNameInput('');
   }
   const confirmLabels={revision:'📤 ¿Quién lo envía a revisión?',aprobado:'✅ ¿Quién aprueba?',devuelto:'↩️ ¿Quién lo devuelve a revisión?'};
@@ -1368,9 +1367,9 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
     const name=nameInput.trim()||'Sin nombre';
     const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','En revisión',name,now,data.titular||'Artículo Medios');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);if(onApprove)onApprove();sendEmail('medios','Aprobado',name,now,data.titular||'Artículo Medios');}
-    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','Devuelto a revisión',name,now,data.titular||'Artículo Medios');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','revision',name,now,data.titular||'Artículo Medios');}
+    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);if(onApprove)onApprove();sendEmail('medios','aprobado',name,now,data.titular||'Artículo Medios');}
+    else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','devolucion',name,now,data.titular||'Artículo Medios');}
     setConfirming(null);setNameInput('');
   }
   const confirmLabels={revision:'📤 ¿Quién lo envía a revisión?',aprobado:'✅ ¿Quién aprueba?',devuelto:'↩️ ¿Quién lo devuelve a revisión?'};
@@ -1789,7 +1788,7 @@ function FormNegocio({data,onChange}){
             downloadFormPDF('Conociendo tu negocio','Cuestionario estratégico completado por el cliente',sections,'conociendo-tu-negocio.pdf');
             // Send email with form content
             const body=sections.map(function(s){return s.titulo+':\n'+s.preguntas.map(function(p){return '  '+p.pregunta+'\n  → '+(p.respuesta||'—');}).join('\n');}).join('\n\n');
-            sendEmail('onboarding','Formulario completado','Cliente Docrys & DC',new Date().toLocaleString('es-ES'),'Conociendo tu negocio — '+body.substring(0,200));
+            sendEmail('onboarding','formulario','Cliente Docrys & DC',new Date().toLocaleString('es-ES'),'Conociendo tu negocio — '+body.substring(0,200));
           }
         },'⬇️ Descargar y enviar')
       ),
@@ -2054,7 +2053,7 @@ function FormMarca({data,onChange}){
             });
             downloadFormPDF('Identidad de marca','Cuestionario estratégico PQC completado por el cliente',sections,'identidad-de-marca.pdf');
             const body=sections.map(function(s){return s.titulo+':\n'+s.preguntas.map(function(p){return '  '+p.pregunta+'\n  → '+(p.respuesta||'—');}).join('\n');}).join('\n\n');
-            sendEmail('onboarding','Formulario completado','Cliente Docrys & DC',new Date().toLocaleString('es-ES'),'Identidad de marca — '+body.substring(0,200));
+            sendEmail('onboarding','formulario','Cliente Docrys & DC',new Date().toLocaleString('es-ES'),'Identidad de marca — '+body.substring(0,200));
           }
         },'⬇️ Descargar y enviar')
       ),
@@ -2495,7 +2494,10 @@ function App(){
   const[agency,setAgency]=useState(()=>lsGet('agency')||{});
   const[medios,setMedios]=useState(()=>{
     const d={};
-    for(const m of MONTHS)d[m.key]=lsGet('medios_'+m.key)||[];
+    for(const m of MONTHS){
+      const arr=lsGet('medios_'+m.key)||[];
+      d[m.key]=arr.map(function(a){return {...a,status:a.status||'pendiente',historial:a.historial||[],revisionBy:a.revisionBy||'',revisionAt:a.revisionAt||'',approvedBy:a.approvedBy||'',approvedAt:a.approvedAt||''};});
+    }
     return d;
   });
   const[pts,setPts]=useState(()=>loadPts());
@@ -2530,7 +2532,8 @@ function App(){
         setPUB(newPUB);
         const newMedios={};
         for(const m of MONTHS){
-          newMedios[m.key]=remote['medios_'+m.key]||lsGet('medios_'+m.key)||[];
+          const arr=remote['medios_'+m.key]||lsGet('medios_'+m.key)||[];
+          newMedios[m.key]=arr.map(function(a){return {...a,status:a.status||'pendiente',historial:a.historial||[],revisionBy:a.revisionBy||'',revisionAt:a.revisionAt||'',approvedBy:a.approvedBy||'',approvedAt:a.approvedAt||''};});
         }
         setMedios(newMedios);
       }
@@ -2625,7 +2628,7 @@ function App(){
 
   // ── MEDIOS handlers
   const updateMediosArticle=useCallback(function(mk,i,f,v){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk][i][f]=v;return n;});  },[]);
-  const addMediosArticle=useCallback(function(mk){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk]=[...(n[mk]||[]),{id:Date.now(),titular:'',titular2:'',titular3:'',texto:'',keywords:'',contactoNombre:'',contactoTel:'',web:'',foto1:'',foto2:'',foto3:'',fotoSeleccionada:undefined}];return n;});  },[]);
+  const addMediosArticle=useCallback(function(mk){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk]=[...(n[mk]||[]),{id:Date.now(),titular:'',titular2:'',titular3:'',texto:'',keywords:'',contactoNombre:'',contactoTel:'',web:'',foto1:'',foto2:'',foto3:'',fotoSeleccionada:undefined,status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',historial:[]}];return n;});  },[]);
   const deleteMediosArticle=useCallback(function(mk,i){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].splice(i,1);return n;});  },[]);
 
   const toggleOnboarding=useCallback(function(id){setOnboarding(prev=>{const n=JSON.parse(JSON.stringify(prev));n.checks[id]=!n.checks[id];return n;});  },[]);
