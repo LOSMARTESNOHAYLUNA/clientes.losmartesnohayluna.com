@@ -160,6 +160,26 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 .budget-amount-wrap,.budget-tipo-wrap{display:flex;flex-direction:column;gap:4px}
 
 /* ── ENVIAR AL CLIENTE ── */
+/* ── DELETE MODAL ── */
+.del-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(2px)}
+.del-modal{background:#fff;border-radius:14px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;animation:modalIn .2s ease}
+@keyframes modalIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.del-modal-hdr{display:flex;align-items:flex-start;gap:12px;padding:20px 20px 16px;border-bottom:1px solid #f1f5f9}
+.del-modal-icon{font-size:28px;flex-shrink:0;line-height:1}
+.del-modal-title{font-size:15px;font-weight:800;color:#1a1205}
+.del-modal-sub{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.4}
+.del-modal-body{display:flex;flex-direction:column;gap:16px;padding:18px 20px}
+.del-modal-field{display:flex;flex-direction:column;gap:6px}
+.del-modal-label{font-size:12px;color:#374151;line-height:1.5}
+.del-modal-input{width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:8px;font-family:inherit;font-size:14px;color:#1a1205;outline:none;transition:all .2s}
+.del-modal-input:focus{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+.del-modal-input.ok{border-color:#22c55e;background:#f0fdf4}
+.del-modal-actions{display:flex;gap:10px;padding:0 20px 20px;justify-content:flex-end}
+.del-modal-cancel{padding:9px 18px;border-radius:8px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#374151;transition:all .2s}
+.del-modal-cancel:hover{background:#f9fafb}
+.del-modal-confirm{padding:9px 18px;border-radius:8px;border:none;background:#ef4444;cursor:pointer;font-family:inherit;font-size:13px;font-weight:800;color:#fff;transition:all .2s}
+.del-modal-confirm:hover:not(:disabled){background:#dc2626}
+
 /* ── NAME SELECTOR ── */
 .name-selector{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .name-btn{padding:5px 12px;border-radius:20px;border:1.5px solid rgba(201,168,76,.3);background:#fff;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#5c4a1e;transition:all .15s}
@@ -304,6 +324,30 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 .pub-platform-badge.otras{background:#f5e8ff;color:#6b00cc}
 .pub-links-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:500px){.pub-links-row{grid-template-columns:1fr}}
+/* ── PUB HEALTH & OPTIMIZATIONS ── */
+.pub-health-block{display:flex;flex-direction:column;gap:6px}
+.pub-health-opts{display:flex;flex-wrap:wrap;gap:6px}
+.pub-health-btn{padding:6px 12px;border-radius:20px;border:1.5px solid rgba(168,85,247,.2);background:#fff;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#4a004a;transition:all .15s;white-space:nowrap}
+.pub-health-btn:hover{border-color:#a855f7;background:#fdf8ff}
+.pub-health-btn.sel{border-color:#a855f7;background:#f3e8ff;font-weight:800}
+.pub-opts-toggle{width:100%;display:flex;align-items:center;gap:6px;padding:8px 10px;background:#fdf8ff;border:1.5px solid rgba(168,85,247,.2);border-radius:8px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#6b21a8;text-align:left;transition:all .2s}
+.pub-opts-toggle:hover{background:#f3e8ff;border-color:rgba(168,85,247,.4)}
+.pub-opts-body{border:1.5px solid rgba(168,85,247,.15);border-top:none;border-radius:0 0 8px 8px;padding:10px 12px;background:#fdf8ff;display:flex;flex-direction:column;gap:8px}
+.pub-opts-list{display:flex;flex-direction:column;gap:6px}
+.pub-opts-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#fff;border-radius:6px;border:1px solid rgba(168,85,247,.15)}
+.pub-opts-item-emoji{font-size:14px;flex-shrink:0}
+.pub-opts-item-tipo{font-size:12px;font-weight:700;color:#6b21a8;flex:1}
+.pub-opts-item-fecha{font-size:11px;color:#a855f7;flex-shrink:0}
+.pub-opts-add-btn{align-self:flex-start;padding:6px 12px;border-radius:6px;border:1.5px dashed rgba(168,85,247,.35);background:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#7c3aed;transition:all .2s}
+.pub-opts-add-btn:hover{background:#f3e8ff;border-color:#a855f7}
+.pub-opts-form{display:flex;flex-direction:column;gap:8px;padding:10px;background:#fff;border-radius:8px;border:1px solid rgba(168,85,247,.2)}
+.pub-opts-tipos{display:flex;gap:6px;flex-wrap:wrap}
+
+
+.pub-opts-quick{display:flex;flex-wrap:wrap;gap:5px}
+.pub-opts-chip{padding:4px 10px;border-radius:12px;border:1.5px solid rgba(168,85,247,.2);background:#fdf8ff;cursor:pointer;font-family:inherit;font-size:11px;color:#6b00cc;transition:all .15s}
+.pub-opts-chip:hover{background:#f3e8ff;border-color:#a855f7}
+.pub-opts-row{display:flex;gap:8px;align-items:flex-start}
 .platform-select{width:100%;padding:9px 11px;border:1.5px solid rgba(168,85,247,.25);border-radius:6px;font-family:inherit;font-size:13px;color:#1a1205;outline:none;background:#f8f5ff;transition:all .2s;cursor:pointer}
 .platform-select:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.1)}
 
@@ -900,6 +944,57 @@ function AddButton({onAdd,variant}){
 
 const AGENCIA_NOMBRES=['Juli','Estefanía','Jessy','Paola','Sheila','Carla','Elena','Matías'];
 
+// ── DELETE MODAL ──────────────────────────────────────────────────────
+function DeleteModal({titulo,onConfirm,onCancel}){
+  const[word,setWord]=useState('');
+  const[nombre,setNombre]=useState('');
+  const wordOk=word==='Borrar';
+  const canDelete=wordOk&&nombre.trim();
+
+  return React.createElement('div',{className:'del-modal-overlay',onClick:function(e){if(e.target===e.currentTarget)onCancel();}},
+    React.createElement('div',{className:'del-modal'},
+      React.createElement('div',{className:'del-modal-hdr'},
+        React.createElement('span',{className:'del-modal-icon'},'🗑️'),
+        React.createElement('div',null,
+          React.createElement('div',{className:'del-modal-title'},'¿Seguro que quieres borrar esto?'),
+          React.createElement('div',{className:'del-modal-sub'},titulo||'Este elemento se eliminará permanentemente')
+        )
+      ),
+      React.createElement('div',{className:'del-modal-body'},
+        React.createElement('div',{className:'del-modal-field'},
+          React.createElement('label',{className:'del-modal-label'},'Escribe ',React.createElement('strong',null,'"Borrar"'),' (con B mayúscula) para confirmar'),
+          React.createElement('input',{
+            className:'del-modal-input'+(wordOk?' ok':''),
+            type:'text',autoFocus:true,value:word,placeholder:'Borrar',
+            onChange:function(e){setWord(e.target.value);},
+            onKeyDown:function(e){if(e.key==='Enter'&&canDelete)onConfirm(nombre.trim());if(e.key==='Escape')onCancel();}
+          })
+        ),
+        React.createElement('div',{className:'del-modal-field'},
+          React.createElement('label',{className:'del-modal-label'},'Tu nombre (quedará registrado)'),
+          React.createElement('div',{className:'name-selector'},
+            AGENCIA_NOMBRES.map(function(n){
+              return React.createElement('button',{
+                key:n,className:'name-btn'+(nombre===n?' sel':''),
+                onClick:function(){setNombre(n);}
+              },n);
+            })
+          )
+        )
+      ),
+      React.createElement('div',{className:'del-modal-actions'},
+        React.createElement('button',{className:'del-modal-cancel',onClick:onCancel},'Cancelar'),
+        React.createElement('button',{
+          className:'del-modal-confirm',
+          disabled:!canDelete,
+          style:{opacity:canDelete?1:.4,cursor:canDelete?'pointer':'default'},
+          onClick:function(){if(canDelete)onConfirm(nombre.trim());}
+        },'Eliminar definitivamente')
+      )
+    )
+  );
+}
+
 // ── CONFIRM ROW COMPONENT ─────────────────────────────────────────────
 function ConfirmRow({confirming,nameInput,setNameInput,onConfirm,onCancel}){
   const isAgencia=confirming==='revision'||confirming==='devuelto';
@@ -1049,6 +1144,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
   const[nameInput,setNameInput]=useState('');
   const[newCorr,setNewCorr]=useState('');
   const[histOpen,setHistOpen]=useState(false);
+  const[showDel,setShowDel]=useState(false);
 
   const correcciones=data.correcciones||[];
   const historial=data.historial||[];
@@ -1100,9 +1196,10 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',title:'Borrar',onClick:function(){setShowDel(true);}},'🗑️')
       )
     ),
+    showDel&&onDelete&&React.createElement(DeleteModal,{titulo:data.topic||'Post RRSS',onConfirm:function(n){onDelete();setShowDel(false);},onCancel:function(){setShowDel(false);}}),
     // HISTORIAL
     historial.length>0&&React.createElement('div',{className:'historial-block'},
       React.createElement('button',{className:'historial-toggle',onClick:function(){setHistOpen(function(o){return !o;});}},
@@ -1227,6 +1324,7 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
   const[histOpen,setHistOpen]=useState(false);
+  const[showDel,setShowDel]=useState(false);
   const historial=data.historial||[];
 
   function handleStatusClick(){
@@ -1255,9 +1353,10 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',title:'Borrar',onClick:function(){setShowDel(true);}},'🗑️')
       )
     ),
+    showDel&&onDelete&&React.createElement(DeleteModal,{titulo:data.title||'Artículo SEO',onConfirm:function(n){onDelete();setShowDel(false);},onCancel:function(){setShowDel(false);}}),
     historial.length>0&&React.createElement('div',{className:'historial-block'},
       React.createElement('button',{className:'historial-toggle',onClick:function(){setHistOpen(function(o){return !o;});}},
         histOpen?'▾':'▸',' 📋 Historial de cambios',React.createElement('span',{className:'historial-count'},historial.length)
@@ -1337,11 +1436,134 @@ function SEOMonth({mk,monthData,onUpdateArticle,onUpdateReport,onUpdateSeoTecnic
 // ── PUBLICIDAD COMPONENTS ──────────────────────────────────────────────
 const PLATFORM_LABELS={meta:'Meta Ads',google:'Google Ads',tiktok:'TikTok Ads',otras:'Otras'};
 
+// ── CORRECCIONES PUBLICIDAD ───────────────────────────────────────────
+function PubCorrecciones({data,onUpdate}){
+  const[newCorr,setNewCorr]=useState('');
+  const correcciones=data.corrPub||[];
+  const pendientes=correcciones.filter(function(c){return !c.done;}).length;
+
+  function addCorreccion(){
+    const txt=newCorr.trim(); if(!txt)return;
+    const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    onUpdate('corrPub',[...correcciones,{id:Date.now(),texto:txt,done:false,creadaAt:now}]);
+    setNewCorr('');
+  }
+  function toggle(id){onUpdate('corrPub',correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;}));}
+  function del(id){onUpdate('corrPub',correcciones.filter(function(c){return c.id!==id;}));}
+
+  return React.createElement('div',{className:'corr-section'},
+    React.createElement('div',{className:'corr-header'},
+      React.createElement('span',{className:'corr-title'},'✏️ Correcciones del cliente'),
+      correcciones.length>0&&React.createElement('span',{className:'corr-badge'+(pendientes===0?' done':'')},
+        pendientes>0?pendientes+' pendiente'+(pendientes>1?'s':''):'✓ Todas aplicadas')
+    ),
+    correcciones.map(function(c){
+      return React.createElement('div',{key:c.id,className:'corr-item'+(c.done?' done':'')},
+        React.createElement('div',{className:'corr-check',onClick:function(){toggle(c.id);}},c.done?'✓':''),
+        React.createElement('div',{className:'corr-text'},c.texto),
+        React.createElement('button',{className:'corr-del',onClick:function(){del(c.id);}  },'✕')
+      );
+    }),
+    React.createElement('div',{className:'corr-add-row'},
+      React.createElement('input',{className:'corr-input',type:'text',value:newCorr,
+        placeholder:'Añadir corrección del cliente...',
+        onChange:function(e){setNewCorr(e.target.value);},
+        onKeyDown:function(e){if(e.key==='Enter')addCorreccion();}}),
+      React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
+    )
+  );
+}
+
+// ── OPTIMIZACIONES BLOCK ───────────────────────────────────────────────
+function OptimizacionesBlock({data,onUpdate}){
+  const[open,setOpen]=useState(false);
+  const[formOpen,setFormOpen]=useState(false);
+  const[tipo,setTipo]=useState('');
+  const[otros,setOtros]=useState('');
+  const[fecha,setFecha]=useState('');
+  const opts=data.optimizaciones||[];
+
+  const tipoFinal=tipo==='Otros'?(otros.trim()||'Otros'):tipo;
+
+  function addOpt(){
+    if(!tipoFinal||!fecha)return;
+    const entry={id:Date.now(),tipo:tipoFinal,fecha:fecha};
+    onUpdate('optimizaciones',[...opts,entry]);
+    setTipo('');setOtros('');setFecha('');setFormOpen(false);
+  }
+  function deleteOpt(id){onUpdate('optimizaciones',opts.filter(function(o){return o.id!==id;}));}
+
+  const tipoEmoji={'Test A/B de nuevo anuncio emocional':'🧪','Ajuste de segmentación por poder adquisitivo':'🎯','Mejora copy de formulario':'✏️','Redistribución de presupuesto a conjunto ganador':'💰','Otros':'📝'};
+  const canSave=tipo&&fecha&&(tipo!=='Otros'||otros.trim());
+
+  return React.createElement('div',{className:'pub-opts-block'},
+    React.createElement('button',{
+      className:'pub-opts-toggle',
+      onClick:function(){setOpen(function(o){return !o;});}
+    },
+      open?'▾':'▸',
+      ' ⚙️ Historial de optimizaciones',
+      opts.length>0&&React.createElement('span',{className:'historial-count',style:{marginLeft:6}},opts.length)
+    ),
+    open&&React.createElement('div',{className:'pub-opts-body'},
+      opts.length>0&&React.createElement('div',{className:'pub-opts-list'},
+        opts.map(function(o){
+          return React.createElement('div',{key:o.id,className:'pub-opts-item'},
+            React.createElement('span',{className:'pub-opts-item-emoji'},tipoEmoji[o.tipo]||'⚙️'),
+            React.createElement('span',{className:'pub-opts-item-tipo'},o.tipo),
+            React.createElement('span',{className:'pub-opts-item-fecha'},o.fecha),
+            React.createElement('button',{className:'corr-del',onClick:function(){deleteOpt(o.id);}},'✕')
+          );
+        })
+      ),
+      !formOpen
+        ?React.createElement('button',{className:'pub-opts-add-btn',onClick:function(){setFormOpen(true);}},
+            '+ Añadir optimización')
+        :React.createElement('div',{className:'pub-opts-form'},
+            React.createElement('div',{className:'pub-opts-tipos'},
+              ['Test A/B de nuevo anuncio emocional','Ajuste de segmentación por poder adquisitivo','Mejora copy de formulario','Redistribución de presupuesto a conjunto ganador','Otros'].map(function(t){
+                return React.createElement('button',{
+                  key:t,
+                  className:'pub-health-btn'+(tipo===t?' sel':''),
+                  onClick:function(){setTipo(t);if(t!=='Otros')setOtros('');}
+                },tipoEmoji[t],' ',t);
+              })
+            ),
+            tipo==='Otros'&&React.createElement('input',{
+              className:'confirm-input revision',
+              type:'text',
+              autoFocus:true,
+              value:otros,
+              placeholder:'Describe la optimización...',
+              onChange:function(e){setOtros(e.target.value);},
+              onKeyDown:function(e){if(e.key==='Enter')addOpt();}
+            }),
+            React.createElement('div',{style:{display:'flex',gap:8,alignItems:'center'}},
+              React.createElement('input',{
+                type:'date',className:'date-input',
+                style:{borderColor:'rgba(168,85,247,.25)'},
+                value:fecha,
+                onChange:function(e){setFecha(e.target.value);}
+              }),
+              React.createElement('button',{
+                className:'confirm-btn aprobado',
+                disabled:!canSave,
+                style:{opacity:canSave?1:.4,whiteSpace:'nowrap'},
+                onClick:addOpt
+              },'Guardar'),
+              React.createElement('button',{className:'confirm-cancel',onClick:function(){setFormOpen(false);setTipo('');setOtros('');setFecha('');}  },'✕')
+            )
+          )
+    )
+  );
+}
+
 function CampaignCard({data,onUpdate,onDelete,onApprove}){
   const s=SC[data.status]||SC.pendiente;
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
   const[histOpen,setHistOpen]=useState(false);
+  const[showDel,setShowDel]=useState(false);
   const historial=data.historial||[];
 
   function handleStatusClick(){
@@ -1373,9 +1595,10 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',title:'Borrar',onClick:function(){setShowDel(true);}},'🗑️')
       )
     ),
+    showDel&&onDelete&&React.createElement(DeleteModal,{titulo:data.name||'Campaña',onConfirm:function(n){onDelete();setShowDel(false);},onCancel:function(){setShowDel(false);}}),
     historial.length>0&&React.createElement('div',{className:'historial-block'},
       React.createElement('button',{className:'historial-toggle',onClick:function(){setHistOpen(function(o){return !o;});}},
         histOpen?'▾':'▸',' 📋 Historial de cambios',React.createElement('span',{className:'historial-count'},historial.length)
@@ -1441,7 +1664,44 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
         React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Informe mensual de campaña'),
         React.createElement(UrlInput,{value:data.reportLink||'',onChange:v=>onUpdate('reportLink',v),placeholder:'https://docs.google.com/...',className:'link-input pub',variant:'pub'})
       )
-    )
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'🔗 Seguimiento de leads (Google Sheets)'),
+      React.createElement(UrlInput,{value:data.leadsLink||'',onChange:v=>onUpdate('leadsLink',v),placeholder:'https://docs.google.com/spreadsheets/...',className:'link-input pub',variant:'pub'})
+    ),
+    // SALUD DE LA CAMPAÑA
+    React.createElement('div',{className:'pub-health-block'},
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Salud de la campaña'),
+      React.createElement('div',{className:'pub-health-opts'},
+        [
+          {val:'aprendizaje',emoji:'🔵',label:'En etapa de aprendizaje'},
+          {val:'excelente', emoji:'🟢', label:'Excelente rendimiento'},
+          {val:'estable',   emoji:'🟡', label:'Rendimiento estable'},
+          {val:'inestable', emoji:'🔴', label:'Rendimiento inestable'},
+        ].map(function(o){
+          const sel=(data.salud||'')=== o.val;
+          return React.createElement('button',{
+            key:o.val,
+            className:'pub-health-btn'+(sel?' sel':''),
+            onClick:function(){onUpdate('salud',sel?'':o.val);}
+          },o.emoji,' ',o.label);
+        })
+      )
+    ),
+    // HISTORIAL DE OPTIMIZACIONES
+    React.createElement(OptimizacionesBlock,{data:data,onUpdate:onUpdate}),
+    // CREATIVIDADES ACTIVAS
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'🎨 Creatividades activas (Drive)'),
+      React.createElement(UrlInput,{value:data.creatividadesLink||'',onChange:v=>onUpdate('creatividadesLink',v),placeholder:'https://drive.google.com/... (creatividades aprobadas)',className:'link-input pub',variant:'pub'})
+    ),
+    // MATERIAL DEL CLIENTE
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'📁 Material del cliente (Drive)'),
+      React.createElement(UrlInput,{value:data.materialClienteLink||'',onChange:v=>onUpdate('materialClienteLink',v),placeholder:'https://drive.google.com/... (material crudo sin editar)',className:'link-input pub',variant:'pub'})
+    ),
+    // CORRECCIONES DEL CLIENTE
+    React.createElement(PubCorrecciones,{data:data,onUpdate:onUpdate})
   );
 }
 
@@ -1531,6 +1791,7 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
   const[histOpen,setHistOpen]=useState(false);
+  const[showDel,setShowDel]=useState(false);
   const s=SC[data.status]||SC.pendiente;
   const historial=data.historial||[];
 
@@ -1565,9 +1826,10 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
         React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
-        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+        onDelete&&React.createElement('button',{className:'del-btn',title:'Borrar',onClick:function(){setShowDel(true);}},'🗑️')
       )
     ),
+    showDel&&onDelete&&React.createElement(DeleteModal,{titulo:data.titular||'Artículo Medios',onConfirm:function(n){onDelete();setShowDel(false);},onCancel:function(){setShowDel(false);}}),
     historial.length>0&&React.createElement('div',{className:'historial-block'},
       React.createElement('button',{className:'historial-toggle',onClick:function(){setHistOpen(function(o){return !o;});}},
         histOpen?'▾':'▸',' 📋 Historial de cambios',React.createElement('span',{className:'historial-count'},historial.length)
