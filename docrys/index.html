@@ -159,6 +159,38 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f0e8;color:#1a1205;m
 @media(max-width:500px){.budget-block{grid-template-columns:1fr}}
 .budget-amount-wrap,.budget-tipo-wrap{display:flex;flex-direction:column;gap:4px}
 
+/* ── ENVIAR AL CLIENTE ── */
+/* ── NAME SELECTOR ── */
+.name-selector{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.name-btn{padding:5px 12px;border-radius:20px;border:1.5px solid rgba(201,168,76,.3);background:#fff;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#5c4a1e;transition:all .15s}
+.name-btn:hover{border-color:#c9a84c;background:#fef9ee}
+.name-btn.sel{background:#c9a84c;border-color:#c9a84c;color:#0d0d0d;font-weight:800}
+
+.send-client-wrap{display:flex;flex-direction:column;gap:0}
+.send-client-toggle{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1.5px solid #bfdbfe;border-radius:8px;background:#f0f7ff;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#1d4ed8;text-align:left;transition:all .2s;width:100%}
+.send-client-toggle:hover{background:#dbeafe}
+.send-client-toggle.open{border-radius:8px 8px 0 0;border-bottom-color:transparent}
+.send-client-toggle.done{background:#f0fdf4;border-color:#86efac;color:#16a34a}
+.send-client-discard{padding:8px 14px;border-radius:6px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:#6b7280;transition:all .2s}
+.send-client-discard:hover{border-color:#9ca3af;color:#374151}
+.send-client-block{border:1.5px solid #bfdbfe;border-top:none;border-radius:0 0 8px 8px;background:linear-gradient(135deg,#f0f7ff,#e8f4fd);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+
+.send-client-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1d4ed8;display:flex;align-items:center;gap:6px}
+.send-client-row{display:flex;flex-direction:column;gap:4px}
+.send-client-label{font-size:10px;font-weight:700;color:#3b82f6;letter-spacing:.06em;text-transform:uppercase}
+.send-client-input-wrap{position:relative}
+.send-client-input{width:100%;padding:8px 11px;border:1.5px solid #bfdbfe;border-radius:6px;font-family:inherit;font-size:13px;color:#1e3a5f;outline:none;background:#fff;transition:all .2s}
+.send-client-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.send-client-input::placeholder{color:#ccc;font-size:11px}
+.send-client-suggestions{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #bfdbfe;border-top:none;border-radius:0 0 6px 6px;z-index:20;max-height:140px;overflow-y:auto}
+.send-client-sug-item{padding:8px 11px;font-size:12px;color:#1e3a5f;cursor:pointer;border-bottom:1px solid #f1f5f9}
+.send-client-sug-item:hover{background:#eff6ff}
+.send-client-actions{display:flex;gap:8px;align-items:center}
+.send-client-btn{flex:1;padding:10px 16px;border-radius:8px;border:none;background:#2563eb;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;color:#fff;letter-spacing:.06em;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.send-client-btn:hover{background:#1d4ed8}
+.send-client-btn:disabled{background:#93c5fd;cursor:not-allowed}
+.send-client-sent{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#16a34a;padding:6px 10px;background:#f0fdf4;border-radius:6px}
+
 /* ── HISTORIAL ── */
 .historial-block{background:#fafafa;border:1px solid rgba(0,0,0,.06);border-radius:6px;overflow:hidden;margin-bottom:2px}
 .historial-toggle{width:100%;display:flex;align-items:center;gap:6px;padding:7px 10px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#666;text-align:left}
@@ -604,6 +636,24 @@ async function sendEmail(seccion,accion,nombre,fecha,titulo){
   }catch(e){}
 }
 
+async function sendEmailCliente(to,cc,seccion,titulo,portalUrl){
+  try{
+    await fetch(EMAIL_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({seccion,accion:'cliente_revision',titulo,to,cc,cliente:'docrys',portalUrl:'https://clientes.losmartesnohayluna.com/docrys'})
+    });
+  }catch(e){}
+}
+
+// Emails frecuentes
+function getFrecuentes(){return lsGet('emails_frecuentes')||[];}
+function saveFrecuente(email){
+  if(!email||!email.includes('@'))return;
+  const list=getFrecuentes();
+  if(!list.includes(email)){lsSet('emails_frecuentes',[...list,email].slice(-20));}
+}
+
 // ── RRSS DATA ──────────────────────────────────────────────────────────
 const TC_RRSS={
   reel:{label:'Reel',color:'#6b4a00',bg:'#fef3dc',border:'#c9a84c'},
@@ -848,6 +898,148 @@ function AddButton({onAdd,variant}){
   );
 }
 
+const AGENCIA_NOMBRES=['Juli','Estefanía','Jessy','Paola','Sheila','Carla','Elena','Matías'];
+
+// ── CONFIRM ROW COMPONENT ─────────────────────────────────────────────
+function ConfirmRow({confirming,nameInput,setNameInput,onConfirm,onCancel}){
+  const isAgencia=confirming==='revision'||confirming==='devuelto';
+  const[revNum,setRevNum]=useState('');
+  const labels={revision:'📤 ¿Quién lo envía a revisión?',aprobado:'✅ ¿Quién aprueba?',devuelto:'↩️ ¿Quién lo devuelve?'};
+  const cls=confirming==='devuelto'?'revision':confirming;
+  const canConfirm=nameInput.trim()&&(confirming!=='revision'||revNum);
+
+  function handleConfirm(){
+    if(!canConfirm)return;
+    // Pass revision number via nameInput augmentation when revision
+    if(confirming==='revision'&&revNum){
+      onConfirm(revNum);
+    } else {
+      onConfirm();
+    }
+    setRevNum('');
+  }
+
+  return React.createElement('div',{className:'confirm-row '+cls},
+    React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:8,flex:1}},
+      React.createElement('span',{className:'confirm-label '+cls},labels[confirming]),
+      // REVISION NUMBER — only for revision action
+      confirming==='revision'&&React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:4}},
+        React.createElement('span',{style:{fontSize:10,fontWeight:700,color:'#8b6914',letterSpacing:'.08em',textTransform:'uppercase'}},'Número de revisión'),
+        React.createElement('div',{className:'name-selector'},
+          ['1ª revisión','2ª revisión','3ª revisión'].map(function(n){
+            return React.createElement('button',{
+              key:n,className:'name-btn'+(revNum===n?' sel':''),
+              onClick:function(){setRevNum(n);}
+            },n);
+          })
+        )
+      ),
+      // NAME SELECTOR (agencia) or free text (cliente)
+      isAgencia
+        ?React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:4}},
+            React.createElement('span',{style:{fontSize:10,fontWeight:700,color:'#8b6914',letterSpacing:'.08em',textTransform:'uppercase'}},'Tu nombre'),
+            React.createElement('div',{className:'name-selector'},
+              AGENCIA_NOMBRES.map(function(n){
+                return React.createElement('button',{
+                  key:n,className:'name-btn'+(nameInput===n?' sel':''),
+                  onClick:function(){setNameInput(n);}
+                },n);
+              })
+            )
+          )
+        :React.createElement('input',{
+            className:'confirm-input '+cls,
+            type:'text',autoFocus:true,value:nameInput,placeholder:'Tu nombre...',
+            onChange:function(e){setNameInput(e.target.value);},
+            onKeyDown:function(e){if(e.key==='Enter')handleConfirm();if(e.key==='Escape')onCancel();}
+          }),
+      React.createElement('div',{style:{display:'flex',gap:6}},
+        React.createElement('button',{
+          className:'confirm-btn '+cls,
+          disabled:!canConfirm,
+          style:{opacity:canConfirm?1:.4,cursor:canConfirm?'pointer':'default'},
+          onClick:handleConfirm
+        },'Confirmar'),
+        React.createElement('button',{className:'confirm-cancel',onClick:onCancel},'✕')
+      )
+    )
+  );
+}
+
+function SendToClientBlock({seccion,titulo}){
+  const[open,setOpen]=useState(false);
+  const[to,setTo]=useState('');
+  const[cc,setCc]=useState('');
+  const[sent,setSent]=useState(false);
+  const[sending,setSending]=useState(false);
+  const[showSugTo,setShowSugTo]=useState(false);
+  const[showSugCc,setShowSugCc]=useState(false);
+  const frecuentes=getFrecuentes();
+  const sugTo=to.length>0?frecuentes.filter(function(e){return e.toLowerCase().includes(to.toLowerCase())&&e!==to;}):frecuentes;
+  const sugCc=cc.length>0?frecuentes.filter(function(e){return e.toLowerCase().includes(cc.toLowerCase())&&e!==cc;}):frecuentes;
+
+  function handleDiscard(){setOpen(false);setTo('');setCc('');setSent(false);}
+  async function handleSend(){
+    if(!to.trim())return;
+    setSending(true);
+    saveFrecuente(to.trim());
+    cc.split(',').forEach(function(e){saveFrecuente(e.trim());});
+    await sendEmailCliente(to.trim(),cc.trim(),seccion,titulo);
+    setSending(false);setSent(true);
+  }
+
+  return React.createElement('div',{className:'send-client-wrap'},
+    React.createElement('button',{
+      className:'send-client-toggle'+(open?' open':'')+(sent?' done':''),
+      onClick:function(){setOpen(function(o){return !o;});}
+    },
+      React.createElement('span',null,open?'▾':'▸'),
+      ' ',sent?'✅ Enviado al cliente':'📨 Enviar al cliente para revisar'
+    ),
+    open&&React.createElement('div',{className:'send-client-block'},
+      sent
+        ?React.createElement('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:8}},
+            React.createElement('span',{className:'send-client-sent'},'✅ Enviado correctamente'),
+            React.createElement('button',{className:'send-client-discard',onClick:handleDiscard},'Cerrar')
+          )
+        :React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:10}},
+            React.createElement('div',{className:'send-client-row'},
+              React.createElement('div',{className:'send-client-label'},'Para'),
+              React.createElement('div',{className:'send-client-input-wrap'},
+                React.createElement('input',{
+                  className:'send-client-input',type:'email',value:to,placeholder:'email@cliente.com',
+                  onChange:function(e){setTo(e.target.value);setShowSugTo(true);},
+                  onFocus:function(){setShowSugTo(true);},
+                  onBlur:function(){setTimeout(function(){setShowSugTo(false);},150)}
+                }),
+                showSugTo&&sugTo.length>0&&React.createElement('div',{className:'send-client-suggestions'},
+                  sugTo.map(function(e){return React.createElement('div',{key:e,className:'send-client-sug-item',onMouseDown:function(){setTo(e);setShowSugTo(false);}},e);})
+                )
+              )
+            ),
+            React.createElement('div',{className:'send-client-row'},
+              React.createElement('div',{className:'send-client-label'},'CC (separar con comas)'),
+              React.createElement('div',{className:'send-client-input-wrap'},
+                React.createElement('input',{
+                  className:'send-client-input',type:'text',value:cc,placeholder:'otro@cliente.com, otro2@...',
+                  onChange:function(e){setCc(e.target.value);setShowSugCc(true);},
+                  onFocus:function(){setShowSugCc(true);},
+                  onBlur:function(){setTimeout(function(){setShowSugCc(false);},150)}
+                }),
+                showSugCc&&sugCc.length>0&&React.createElement('div',{className:'send-client-suggestions'},
+                  sugCc.map(function(e){return React.createElement('div',{key:e,className:'send-client-sug-item',onMouseDown:function(){setCc(function(prev){return prev?prev+', '+e:e;});setShowSugCc(false);}},e);})
+                )
+              )
+            ),
+            React.createElement('div',{style:{display:'flex',gap:8}},
+              React.createElement('button',{className:'send-client-btn',disabled:!to.trim()||sending,onClick:handleSend},sending?'Enviando...':'📨 Enviar'),
+              React.createElement('button',{className:'send-client-discard',onClick:handleDiscard},'Descartar')
+            )
+          )
+    )
+  );
+}
+
 function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
   const type=planCfg?planCfg.type:(data.type||'reel');
   const t=TC_RRSS[type]||TC_RRSS.reel;
@@ -877,14 +1069,15 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     else if(data.status==='aprobado'){setConfirming('devuelto');setNameInput('');}
     else{setConfirming('revision');setNameInput('');}
   }
-  function handleConfirm(){
+  function handleConfirm(revNum){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
+    const accionLabel=confirming==='revision'?('📤 Enviado a '+(revNum||'revisión')):confirming;
+    const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
     if(confirming==='revision'){
-      onUpdate('status','revision'); onUpdate('revisionBy',name); onUpdate('revisionAt',now);
-      sendEmail('rrss','revision',name,now,data.topic||'Post RRSS');
+      onUpdate('status','revision'); onUpdate('revisionBy',name+(revNum?' ('+revNum+')':'')); onUpdate('revisionAt',now);
+      sendEmail('rrss','revision',name,now,(revNum?'['+revNum+'] ':' ')+(data.topic||'Post RRSS'));
     } else if(confirming==='aprobado'){
       onUpdate('status','aprobado'); onUpdate('approvedBy',name); onUpdate('approvedAt',now);
       onApprove();
@@ -928,6 +1121,8 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
         })
       )
     ),
+    // SEND TO CLIENT
+    data.status==='revision'&&React.createElement(SendToClientBlock,{seccion:'rrss',titulo:data.topic||'Post RRSS'}),
     // REGISTRY
     (data.revisionBy||data.approvedBy)&&React.createElement('div',{className:'registry'},
       data.revisionBy&&React.createElement('div',{className:'reg-tag rev'},
@@ -940,17 +1135,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
       )
     ),
     // INLINE CONFIRM
-    confirming&&React.createElement('div',{className:'confirm-row '+confirming},
-      React.createElement('span',{className:'confirm-label '+(confirming==='devuelto'?'revision':confirming)},confirmLabels[confirming]),
-      React.createElement('input',{
-        className:'confirm-input '+(confirming==='devuelto'?'revision':confirming),
-        type:'text',autoFocus:true,value:nameInput,placeholder:'Nombre...',
-        onChange:e=>setNameInput(e.target.value),
-        onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}
-      }),
-      React.createElement('button',{className:'confirm-btn '+(confirming==='devuelto'?'revision':confirming),onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
-    ),
+    confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Tema'),
       React.createElement('input',{className:'topic-input',type:'text',value:data.topic,onChange:e=>onUpdate('topic',e.target.value),placeholder:'Escribe o edita el tema del post...'})
@@ -960,6 +1145,10 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
       React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el texto principal del post...'}),
       React.createElement('div',{className:'firma-box'},FIRMA),
       React.createElement('div',{className:'firma-hint'},'👆 Añadir al final del copy del post')
+    ),
+    React.createElement('div',null,
+      React.createElement('label',{className:'field-label'},'Hashtags'),
+      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value)})
     ),
     React.createElement('div',{className:'design-link-block'},
       React.createElement('div',{className:'design-link-label'},'Enlace al diseño'),
@@ -985,10 +1174,6 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
           onKeyDown:function(e){if(e.key==='Enter')addCorreccion();}}),
         React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
       )
-    ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label'},'Hashtags'),
-      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value)})
     ),
     React.createElement('div',{className:'fields-stack'},
       React.createElement('div',null,
@@ -1050,12 +1235,13 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
     else if(data.status==='aprobado'){setConfirming('devuelto');setNameInput('');}
     else{setConfirming('revision');setNameInput('');}
   }
-  function handleConfirm(){
+  function handleConfirm(revNum){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
+    const accionLabel=confirming==='revision'?('📤 Enviado a '+(revNum||'revisión')):confirming;
+    const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','revision',name,now,data.title||'Artículo SEO');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);sendEmail('seo','revision',name,now,(revNum?'['+revNum+'] ':' ')+(data.title||'Artículo SEO'));}
     else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('seo','aprobado',name,now,data.title||'Artículo SEO');}
     else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','devolucion',name,now,data.title||'Artículo SEO');}
     setConfirming(null);setNameInput('');
@@ -1089,12 +1275,8 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
       data.revisionBy&&React.createElement('div',{className:'reg-tag rev'},React.createElement('span',{className:'reg-icon'},'📤'),'Enviado a revisión por ',React.createElement('strong',null,data.revisionBy),' · ',data.revisionAt),
       data.approvedBy&&React.createElement('div',{className:'reg-tag apr'},React.createElement('span',{className:'reg-icon'},'✅'),'Aprobado por ',React.createElement('strong',null,data.approvedBy),' · ',data.approvedAt)
     ),
-    confirming&&React.createElement('div',{className:'confirm-row '+(confirming==='devuelto'?'revision':confirming)},
-      React.createElement('span',{className:'confirm-label '+(confirming==='devuelto'?'revision':confirming)},confirmLabels[confirming]),
-      React.createElement('input',{className:'confirm-input '+(confirming==='devuelto'?'revision':confirming),type:'text',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}}),
-      React.createElement('button',{className:'confirm-btn '+(confirming==='devuelto'?'revision':confirming),onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
-    ),
+    data.status==='revision'&&React.createElement(SendToClientBlock,{seccion:'seo',titulo:data.title||'Artículo SEO'}),
+    confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Título del artículo'),
       React.createElement('input',{className:'topic-input seo',type:'text',value:data.title,onChange:e=>onUpdate('title',e.target.value),placeholder:'Título optimizado SEO...'})
@@ -1168,12 +1350,13 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     else if(data.status==='aprobado'){setConfirming('devuelto');setNameInput('');}
     else{setConfirming('revision');setNameInput('');}
   }
-  function handleConfirm(){
+  function handleConfirm(revNum){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
+    const accionLabel=confirming==='revision'?('📤 Enviado a '+(revNum||'revisión')):confirming;
+    const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','revision',name,now,data.name||'Campaña');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);sendEmail('pub','revision',name,now,(revNum?'['+revNum+'] ':' ')+(data.name||'Campaña'));}
     else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('pub','aprobado',name,now,data.name||'Campaña');}
     else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('pub','devolucion',name,now,data.name||'Campaña');}
     setConfirming(null);setNameInput('');
@@ -1210,12 +1393,8 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
       data.revisionBy&&React.createElement('div',{className:'reg-tag rev'},React.createElement('span',{className:'reg-icon'},'📤'),'Enviado a revisión por ',React.createElement('strong',null,data.revisionBy),' · ',data.revisionAt),
       data.approvedBy&&React.createElement('div',{className:'reg-tag apr'},React.createElement('span',{className:'reg-icon'},'✅'),'Aprobado por ',React.createElement('strong',null,data.approvedBy),' · ',data.approvedAt)
     ),
-    confirming&&React.createElement('div',{className:'confirm-row '+(confirming==='devuelto'?'revision':confirming)},
-      React.createElement('span',{className:'confirm-label '+(confirming==='devuelto'?'revision':confirming)},confirmLabels[confirming]),
-      React.createElement('input',{className:'confirm-input '+(confirming==='devuelto'?'revision':confirming),type:'text',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}}),
-      React.createElement('button',{className:'confirm-btn '+(confirming==='devuelto'?'revision':confirming),onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
-    ),
+    data.status==='revision'&&React.createElement(SendToClientBlock,{seccion:'pub',titulo:data.name||'Campaña'}),
+    confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label',style:{color:'#3a0066'}},'Nombre de la campaña'),
       React.createElement('input',{className:'topic-input pub',type:'text',value:data.name,onChange:e=>onUpdate('name',e.target.value),placeholder:'Nombre de la campaña...'})
@@ -1362,12 +1541,13 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
     else if(data.status==='aprobado'){setConfirming('devuelto');setNameInput('');}
     else{setConfirming('revision');setNameInput('');}
   }
-  function handleConfirm(){
+  function handleConfirm(revNum){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const hist=[...historial,{accion:confirming,nombre:name,fecha:now}];
+    const accionLabel=confirming==='revision'?('📤 Enviado a '+(revNum||'revisión')):confirming;
+    const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','revision',name,now,data.titular||'Artículo Medios');}
+    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);sendEmail('medios','revision',name,now,(revNum?'['+revNum+'] ':' ')+(data.titular||'Artículo Medios'));}
     else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);if(onApprove)onApprove();sendEmail('medios','aprobado',name,now,data.titular||'Artículo Medios');}
     else if(confirming==='devuelto'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('medios','devolucion',name,now,data.titular||'Artículo Medios');}
     setConfirming(null);setNameInput('');
@@ -1401,12 +1581,8 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
         })
       )
     ),
-    confirming&&React.createElement('div',{className:'confirm-row '+(confirming==='devuelto'?'revision':confirming)},
-      React.createElement('span',{className:'confirm-label '+(confirming==='devuelto'?'revision':confirming)},confirmLabels[confirming]),
-      React.createElement('input',{className:'confirm-input '+(confirming==='devuelto'?'revision':confirming),type:'text',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}}),
-      React.createElement('button',{className:'confirm-btn '+(confirming==='devuelto'?'revision':confirming),onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
-    ),
+    data.status==='revision'&&React.createElement(SendToClientBlock,{seccion:'medios',titulo:data.titular||'Artículo Medios'}),
+    confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
     open&&React.createElement('div',null,
       // TITULARES
       React.createElement('div',{className:'medios-titulares'},
@@ -1447,6 +1623,10 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
       React.createElement('div',{className:'medios-field'},
         React.createElement('label',null,'Web a enlazar'),
         React.createElement(UrlInput,{value:data.web||'',onChange:function(v){onUpdate('web',v);},placeholder:'https://docrysdc.es/...',variant:'rrss'})
+      ),
+      React.createElement('div',{className:'medios-field'},
+        React.createElement('label',null,'Enlace al reporte'),
+        React.createElement(UrlInput,{value:data.reporteLink||'',onChange:function(v){onUpdate('reporteLink',v);},placeholder:'https://docs.google.com/...',variant:'rrss'})
       ),
       // FOTOS
       React.createElement('div',{className:'medios-fotos-block'},
