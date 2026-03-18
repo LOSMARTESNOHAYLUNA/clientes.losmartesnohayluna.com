@@ -493,6 +493,29 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .confirm-input.devolucion:focus{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.12)}
 .confirm-btn.devolucion{background:#f59e0b;color:#fff}
 .confirm-btn.devolucion:hover{background:#d97706}
+.confirm-section{margin-bottom:6px}
+.confirm-section-label{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8C7A9C;margin-bottom:4px;display:block}
+.nombre-btns{display:flex;flex-wrap:wrap;gap:4px}
+.nombre-btn{padding:4px 10px;border-radius:20px;border:1.5px solid rgba(124,58,237,.25);background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#4C3A6B;transition:all .15s;font-family:inherit}
+.nombre-btn:hover,.nombre-btn.sel{background:#7C3AED;color:#fff;border-color:#7C3AED}
+.revision-num-btns{display:flex;gap:4px}
+.revision-num-btn{padding:4px 10px;border-radius:20px;border:1.5px solid rgba(124,58,237,.25);background:#fff;cursor:pointer;font-size:11px;font-weight:700;color:#4C3A6B;transition:all .15s;font-family:inherit}
+.revision-num-btn:hover,.revision-num-btn.sel{background:#A855F7;color:#fff;border-color:#A855F7}
+.enviar-cliente-accordion{border-top:1px solid rgba(124,58,237,.1);margin-top:8px;padding-top:8px}
+.enviar-cliente-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:700;color:#8C7A9C;letter-spacing:.04em;user-select:none;padding:2px 0}
+.enviar-cliente-toggle:hover{color:#7C3AED}
+.enviar-cliente-body{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.enviar-cliente-field{display:flex;flex-direction:column;gap:3px}
+.enviar-cliente-field label{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8C7A9C}
+.enviar-cliente-input{padding:7px 10px;border:1.5px solid rgba(124,58,237,.2);border-radius:6px;font-family:inherit;font-size:12px;color:#1A0B2E;outline:none;background:#fff;transition:all .2s;width:100%}
+.enviar-cliente-input:focus{border-color:#7C3AED;box-shadow:0 0 0 3px rgba(124,58,237,.08)}
+.enviar-cliente-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:4px}
+.enviar-cliente-btn{padding:7px 16px;border-radius:6px;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;background:#7C3AED;color:#fff;transition:all .15s}
+.enviar-cliente-btn:hover{background:#5B21B6}
+.enviar-cliente-cancel{background:none;border:1.5px solid rgba(124,58,237,.25);color:#8C7A9C;font-size:11px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.frecuentes{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.frecuente-tag{padding:2px 8px;border-radius:12px;background:#F5F0FF;border:1px solid rgba(124,58,237,.2);font-size:10px;color:#7C3AED;cursor:pointer;font-weight:600}
+.frecuente-tag:hover{background:#EDE9FE}
 .confirm-cancel{font-size:11px;color:#bbb;background:none;border:none;cursor:pointer;font-family:inherit;padding:4px;transition:color .15s}
 .confirm-cancel:hover{color:#888}
 /* ── REGISTRY TAGS ── */
@@ -608,18 +631,26 @@ const SB_HEADERS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type
 
 async function sbLoad(){
   try{
-    const r=await fetch(SB_URL+'/rest/v1/portal_data?client_id=eq.'+SB_CLIENT+'&key=eq.main&select=data',{headers:SB_HEADERS});
+    const r=await fetch(SB_URL+'/rest/v1/portal_data?client_id=eq.'+SB_CLIENT+'&select=key,data',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    });
+    if(!r.ok)return null;
     const rows=await r.json();
-    return(rows&&rows[0])?rows[0].data:null;
+    const out={};
+    rows.forEach(function(row){out[row.key]=row.data;});
+    return out;
   }catch(e){return null;}
 }
 
-async function sbSave(data){
+async function sbSave(snapshot){
   try{
+    const rows=Object.entries(snapshot).map(function([k,v]){
+      return {client_id:SB_CLIENT,key:k,data:v,updated_at:new Date().toISOString()};
+    });
     await fetch(SB_URL+'/rest/v1/portal_data',{
       method:'POST',
-      headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify({client_id:SB_CLIENT,key:'main',data,updated_at:new Date().toISOString()})
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify(rows)
     });
   }catch(e){}
 }
@@ -630,9 +661,30 @@ async function sendEmail(seccion,accion,nombre,fecha,titulo){
     await fetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({seccion,accion,nombre,fecha,titulo})
+      body:JSON.stringify({seccion,accion,nombre,fecha,titulo,cliente:SB_CLIENT})
     });
   }catch(e){}
+}
+
+// Email al cliente (cuando la agencia envía a revisión)
+async function sendEmailCliente(to,cc,seccion,titulo){
+  try{
+    await fetch(EMAIL_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({seccion,accion:'cliente_revision',titulo,to,cc,
+        cliente:SB_CLIENT,
+        portalUrl:'https://clientes.losmartesnohayluna.com/fabricasonrisas'})
+    });
+  }catch(e){}
+}
+
+// Emails frecuentes
+function getFrecuentes(){return lsGet('emails_frecuentes')||[];}
+function saveFrecuente(email){
+  if(!email||!email.includes('@'))return;
+  const list=getFrecuentes();
+  if(!list.includes(email)){lsSet('emails_frecuentes',[...list,email].slice(-20));}
 }
 
 async function sendOnboardingEmail(formTitle, sections){
@@ -697,6 +749,8 @@ const TC_RRSS={
   historia:{label:'Historia',color:'#3c3028',bg:'#ede8e0',border:'#8C7A9C'},
   imagen:{label:'Post imagen',color:'#0e6b8f',bg:'#e0f4fb',border:'#0ea5c9'},
 };
+const AGENCIA_NOMBRES=['Juli','Estefanía','Jessy','Paola','Sheila','Carla','Elena','Matías'];
+
 const SC={
   pendiente:{label:'Pendiente',bg:'#F5F0FF',color:'#4C3A6B',bc:'rgba(124,58,237,.4)',next:'revision'},
   revision:{label:'En revisión',bg:'#fffbeb',color:'#92400e',bc:'#fcd34d',next:'aprobado'},
@@ -939,7 +993,7 @@ function HistorialBlock({historial}){
   const reversed=[...historial].reverse();
   const ultimo=reversed[0];
   const anteriores=reversed.slice(1);
-  function evIcon(a){return a==='aprobado'?'✅':a==='devolucion'?'🔄':'📤';}
+  function evIcon(a){return a==='aprobado'?'✅':a==='devolucion'?'↩️':'📤';}
   function evLabel(a){return a==='aprobado'?'Aprobado':a==='devolucion'?'Devuelto a revisión':'Enviado a revisión';}
   return React.createElement('div',{className:'historial-section'},
     React.createElement('div',{className:'historial-toggle',onClick:()=>setOpen(o=>!o)},
@@ -976,6 +1030,11 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
   const pillar=planCfg?planCfg.pillar:(data.pillar||'');
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
+  const[selectedNombre,setSelectedNombre]=useState('');
+  const[numRevision,setNumRevision]=useState('1ª');
+  const[enviarOpen,setEnviarOpen]=useState(false);
+  const[emailPara,setEmailPara]=useState('');
+  const[emailCC,setEmailCC]=useState('');
   const[newCorr,setNewCorr]=useState('');
 
   const correcciones=data.correcciones||[];
@@ -998,21 +1057,22 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
   }
 
   function handleStatusClick(){
-    if(data.status==='pendiente'){setConfirming('revision');setNameInput('');}
-    else if(data.status==='revision'){setConfirming('aprobado');setNameInput('');}
-    else{setConfirming('devolucion');setNameInput('');}
+    if(data.status==='pendiente'){setConfirming('revision');setSelectedNombre('');setNumRevision('1ª');}
+    else if(data.status==='revision'){setConfirming('aprobado');setSelectedNombre('');setNameInput('');}
+    else{setConfirming('devolucion');setSelectedNombre('');setNumRevision('1ª');}
   }
   function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const name=nameInput.trim()||'Sin nombre';
-    const evento={accion:confirming,nombre:name,fecha:now};
+    const name=confirming==='aprobado'?(nameInput.trim()||'Cliente'):(selectedNombre||'Sin nombre');
+    const label=confirming==='revision'?('['+numRevision+' revisión] '+name):confirming==='devolucion'?('['+numRevision+' revisión devuelta] '+name):name;
+    const evento={accion:confirming,nombre:label,fecha:now};
     const nuevoHistorial=[...(data.historial||[]),evento];
     if(confirming==='revision'){
       onUpdate('status','revision');
-      onUpdate('revisionBy',name);
+      onUpdate('revisionBy',label);
       onUpdate('revisionAt',now);
       onUpdate('historial',nuevoHistorial);
-      sendEmail(seccion||'rrss','revision',name,now,data.topic||'Post sin título');
+      sendEmail(seccion||'rrss','revision',label,now,data.topic||'Post sin título');
     } else if(confirming==='aprobado'){
       onUpdate('status','aprobado');
       onUpdate('approvedBy',name);
@@ -1022,14 +1082,21 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
       sendEmail(seccion||'rrss','aprobado',name,now,data.topic||'Post sin título');
     } else if(confirming==='devolucion'){
       onUpdate('status','revision');
-      onUpdate('revisionBy',name);
+      onUpdate('revisionBy',label);
       onUpdate('revisionAt',now);
       onUpdate('approvedBy','');
       onUpdate('approvedAt','');
       onUpdate('historial',nuevoHistorial);
-      sendEmail(seccion||'rrss','devolucion',name,now,data.topic||'Post sin título');
+      sendEmail(seccion||'rrss','devolucion',label,now,data.topic||'Post sin título');
     }
-    setConfirming(null);setNameInput('');
+    setConfirming(null);setSelectedNombre('');setNameInput('');
+  }
+  function handleEnviarCliente(){
+    if(!emailPara)return;
+    saveFrecuente(emailPara);
+    if(emailCC){emailCC.split(',').forEach(function(e){saveFrecuente(e.trim());});}
+    sendEmailCliente(emailPara,emailCC?emailCC.split(',').map(function(e){return e.trim();}):[],(seccion||'rrss'),data.topic||'Post sin título');
+    setEnviarOpen(false);setEmailPara('');setEmailCC('');
   }
 
   const isApproved=data.status==='aprobado';
@@ -1060,18 +1127,82 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
     // INLINE CONFIRM
     confirming&&React.createElement('div',{className:'confirm-row '+confirming},
       React.createElement('span',{className:'confirm-label '+confirming},
-        confirming==='revision'?'📤 ¿Quién lo envía a revisión?':confirming==='devolucion'?'🔄 ¿Quién lo devuelve a revisión?':'✅ ¿Quién aprueba este post?'
+        confirming==='revision'?'📤 Enviar a revisión':confirming==='devolucion'?'↩️ Devolver a revisión':'✅ Aprobado por el cliente'
       ),
-      React.createElement('input',{
-        className:'confirm-input '+confirming,
-        type:'text',autoFocus:true,
-        value:nameInput,
-        placeholder:'Nombre...',
-        onChange:e=>setNameInput(e.target.value),
-        onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}
-      }),
-      React.createElement('button',{className:'confirm-btn '+confirming,onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
+      confirming!=='aprobado'&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'Número de revisión'),
+        React.createElement('div',{className:'revision-num-btns'},
+          ['1ª','2ª','3ª'].map(function(n){
+            return React.createElement('button',{key:n,className:'revision-num-btn'+(numRevision===n?' sel':''),onClick:function(){setNumRevision(n);}},n);
+          })
+        )
+      ),
+      confirming!=='aprobado'&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'¿Quién lo envía?'),
+        React.createElement('div',{className:'nombre-btns'},
+          AGENCIA_NOMBRES.map(function(n){
+            return React.createElement('button',{key:n,className:'nombre-btn'+(selectedNombre===n?' sel':''),onClick:function(){setSelectedNombre(n);}},n);
+          })
+        )
+      ),
+      confirming==='aprobado'&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'Nombre del cliente'),
+        React.createElement('input',{
+          className:'confirm-input '+confirming,autoFocus:true,
+          value:nameInput,placeholder:'Nombre de quien aprueba...',
+          onChange:e=>setNameInput(e.target.value),
+          onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);}}
+        })
+      ),
+      React.createElement('div',{style:{display:'flex',gap:6,marginTop:4}},
+        React.createElement('button',{
+          className:'confirm-btn '+confirming,
+          onClick:handleConfirm,
+          disabled:confirming!=='aprobado'&&!selectedNombre,
+          style:{opacity:(confirming!=='aprobado'&&!selectedNombre)?0.5:1}
+        },'Confirmar'),
+        React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setSelectedNombre('');setNameInput('');}  },'✕')
+      )
+    ),
+    // ENVIAR AL CLIENTE (solo cuando está en revisión)
+    data.status==='revision'&&React.createElement('div',{className:'enviar-cliente-accordion'},
+      React.createElement('div',{className:'enviar-cliente-toggle',onClick:()=>setEnviarOpen(o=>!o)},
+        React.createElement('span',null,enviarOpen?'▾':'▸'),
+        ' 📨 Enviar al cliente para revisar'
+      ),
+      enviarOpen&&React.createElement('div',{className:'enviar-cliente-body'},
+        React.createElement('div',{className:'enviar-cliente-field'},
+          React.createElement('label',null,'Para'),
+          React.createElement('input',{
+            className:'enviar-cliente-input',type:'email',
+            placeholder:'email@cliente.com',
+            value:emailPara,
+            onChange:e=>setEmailPara(e.target.value)
+          }),
+          getFrecuentes().length>0&&React.createElement('div',{className:'frecuentes'},
+            getFrecuentes().map(function(e){
+              return React.createElement('span',{key:e,className:'frecuente-tag',onClick:function(){setEmailPara(e);}},e);
+            })
+          )
+        ),
+        React.createElement('div',{className:'enviar-cliente-field'},
+          React.createElement('label',null,'CC (separar con comas)'),
+          React.createElement('input',{
+            className:'enviar-cliente-input',type:'text',
+            placeholder:'cc1@email.com, cc2@email.com',
+            value:emailCC,
+            onChange:e=>setEmailCC(e.target.value)
+          })
+        ),
+        React.createElement('div',{className:'enviar-cliente-actions'},
+          React.createElement('button',{className:'enviar-cliente-cancel',onClick:()=>setEnviarOpen(false)},'Descartar'),
+          React.createElement('button',{
+            className:'enviar-cliente-btn',
+            onClick:handleEnviarCliente,
+            disabled:!emailPara
+          },'📨 Enviar')
+        )
+      )
     ),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Tema'),
@@ -2655,17 +2786,18 @@ function App(){
   const timer=useRef(null);
   const[pubPlanLink,setPubPlanLink]=useState(()=>lsGet('pub_plan_link')||'');
 
-  // ── CARGA INICIAL DESDE SUPABASE ──
+  // ── CARGA INICIAL DESDE SUPABASE (multi-key) ──
   useEffect(()=>{
     sbLoad().then(remote=>{
       if(remote){
-        if(remote.rrss){setRRSS(remote.rrss); for(const m of MONTHS){lsSet('rrss_'+m.key,remote.rrss[m.key]);}}
-        if(remote.seo){setSEO(remote.seo); for(const m of MONTHS){lsSet('seo_'+m.key,remote.seo[m.key]);}}
-        if(remote.pub){setPUB(remote.pub); for(const m of MONTHS){lsSet('pub_'+m.key,remote.pub[m.key]);}}
+        // Cargar cada sección desde su propia fila
+        if(remote.rrss){setRRSS(remote.rrss); for(const m of MONTHS){lsSet('rrss_'+m.key,(remote.rrss||{})[m.key]);}}
+        if(remote.seo){setSEO(remote.seo); for(const m of MONTHS){lsSet('seo_'+m.key,(remote.seo||{})[m.key]);}}
+        if(remote.pub){setPUB(remote.pub); for(const m of MONTHS){lsSet('pub_'+m.key,(remote.pub||{})[m.key]);}}
         if(remote.contact){setContact(remote.contact); lsSet('contact',remote.contact);}
         if(remote.onboarding){setOnboarding(remote.onboarding); lsSet('onboarding',remote.onboarding);}
         if(remote.agency){setAgency(remote.agency); lsSet('agency',remote.agency);}
-        if(remote.medios){setMedios(remote.medios); for(const m of MONTHS){lsSet('medios_'+m.key,remote.medios[m.key]);}}
+        if(remote.medios){setMedios(remote.medios); for(const m of MONTHS){lsSet('medios_'+m.key,(remote.medios||{})[m.key]);}}
         if(remote.pts!=null){setPts(remote.pts); lsSet('pts',remote.pts);}
         if(remote.pubPlanLink!=null){setPubPlanLink(remote.pubPlanLink); lsSet('pub_plan_link',remote.pubPlanLink);}
         if(remote.visited){localStorage.setItem('lfs_visited','1');}
@@ -2682,7 +2814,11 @@ function App(){
     timer.current=setTimeout(()=>{
       for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);lsSet('medios_'+m.key,medios[m.key]);}
       lsSet('pts',pts); lsSet('contact',contact); lsSet('onboarding',onboarding); lsSet('agency',agency);
-      const snapshot={rrss,seo,pub,contact,onboarding,agency,medios,pts,pubPlanLink,visited:!!localStorage.getItem('lfs_visited')};
+      const snapshot={
+        rrss,seo,pub,contact,onboarding,agency,medios,
+        pts,pubPlanLink,
+        visited:!!localStorage.getItem('lfs_visited')
+      };
       sbSave(snapshot).then(()=>setSaved(true));
     },1500);
   },[rrss,seo,pub,pts,contact,onboarding,agency,medios,syncing]);
