@@ -192,6 +192,11 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .historial-info{flex:1;min-width:0}
 .historial-nombre{font-size:11px;font-weight:700;color:#1A0B2E}
 .historial-meta{font-size:10px;color:#8C7A9C;margin-top:1px}
+.historial-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:2px 0}
+.historial-toggle:hover .historial-title{color:#7C3AED}
+.historial-arrow{font-size:10px;color:#8C7A9C;transition:transform .2s}
+.historial-arrow.open{transform:rotate(180deg)}
+.historial-older{margin-top:4px;border-top:1px dashed rgba(124,58,237,.15);padding-top:4px}
 
 
 .util-nav{display:flex;gap:8px;padding:10px 16px 8px;background:#3D1785;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
@@ -886,6 +891,39 @@ function AddButton({onAdd,variant}){
   );
 }
 
+function HistorialBlock({historial}){
+  const[open,setOpen]=React.useState(false);
+  const reversed=[...historial].reverse();
+  const ultimo=reversed[0];
+  const anteriores=reversed.slice(1);
+  function evIcon(a){return a==='aprobado'?'✅':a==='devolucion'?'🔄':'📤';}
+  function evLabel(a){return a==='aprobado'?'Aprobado':a==='devolucion'?'Devuelto a revisión':'Enviado a revisión';}
+  return React.createElement('div',{className:'historial-section'},
+    React.createElement('div',{className:'historial-toggle',onClick:()=>setOpen(o=>!o)},
+      React.createElement('div',{className:'historial-title'},'📋 Historial de cambios'),
+      anteriores.length>0&&React.createElement('span',{className:'historial-arrow '+(open?'open':'')+(anteriores.length>0?' ':'')},'▾')
+    ),
+    React.createElement('div',{className:'historial-item'},
+      React.createElement('span',{className:'historial-icon'},evIcon(ultimo.accion)),
+      React.createElement('div',{className:'historial-info'},
+        React.createElement('div',{className:'historial-nombre'},ultimo.nombre),
+        React.createElement('div',{className:'historial-meta'},evLabel(ultimo.accion)+' · '+ultimo.fecha)
+      )
+    ),
+    open&&anteriores.length>0&&React.createElement('div',{className:'historial-older'},
+      anteriores.map(function(ev,i){
+        return React.createElement('div',{key:i,className:'historial-item'},
+          React.createElement('span',{className:'historial-icon'},evIcon(ev.accion)),
+          React.createElement('div',{className:'historial-info'},
+            React.createElement('div',{className:'historial-nombre'},ev.nombre),
+            React.createElement('div',{className:'historial-meta'},evLabel(ev.accion)+' · '+ev.fecha)
+          )
+        );
+      })
+    )
+  );
+}
+
 function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
   const type=planCfg?planCfg.type:(data.type||'reel');
   const t=TC_RRSS[type]||TC_RRSS.reel;
@@ -973,20 +1011,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove,seccion}){
       )
     ),
     // HISTORIAL
-    (data.historial&&data.historial.length>0)&&React.createElement('div',{className:'historial-section'},
-      React.createElement('div',{className:'historial-title'},'📋 Historial de cambios'),
-      [...data.historial].reverse().map(function(ev,i){
-        var icon=ev.accion==='aprobado'?'✅':ev.accion==='devolucion'?'🔄':'📤';
-        var label=ev.accion==='aprobado'?'Aprobado':ev.accion==='devolucion'?'Devuelto a revisión':'Enviado a revisión';
-        return React.createElement('div',{key:i,className:'historial-item'},
-          React.createElement('span',{className:'historial-icon'},icon),
-          React.createElement('div',{className:'historial-info'},
-            React.createElement('div',{className:'historial-nombre'},ev.nombre),
-            React.createElement('div',{className:'historial-meta'},label+' · '+ev.fecha)
-          )
-        );
-      })
-    ),
+    (data.historial&&data.historial.length>0)&&React.createElement(HistorialBlock,{historial:data.historial}),
     // INLINE CONFIRM
     confirming&&React.createElement('div',{className:'confirm-row '+confirming},
       React.createElement('span',{className:'confirm-label '+confirming},
