@@ -1161,6 +1161,8 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     const txt=newCorr.trim(); if(!txt)return;
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     onUpdate('correcciones',[...correcciones,{id:Date.now(),texto:txt,done:false,creadaAt:now}]);
+    // Auto-cambiar estado a "solicitud de cambios" si no está ya aprobado
+    if(data.status!=='aprobado'){onUpdate('status','cambios');}
     setNewCorr('');
   }
   function toggleCorreccion(id){onUpdate('correcciones',correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;}));}
