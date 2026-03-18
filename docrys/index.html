@@ -897,7 +897,7 @@ function loadRRSS(){
 }
 function buildDefaultSEO(){
   const s={};
-  for(const m of MONTHS) s[m.key]={articles:PLAN_SEO[m.key].map(a=>({...a,notas:'',linkArticulo:'',status:'pendiente'})),reportLink:''};
+  for(const m of MONTHS) s[m.key]={articles:PLAN_SEO[m.key].map(a=>({...a,notas:'',linkArticulo:'',status:'pendiente',correcciones:[]})),reportLink:''};
   return s;
 }
 function loadSEO(){
@@ -951,7 +951,7 @@ function AddButton({onAdd,variant}){
   );
 }
 
-const AGENCIA_NOMBRES=['Juli','Estefanía','Jessy','Paola','Sheila','Carla','Elena','Matías'];
+const AGENCIA_NOMBRES=['Juli','Estefanía','Jessy','Paola','Sheila','Carla','Elena','Matías','Laura'];
 
 // ── DELETE MODAL ──────────────────────────────────────────────────────
 function DeleteModal({titulo,onConfirm,onCancel}){
@@ -1007,7 +1007,6 @@ function DeleteModal({titulo,onConfirm,onCancel}){
 // ── CONFIRM ROW COMPONENT ─────────────────────────────────────────────
 function ConfirmRow({confirming,nameInput,setNameInput,onConfirm,onCancel}){
   const isAgencia=confirming==='enviar_revision'||confirming==='reset_pendiente';
-  const[revNum,setRevNum]=useState('');
   const labels={
     enviar_revision:'📤 ¿Quién lo envía a revisión? (agencia)',
     aprobar:'✅ ¿Quién aprueba? (nombre del cliente)',
@@ -1015,28 +1014,17 @@ function ConfirmRow({confirming,nameInput,setNameInput,onConfirm,onCancel}){
     reset_pendiente:'↩️ ¿Quién lo devuelve a pendiente? (agencia)',
   };
   const cls={enviar_revision:'revision',aprobar:'aprobado',pedir_cambios:'revision',reset_pendiente:'revision'}[confirming]||'revision';
-  const canConfirm=nameInput.trim()&&(confirming!=='enviar_revision'||revNum);
+  const canConfirm=nameInput.trim();
 
   function handleConfirm(){
     if(!canConfirm)return;
-    onConfirm(revNum);
-    setRevNum('');
+    onConfirm();
   }
 
   return React.createElement('div',{className:'confirm-row '+cls},
     React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:8,flex:1}},
       React.createElement('span',{className:'confirm-label '+cls},labels[confirming]||confirming),
-      confirming==='enviar_revision'&&React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:4}},
-        React.createElement('span',{style:{fontSize:10,fontWeight:700,color:'#8b6914',letterSpacing:'.08em',textTransform:'uppercase'}},'Número de revisión'),
-        React.createElement('div',{className:'name-selector'},
-          ['1ª revisión','2ª revisión','3ª revisión'].map(function(n){
-            return React.createElement('button',{
-              key:n,className:'name-btn'+(revNum===n?' sel':''),
-              onClick:function(){setRevNum(n);}
-            },n);
-          })
-        )
-      ),
+
       isAgencia
         ?React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:4}},
             React.createElement('span',{style:{fontSize:10,fontWeight:700,color:'#8b6914',letterSpacing:'.08em',textTransform:'uppercase'}},'Tu nombre'),
@@ -1152,6 +1140,7 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
   const[newCorr,setNewCorr]=useState('');
   const[histOpen,setHistOpen]=useState(false);
   const[showDel,setShowDel]=useState(false);
+  const[nudgeId,setNudgeId]=useState(null);
 
   const correcciones=data.correcciones||[];
   const historial=data.historial||[];
@@ -1161,12 +1150,23 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     const txt=newCorr.trim(); if(!txt)return;
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     onUpdate('correcciones',[...correcciones,{id:Date.now(),texto:txt,done:false,creadaAt:now}]);
-    // Auto-cambiar estado a "solicitud de cambios" si no está ya aprobado
     if(data.status!=='aprobado'){onUpdate('status','cambios');}
     setNewCorr('');
   }
-  function toggleCorreccion(id){onUpdate('correcciones',correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;}));}
-  function deleteCorreccion(id){onUpdate('correcciones',correcciones.filter(function(c){return c.id!==id;}));}
+  function toggleCorreccion(id){
+    const corr=correcciones.find(function(c){return c.id===id;});
+    const list=correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;});
+    onUpdate('correcciones',list);
+    if(corr&&!corr.done){
+      // Al marcar hecho: pasar a "enviado a revisión" y mostrar nudge
+      onUpdate('status','revision');
+      setNudgeId(id);
+    }else{setNudgeId(null);}
+  }
+  function deleteCorreccion(id){
+    onUpdate('correcciones',correcciones.filter(function(c){return c.id!==id;}));
+    if(nudgeId===id)setNudgeId(null);
+  }
 
   function selectStatus(val){
     if(val===data.status)return;
@@ -1175,16 +1175,17 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     else if(val==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
     else if(val==='pendiente'){setConfirming('reset_pendiente');setNameInput('');}
   }
-  function handleConfirm(revNum){
+  function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const revLabel=revNum?(' — '+revNum):'';
+    const numRevisiones=historial.filter(function(h){return h.accion&&h.accion.includes('Enviado a revisión');}).length+1;
+    const revLabel=' ('+numRevisiones+'ª revisión)';
     const accionLabel={enviar_revision:'📤 Enviado a revisión'+revLabel,aprobar:'✅ Aprobado',pedir_cambios:'🟠 Solicitud de cambios'}[confirming]||confirming;
     const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
     if(confirming==='enviar_revision'){
-      onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);
-      sendEmail('rrss','revision',name,now,(revNum?'['+revNum+'] ':' ')+(data.topic||'Post RRSS'));
+      onUpdate('status','revision');onUpdate('revisionBy',name+revLabel);onUpdate('revisionAt',now);
+      sendEmail('rrss','revision',name,now,'['+numRevisiones+'ª revisión] '+(data.topic||'Post RRSS'));
     } else if(confirming==='aprobar'){
       onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);
       onApprove();sendEmail('rrss','aprobado',name,now,data.topic||'Post RRSS');
@@ -1259,6 +1260,12 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
           React.createElement('button',{className:'corr-del',onClick:function(){deleteCorreccion(c.id);}  },'✕')
         );
       }),
+      nudgeId&&React.createElement('div',{style:{marginTop:4}},
+        React.createElement(SendToClientBlock,{
+          seccion:'rrss',
+          titulo:'Corrección aplicada: '+((correcciones.find(function(c){return c.id===nudgeId;})||{}).texto||'')
+        })
+      ),
       React.createElement('div',{className:'corr-add-row'},
         React.createElement('input',{className:'corr-input',type:'text',value:newCorr,
           placeholder:'Añadir corrección del cliente...',
@@ -1353,7 +1360,31 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
   const[nameInput,setNameInput]=useState('');
   const[histOpen,setHistOpen]=useState(false);
   const[showDel,setShowDel]=useState(false);
+  const[newCorr,setNewCorr]=useState('');
+  const[nudgeId,setNudgeId]=useState(null);
   const historial=data.historial||[];
+  const correcciones=data.correcciones||[];
+  const pendientes=correcciones.filter(function(c){return !c.done;}).length;
+
+  function addCorreccion(){
+    const txt=newCorr.trim();if(!txt)return;
+    const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    onUpdate('correcciones',[...correcciones,{id:Date.now(),texto:txt,done:false,creadaAt:now}]);
+    if(data.status!=='aprobado'){onUpdate('status','cambios');}
+    setNewCorr('');
+  }
+  function toggleCorr(id){
+    const corr=correcciones.find(function(c){return c.id===id;});
+    onUpdate('correcciones',correcciones.map(function(c){return c.id===id?{...c,done:!c.done}:c;}));
+    if(corr&&!corr.done){
+      onUpdate('status','revision');
+      setNudgeId(id);
+    }else{setNudgeId(null);}
+  }
+  function delCorr(id){
+    onUpdate('correcciones',correcciones.filter(function(c){return c.id!==id;}));
+    if(nudgeId===id)setNudgeId(null);
+  }
 
   function selectStatus(val){
     if(val===data.status)return;
@@ -1369,10 +1400,11 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
     else if(val==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
     else if(val==='pendiente'){setConfirming('reset_pendiente');setNameInput('');}
   }
-  function handleConfirm(revNum){
+  function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const revLabel=revNum?(' — '+revNum):'';
+    const numRevisiones=historial.filter(function(h){return h.accion&&h.accion.includes('Enviado a revisión');}).length+1;
+    const revLabel=' ('+numRevisiones+'ª revisión)';
     const accionLabel={
       enviar_revision:'📤 Enviado a revisión'+revLabel,
       aprobar:'✅ Aprobado',
@@ -1381,8 +1413,8 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
     const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
     if(confirming==='enviar_revision'){
-      onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);
-      sendEmail('seo','revision',name,now,(revNum?'['+revNum+'] ':'')+(data.title||'Artículo SEO'||''));
+      onUpdate('status','revision');onUpdate('revisionBy',name+revLabel);onUpdate('revisionAt',now);
+      sendEmail('seo','revision',name,now,'['+numRevisiones+'ª revisión] '+(data.title||'Artículo SEO'));
     } else if(confirming==='aprobar'){
       onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);
       onApprove();
@@ -1457,6 +1489,37 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
       React.createElement('div',null,
         React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Fecha de publicación'),
         React.createElement('input',{className:'date-input',style:{borderColor:'rgba(44,142,138,.2)'},type:'date',value:data.date||'',onChange:e=>onUpdate('date',e.target.value)})
+      )
+    ),
+    // CORRECCIONES DEL CLIENTE
+    React.createElement('div',{className:'corr-section'},
+      React.createElement('div',{className:'corr-header'},
+        React.createElement('span',{className:'corr-title'},'✏️ Correcciones del cliente'),
+        correcciones.length>0&&React.createElement('span',{className:'corr-badge'+(pendientes===0?' done':'')},
+          pendientes>0?pendientes+' pendiente'+(pendientes>1?'s':''):'✓ Todas aplicadas')
+      ),
+      correcciones.map(function(c){
+        return React.createElement('div',{key:c.id,className:'corr-item'+(c.done?' done':'')},
+          React.createElement('button',{className:'corr-check-btn'+(c.done?' done':''),onClick:function(){toggleCorr(c.id);}},c.done?'✓ Hecho':'Hecho'),
+          React.createElement('div',{className:'corr-text'},
+            c.texto,
+            c.creadaAt&&React.createElement('span',{className:'corr-fecha'},c.creadaAt)
+          ),
+          React.createElement('button',{className:'corr-del',onClick:function(){delCorr(c.id);}  },'✕')
+        );
+      }),
+      nudgeId&&React.createElement('div',{style:{marginTop:4}},
+        React.createElement(SendToClientBlock,{
+          seccion:'seo',
+          titulo:'Corrección aplicada: '+((correcciones.find(function(c){return c.id===nudgeId;})||{}).texto||'')
+        })
+      ),
+      React.createElement('div',{className:'corr-add-row'},
+        React.createElement('input',{className:'corr-input',type:'text',value:newCorr,
+          placeholder:'Añadir corrección del cliente...',
+          onChange:function(e){setNewCorr(e.target.value);},
+          onKeyDown:function(e){if(e.key==='Enter')addCorreccion();}}),
+        React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
       )
     )
   );
@@ -1644,10 +1707,11 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     else if(val==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
     else if(val==='pendiente'){setConfirming('reset_pendiente');setNameInput('');}
   }
-  function handleConfirm(revNum){
+  function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const revLabel=revNum?(' — '+revNum):'';
+    const numRevisiones=historial.filter(function(h){return h.accion&&h.accion.includes('Enviado a revisión');}).length+1;
+    const revLabel=' ('+numRevisiones+'ª revisión)';
     const accionLabel={
       enviar_revision:'📤 Enviado a revisión'+revLabel,
       aprobar:'✅ Aprobado',
@@ -1656,8 +1720,8 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
     if(confirming==='enviar_revision'){
-      onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);
-      sendEmail('pub','revision',name,now,(revNum?'['+revNum+'] ':'')+(data.name||'Campaña'||''));
+      onUpdate('status','revision');onUpdate('revisionBy',name+revLabel);onUpdate('revisionAt',now);
+      sendEmail('pub','revision',name,now,'['+numRevisiones+'ª revisión] '+(data.name||'Campaña'));
     } else if(confirming==='aprobar'){
       onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);
       onApprove();
@@ -1907,10 +1971,11 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
     else if(val==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
     else if(val==='pendiente'){setConfirming('reset_pendiente');setNameInput('');}
   }
-  function handleConfirm(revNum){
+  function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const name=nameInput.trim()||'Sin nombre';
-    const revLabel=revNum?(' — '+revNum):'';
+    const numRevisiones=historial.filter(function(h){return h.accion&&h.accion.includes('Enviado a revisión');}).length+1;
+    const revLabel=' ('+numRevisiones+'ª revisión)';
     const accionLabel={
       enviar_revision:'📤 Enviado a revisión'+revLabel,
       aprobar:'✅ Aprobado',
@@ -1919,8 +1984,8 @@ function MediosArticleCard({data,idx,onUpdate,onDelete,onApprove}){
     const hist=[...historial,{accion:accionLabel,nombre:name,fecha:now}];
     onUpdate('historial',hist);
     if(confirming==='enviar_revision'){
-      onUpdate('status','revision');onUpdate('revisionBy',name+(revNum?' ('+revNum+')':''));onUpdate('revisionAt',now);
-      sendEmail('medios','revision',name,now,(revNum?'['+revNum+'] ':'')+(data.titular||'Artículo Medios'||''));
+      onUpdate('status','revision');onUpdate('revisionBy',name+revLabel);onUpdate('revisionAt',now);
+      sendEmail('medios','revision',name,now,'['+numRevisiones+'ª revisión] '+(data.titular||'Artículo Medios'));
     } else if(confirming==='aprobar'){
       onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);
       onApprove();
