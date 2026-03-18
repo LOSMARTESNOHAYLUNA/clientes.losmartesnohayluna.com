@@ -537,7 +537,6 @@ const MONTHS=[
 ];
 
 const FIRMA='';
-const DEFAULT_HASHTAGS='#FabricaDeSonrisas #ClínicaDental #OdontologíaGranada';
 
 const TOAST_MSGS=[
   ['🚀 ¡Marchando publicación!','+5 puntos'],
@@ -567,13 +566,39 @@ function showToast(){
 const LS_PFX='lfs26v1_';
 function lsGet(k){try{return JSON.parse(localStorage.getItem(LS_PFX+k)||'null');}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(LS_PFX+k,JSON.stringify(v));}catch(e){}}
+// ── MIGRATION: strip old default hashtags from saved data ──
+(function(){
+  var badHashtags=['#FabricaDeSonrisas #ClínicaDental #OdontologíaGranada','#DocrysDC #DiseñoDeInteriores #InteriorismoMadrid'];
+  var months=['2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12'];
+  months.forEach(function(m){
+    var key=LS_PFX+'rrss_'+m;
+    try{
+      var raw=localStorage.getItem(key);
+      if(!raw)return;
+      var data=JSON.parse(raw);
+      var changed=false;
+      if(Array.isArray(data)){
+        data.forEach(function(week){
+          ['ig','customIg'].forEach(function(plat){
+            if(Array.isArray(week[plat])){
+              week[plat].forEach(function(post){
+                if(badHashtags.indexOf(post.hashtags)!==-1){post.hashtags='';changed=true;}
+              });
+            }
+          });
+        });
+      }
+      if(changed)localStorage.setItem(key,JSON.stringify(data));
+    }catch(e){}
+  });
+})();
 
 // ── RRSS DATA ──────────────────────────────────────────────────────────
 const TC_RRSS={
   reel:{label:'Reel',color:'#4C1D95',bg:'#E9E3FB',border:'#7C3AED'},
   carrusel:{label:'Carrusel',color:'#3c2800',bg:'#f5e8c4',border:'#a07820'},
   historia:{label:'Historia',color:'#3c3028',bg:'#ede8e0',border:'#8C7A9C'},
-  blog:{label:'Blog',color:'#0e6b8f',bg:'#e0f4fb',border:'#0ea5c9'},
+  imagen:{label:'Post imagen',color:'#0e6b8f',bg:'#e0f4fb',border:'#0ea5c9'},
 };
 const SC={
   pendiente:{label:'Pendiente',bg:'#F5F0FF',color:'#4C3A6B',bc:'rgba(124,58,237,.4)',next:'revision'},
@@ -584,63 +609,63 @@ const ADD_TYPES_RRSS=[
   {type:'reel',label:'Reel',dot:'#7C3AED'},
   {type:'carrusel',label:'Carrusel',dot:'#a07820'},
   {type:'historia',label:'Historia',dot:'#8C7A9C'},
-  {type:'blog',label:'Blog',dot:'#0ea5c9'},
+  {type:'imagen',label:'Post imagen',dot:'#0ea5c9'},
 ];
 
 const PLAN_RRSS={
 '2026-04':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Materiales'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Servicios'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-05':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Servicios'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Servicios'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-06':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Tendencias'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Materiales'},{type:'carrusel',topic:'',pillar:'Servicios'},{type:'historia',topic:'',pillar:'Servicios'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-07':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Tendencias'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Marca'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-08':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Servicios'},{type:'blog',topic:'',pillar:'Tendencias'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-09':[
-  {ig:[{type:'reel',topic:'',pillar:'Servicios'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Servicios'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-10':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Servicios'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Servicios'},{type:'reel',topic:'',pillar:'Proyecto'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-11':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Tendencias'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Servicios'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Proyecto'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Materiales'},{type:'blog',topic:'',pillar:'Tendencias'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Educativo'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-12':[
-  {ig:[{type:'reel',topic:'',pillar:'Proyecto'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Marca'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Marca'},{type:'historia',topic:'',pillar:'Marca'},{type:'reel',topic:'',pillar:'Servicios'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Servicios'},{type:'historia',topic:'',pillar:'Marca'},{type:'blog',topic:'',pillar:'Educativo'}]},
-  {ig:[{type:'reel',topic:'',pillar:'Marca'},{type:'carrusel',topic:'',pillar:'Tendencias'},{type:'historia',topic:'',pillar:'Marca'},{type:'blog',topic:'',pillar:'Educativo'}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''}]},
+  {ig:[{type:'imagen',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 };
 
@@ -739,7 +764,7 @@ function buildDefaultRRSS(){
   const s={};
   for(const m of MONTHS){
     s[m.key]=PLAN_RRSS[m.key].map(w=>({
-      ig:w.ig.map(c=>({topic:c.topic,text:'',hashtags:DEFAULT_HASHTAGS,link:'',materialLink:'',date:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',correcciones:[]})),
+      ig:w.ig.map(c=>({topic:c.topic,text:'',hashtags:'',link:'',materialLink:'',date:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',correcciones:[]})),
       customIg:[],
     }));
   }
@@ -750,7 +775,7 @@ function loadRRSS(){
   for(const m of MONTHS){
     const r=lsGet('rrss_'+m.key);
     if(r)d[m.key]=r.map((w,wi)=>({
-      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:s.text||'',hashtags:s.hashtags||DEFAULT_HASHTAGS,link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[]})),
+      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:s.text||'',hashtags:s.hashtags||'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[]})),
       customIg:w.customIg||[],
     }));
   }
@@ -907,8 +932,8 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Copy del post'),
       React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el texto principal del post...'}),
-      React.createElement('div',{className:'firma-box'},FIRMA),
-      React.createElement('div',{className:'firma-hint'},'👆 Añadir al final del copy del post')
+      React.createElement('label',{className:'field-label',style:{marginTop:8}},'Hashtags'),
+      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||'',onChange:e=>onUpdate('hashtags',e.target.value),placeholder:'#ejemplo #hashtag...'})
     ),
     // ENLACE DISEÑO — destacado
     React.createElement('div',{className:'design-link-block'},
@@ -941,10 +966,6 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
         }),
         React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
       )
-    ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label'},'Hashtags'),
-      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value)})
     ),
     React.createElement('div',{className:'fields-stack'},
       React.createElement('div',null,
@@ -2443,7 +2464,7 @@ function App(){
     setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk]?.[wi]?.[plat]?.[pi])n[mk][wi][plat][pi][f]=v;return n;});
   },[]);
   const addCustomRRSS=useCallback((mk,wi,plat,type)=>{
-    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[mk][wi].customIg)n[mk][wi].customIg=[];n[mk][wi].customIg.push({type,topic:'',text:'',hashtags:DEFAULT_HASHTAGS,link:'',date:'',status:'pendiente'});return n;});
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[mk][wi].customIg)n[mk][wi].customIg=[];n[mk][wi].customIg.push({type,topic:'',text:'',hashtags:'',link:'',date:'',status:'pendiente'});return n;});
   },[]);
   const updateCustomRRSS=useCallback((mk,wi,plat,ci,f,v)=>{
     setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk][wi].customIg?.[ci])n[mk][wi].customIg[ci][f]=v;return n;});
