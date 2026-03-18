@@ -41,8 +41,8 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 /* ── MONTH TABS ── */
 .tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;background:#3D1785;padding:0 0 0}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:8px 13px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
-.tab.on{color:#7C3AED;border-bottom-color:#7C3AED}
+.tab{padding:8px 13px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.72);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab.on{color:#fff;border-bottom-color:transparent;font-weight:800;background:rgba(255,255,255,.18);border-radius:6px 6px 0 0}
 .tab.on.seo-tab{color:#2c8e8a;border-bottom-color:#2c8e8a}
 .tab.on.pub-tab{color:#a855f7;border-bottom-color:#a855f7}
 
@@ -60,7 +60,7 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .mth-accent.seo{background:#2c8e8a}
 .mth-accent.pub{background:#a855f7}
 .mth-name{font-size:18px;font-weight:700;color:#1A0B2E;letter-spacing:-.02em}
-.mth-sub{font-size:11px;color:#4C3A6B;letter-spacing:.06em;margin-top:1px}
+.mth-sub{font-size:12px;color:#6B4D9A;letter-spacing:.04em;margin-top:2px;font-weight:500}
 
 /* ── WEEK (RRSS) ── */
 .week{border:1px solid rgba(124,58,237,.3);border-radius:10px;overflow:hidden;background:#fff;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
@@ -192,9 +192,9 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .historial-info{flex:1;min-width:0}
 .historial-nombre{font-size:11px;font-weight:700;color:#1A0B2E}
 .historial-meta{font-size:10px;color:#8C7A9C;margin-top:1px}
-.historial-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:2px 0}
+.historial-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:4px 0;border-radius:4px}
 .historial-toggle:hover .historial-title{color:#7C3AED}
-.historial-arrow{font-size:10px;color:#8C7A9C;transition:transform .2s}
+.historial-arrow{font-size:14px;color:#7C3AED;font-weight:700;transition:transform .2s;margin-left:6px;line-height:1}
 .historial-arrow.open{transform:rotate(180deg)}
 .historial-older{margin-top:4px;border-top:1px dashed rgba(124,58,237,.15);padding-top:4px}
 
@@ -224,14 +224,28 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 
 /* ── SEO SECTION ── */
 .seo-section{display:flex;flex-direction:column;gap:16px}
+.seo-reporte-block{background:#f0fdfb;border:1.5px solid rgba(44,142,138,.3);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.seo-reporte-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1a4a48;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.seo-tecnico-block{background:#fff;border:1px solid rgba(44,142,138,.2);border-left:4px solid #2c8e8a;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.seo-tecnico-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#1a4a48;display:flex;align-items:center;gap:6px}
+.seo-tecnico-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;background:#f0fdfb;border:1px solid rgba(44,142,138,.15)}
+.seo-tecnico-item-text{flex:1;font-size:12px;color:#1a4a48;line-height:1.5}
+.seo-tecnico-add-row{display:flex;gap:6px}
+.seo-tecnico-input{flex:1;padding:8px 11px;border:1.5px solid rgba(44,142,138,.25);border-radius:6px;font-family:inherit;font-size:12px;color:#1A0B2E;outline:none;background:#fff;transition:all .2s}
+.seo-tecnico-input:focus{border-color:#2c8e8a;box-shadow:0 0 0 3px rgba(44,142,138,.1)}
+.seo-tecnico-input::placeholder{color:#ccc;font-size:11px}
+.seo-tecnico-add-btn{padding:8px 14px;border-radius:6px;border:1.5px solid rgba(44,142,138,.35);background:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#1a4a48;transition:all .2s;white-space:nowrap}
+.seo-tecnico-add-btn:hover{background:#f0fdfb;border-color:#2c8e8a}
+.seo-tecnico-del{font-size:10px;color:#ccc;background:none;border:none;cursor:pointer;padding:2px 5px;border-radius:3px;transition:color .15s;flex-shrink:0}
+.seo-tecnico-del:hover{color:#c0392b}
 .seo-month-block{background:#fff;border:1px solid rgba(44,142,138,.25);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.seo-month-hdr{background:#0d3a38;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.seo-month-hdr{background:#0a4a46;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .seo-month-title{font-size:13px;font-weight:700;color:#4fd1cd;letter-spacing:.08em;text-transform:uppercase}
 .seo-report-row{display:flex;align-items:center;gap:8px}
-.seo-report-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-.seo-report-input{padding:5px 10px;border:1px solid rgba(77,209,205,.3);border-radius:6px;background:rgba(255,255,255,.07);font-family:inherit;font-size:11px;color:#4fd1cd;outline:none;width:200px;transition:all .2s}
+.seo-report-label{font-size:10px;color:rgba(255,255,255,.85);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;font-weight:700}
+.seo-report-input{padding:5px 10px;border:1px solid rgba(77,209,205,.6);border-radius:6px;background:rgba(255,255,255,.12);font-family:inherit;font-size:11px;color:#fff;outline:none;width:200px;transition:all .2s}
 .seo-report-input:focus{border-color:#4fd1cd;background:rgba(255,255,255,.12)}
-.seo-report-input::placeholder{color:rgba(77,209,205,.3)}
+.seo-report-input::placeholder{color:rgba(255,255,255,.4)}
 .seo-report-link{font-size:10px;padding:5px 10px;border:1px solid #4fd1cd;border-radius:6px;background:none;color:#4fd1cd;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
 .seo-report-link:hover{background:rgba(77,209,205,.15)}
 .seo-body{padding:14px;display:flex;flex-direction:column;gap:12px}
@@ -255,13 +269,13 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .pub-plan-btn{font-size:10px;padding:6px 12px;border:1px solid #a855f7;border-radius:6px;background:none;color:#d8b4fe;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
 .pub-plan-btn:hover{background:rgba(168,85,247,.2)}
 .pub-month-block{background:#fff;border:1px solid rgba(168,85,247,.2);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.pub-month-hdr{background:#1a0033;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pub-month-hdr{background:#2d0055;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .pub-month-title{font-size:13px;font-weight:700;color:#d8b4fe;letter-spacing:.08em;text-transform:uppercase}
 .pub-report-row{display:flex;align-items:center;gap:8px}
-.pub-report-label{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-.pub-report-input{padding:5px 10px;border:1px solid rgba(168,85,247,.3);border-radius:6px;background:rgba(255,255,255,.07);font-family:inherit;font-size:11px;color:#d8b4fe;outline:none;width:200px;transition:all .2s}
+.pub-report-label{font-size:10px;color:rgba(255,255,255,.85);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;font-weight:700}
+.pub-report-input{padding:5px 10px;border:1px solid rgba(168,85,247,.6);border-radius:6px;background:rgba(255,255,255,.12);font-family:inherit;font-size:11px;color:#fff;outline:none;width:200px;transition:all .2s}
 .pub-report-input:focus{border-color:#a855f7;background:rgba(255,255,255,.12)}
-.pub-report-input::placeholder{color:rgba(216,180,254,.3)}
+.pub-report-input::placeholder{color:rgba(255,255,255,.4)}
 .pub-report-link{font-size:10px;padding:5px 10px;border:1px solid #a855f7;border-radius:6px;background:none;color:#d8b4fe;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;text-decoration:none;white-space:nowrap}
 .pub-report-link:hover{background:rgba(168,85,247,.15)}
 .pub-body{padding:14px;display:flex;flex-direction:column;gap:12px}
@@ -620,6 +634,35 @@ async function sendEmail(seccion,accion,nombre,fecha,titulo){
     });
   }catch(e){}
 }
+
+async function sendOnboardingEmail(formTitle, sections){
+  try{
+    let html='<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">';
+    html+='<h2 style="color:#3D1785;margin-top:0">'+formTitle+' — La Fábrica de Sonrisas</h2>';
+    html+='<p style="color:#666;font-size:13px">Formulario completado y enviado desde el portal de cliente.</p>';
+    sections.forEach(function(s){
+      html+='<div style="margin-top:20px;border-top:2px solid #7C3AED;padding-top:12px">';
+      html+='<h3 style="color:#4C1D95;margin:0 0 12px">'+s.emoji+' '+s.titulo+'</h3>';
+      s.preguntas.forEach(function(p){
+        if(p.respuesta){
+          html+='<div style="margin-bottom:12px;padding:10px 14px;background:#f9f5ff;border-radius:6px;border-left:3px solid #7C3AED">';
+          html+='<div style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">'+p.pregunta+'</div>';
+          html+='<div style="font-size:13px;color:#1A0B2E;line-height:1.6">'+String(p.respuesta).replace(/\n/g,'<br>')+'</div>';
+          html+='</div>';
+        }
+      });
+      html+='</div>';
+    });
+    html+='<hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>';
+    html+='<p style="font-size:11px;color:#9ca3af">Portal de cliente · La Fábrica de Sonrisas · '+new Date().toLocaleString('es-ES')+'</p>';
+    html+='</div>';
+    await fetch(EMAIL_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({seccion:'onboarding',accion:'formulario',nombre:'Cliente',fecha:new Date().toLocaleString('es-ES'),titulo:formTitle,html:html})
+    });
+  }catch(e){}
+}
 // ── MIGRATION: strip old default hashtags from saved data ──
 (function(){
   var badHashtags=['#FabricaDeSonrisas #ClínicaDental #OdontologíaGranada','#DocrysDC #DiseñoDeInteriores #InteriorismoMadrid'];
@@ -837,7 +880,7 @@ function loadRRSS(){
 }
 function buildDefaultSEO(){
   const s={};
-  for(const m of MONTHS) s[m.key]={articles:PLAN_SEO[m.key].map(a=>({...a,notas:'',linkArticulo:'',status:'pendiente'})),reportLink:''};
+  for(const m of MONTHS) s[m.key]={articles:PLAN_SEO[m.key].map(a=>({...a,notas:'',linkArticulo:'',status:'pendiente'})),reportLink:'',cambiosSeoTecnico:'',reporteMensual:''};
   return s;
 }
 function loadSEO(){
@@ -892,7 +935,7 @@ function AddButton({onAdd,variant}){
 }
 
 function HistorialBlock({historial}){
-  const[open,setOpen]=React.useState(false);
+  const[open,setOpen]=useState(false);
   const reversed=[...historial].reverse();
   const ultimo=reversed[0];
   const anteriores=reversed.slice(1);
@@ -900,18 +943,20 @@ function HistorialBlock({historial}){
   function evLabel(a){return a==='aprobado'?'Aprobado':a==='devolucion'?'Devuelto a revisión':'Enviado a revisión';}
   return React.createElement('div',{className:'historial-section'},
     React.createElement('div',{className:'historial-toggle',onClick:()=>setOpen(o=>!o)},
-      React.createElement('div',{className:'historial-title'},'📋 Historial de cambios'),
-      anteriores.length>0&&React.createElement('span',{className:'historial-arrow '+(open?'open':'')+(anteriores.length>0?' ':'')},'▾')
+      React.createElement('div',{className:'historial-title'},
+        React.createElement('span',{className:'historial-arrow '+(open?'open':'')},'▾'),
+        ' 📋 Historial de cambios'
+      ),
     ),
-    React.createElement('div',{className:'historial-item'},
+    !open&&React.createElement('div',{className:'historial-item'},
       React.createElement('span',{className:'historial-icon'},evIcon(ultimo.accion)),
       React.createElement('div',{className:'historial-info'},
         React.createElement('div',{className:'historial-nombre'},ultimo.nombre),
         React.createElement('div',{className:'historial-meta'},evLabel(ultimo.accion)+' · '+ultimo.fecha)
       )
     ),
-    open&&anteriores.length>0&&React.createElement('div',{className:'historial-older'},
-      anteriores.map(function(ev,i){
+    open&&React.createElement('div',{className:'historial-older'},
+      reversed.map(function(ev,i){
         return React.createElement('div',{key:i,className:'historial-item'},
           React.createElement('span',{className:'historial-icon'},evIcon(ev.accion)),
           React.createElement('div',{className:'historial-info'},
@@ -1179,7 +1224,22 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
   );
 }
 
-function SEOMonth({mk,monthData,onUpdateArticle,onUpdateReport,onAddArticle,onDeleteArticle,onApprove,monthName}){
+function SeoTecnicoBlock({cambios,onChange}){
+  return React.createElement('div',{className:'seo-tecnico-block'},
+    React.createElement('div',{className:'seo-tecnico-title'},'🔧 Cambios SEO técnico del mes'),
+    React.createElement('div',{className:'medios-field'},
+      React.createElement('label',null,'Enlace al documento de cambios técnicos'),
+      React.createElement(UrlInput,{
+        value:typeof cambios==='string'?cambios:'',
+        onChange:function(v){onChange(v);},
+        placeholder:'https://docs.google.com/... (informe de SEO técnico)',
+        variant:'seo'
+      })
+    )
+  );
+}
+
+function SEOMonth({mk,monthData,onUpdateArticle,onUpdateReport,onUpdateTecnico,onUpdateReporteMensual,onAddArticle,onDeleteArticle,onApprove,monthName}){
   const[open,setOpen]=useState(true);
   const apr=monthData.articles.filter(a=>a.status==='aprobado').length;
   return React.createElement('div',{className:'seo-month-block'},
@@ -1197,12 +1257,19 @@ function SEOMonth({mk,monthData,onUpdateArticle,onUpdateReport,onAddArticle,onDe
       )
     ),
     open&&React.createElement('div',{className:'seo-body'},
+      React.createElement('div',{className:'seo-reporte-block'},
+        React.createElement('span',{className:'seo-reporte-label'},'📈 Reporte mensual de datos'),
+        React.createElement('div',{style:{flex:1}},
+          React.createElement(UrlInput,{value:monthData.reporteMensual||'',onChange:function(v){onUpdateReporteMensual(v);},placeholder:'https://docs.google.com/... (reporte mensual de datos)',variant:'seo'})
+        )
+      ),
       monthData.articles.map((art,i)=>React.createElement(SEOArticleCard,{key:i,data:art,onUpdate:(f,v)=>onUpdateArticle(i,f,v),onDelete:monthData.articles.length>1?()=>onDeleteArticle(i):null,onApprove:()=>onApprove(i)})),
       React.createElement('button',{className:'add-post-btn seo',onClick:onAddArticle,style:{marginTop:4}},
         React.createElement('span',{className:'add-icon seo'},'+'),
         'Añadir artículo SEO'
       )
-    )
+    ),
+    React.createElement(SeoTecnicoBlock,{cambios:monthData.cambiosSeoTecnico||[],onChange:function(v){onUpdateTecnico(v);}})
   );
 }
 
@@ -1382,8 +1449,34 @@ function AgencySection({data,onUpdate}){
 // ── MEDIOS DIGITALES COMPONENTS ────────────────────────────────────────
 function MediosArticleCard({data,idx,onUpdate,onDelete}){
   const[open,setOpen]=useState(true);
+  const[confirming,setConfirming]=useState(null);
+  const[nameInput,setNameInput]=useState('');
   function setFoto(i){onUpdate('fotoSeleccionada',i);}
-  return React.createElement('div',{className:'medios-card'},
+  const status=data.status||'pendiente';
+  const sc=SC[status]||SC.pendiente;
+  function handleStatusClick(){
+    if(status==='pendiente'){setConfirming('revision');setNameInput('');}
+    else if(status==='revision'){setConfirming('aprobado');setNameInput('');}
+    else{setConfirming('devolucion');setNameInput('');}
+  }
+  function handleConfirm(){
+    const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const name=nameInput.trim()||'Sin nombre';
+    const evento={accion:confirming,nombre:name,fecha:now};
+    const nuevoHistorial=[...(data.historial||[]),evento];
+    if(confirming==='revision'){
+      onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);onUpdate('historial',nuevoHistorial);
+      sendEmail('medios','revision',name,now,data.titular||'Artículo sin titular');
+    } else if(confirming==='aprobado'){
+      onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onUpdate('historial',nuevoHistorial);
+      sendEmail('medios','aprobado',name,now,data.titular||'Artículo sin titular');
+    } else if(confirming==='devolucion'){
+      onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);onUpdate('approvedBy','');onUpdate('approvedAt','');onUpdate('historial',nuevoHistorial);
+      sendEmail('medios','devolucion',name,now,data.titular||'Artículo sin titular');
+    }
+    setConfirming(null);setNameInput('');
+  }
+  return React.createElement('div',{className:'medios-card',style:{borderLeftColor:sc.bc}},
     React.createElement('div',{className:'medios-card-hdr'},
       React.createElement('button',{
         onClick:function(){setOpen(function(o){return !o;});},
@@ -1392,8 +1485,24 @@ function MediosArticleCard({data,idx,onUpdate,onDelete}){
         React.createElement('span',{className:'medios-badge'},'Artículo '+(idx+1)),
         React.createElement('span',{style:{fontSize:11,color:'#a5b4fc',letterSpacing:'.06em'}},(data.titular||'Sin titular')+(open?'  ▲':'  ▼'))
       ),
-      onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+      React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8}},
+        React.createElement('button',{
+          className:'st-btn',
+          style:{background:sc.bg,color:sc.color,borderColor:sc.bc},
+          onClick:handleStatusClick
+        },sc.label),
+        onDelete&&React.createElement('button',{className:'del-btn',onClick:onDelete},'✕')
+            ),
     ),
+    confirming&&React.createElement('div',{className:'confirm-row '+confirming},
+      React.createElement('span',{className:'confirm-label '+confirming},
+        confirming==='revision'?'📤 ¿Quién lo envía a revisión?':confirming==='devolucion'?'🔄 ¿Quién lo devuelve a revisión?':'✅ ¿Quién aprueba este artículo?'
+      ),
+      React.createElement('input',{className:'confirm-input '+confirming,placeholder:'Tu nombre...',value:nameInput,onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}  }),
+      React.createElement('button',{className:'confirm-btn '+confirming,onClick:handleConfirm},'Confirmar'),
+      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}},'✕')
+    ),
+    (data.historial&&data.historial.length>0)&&React.createElement(HistorialBlock,{historial:data.historial}),
     open&&React.createElement('div',null,
       // TITULARES
       React.createElement('div',{className:'medios-titulares'},
@@ -1781,8 +1890,9 @@ function FormNegocio({data,onChange}){
               sections,
               'conociendo-tu-negocio.pdf'
             );
+            sendOnboardingEmail('Conociendo tu negocio',sections);
           }
-        },'⬇️ Descargar PDF')
+        },'⬇️ Descargar y enviar PDF')
       ),
     )
   );
@@ -2049,8 +2159,9 @@ function FormMarca({data,onChange}){
               sections,
               'identidad-de-marca.pdf'
             );
+            sendOnboardingEmail('Identidad de marca',sections);
           }
-        },'⬇️ Descargar PDF')
+        },'⬇️ Descargar y enviar')
       ),
     )
   );
@@ -2612,6 +2723,12 @@ function App(){
   const updateSEOReport=useCallback((mk,v)=>{
     setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].reportLink=v;return n;});
   },[]);
+  const updateSEOTecnico=useCallback(function(mk,v){
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].cambiosSeoTecnico=v;return n;});
+  },[]);
+  const updateSEOReporteMensual=useCallback(function(mk,v){
+    setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].reporteMensual=v;return n;});
+  },[]);
   const addSEOArticle=useCallback((mk)=>{
     setSEO(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].articles.push({title:'',kw:'',type:'Blog',notas:'',linkArticulo:'',date:'',status:'pendiente'});return n;});
   },[]);
@@ -2645,7 +2762,7 @@ function App(){
 
   // ── MEDIOS handlers
   const updateMediosArticle=useCallback(function(mk,i,f,v){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk][i][f]=v;return n;});  },[]);
-  const addMediosArticle=useCallback(function(mk){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk]=[...(n[mk]||[]),{id:Date.now(),titular:'',titular2:'',titular3:'',texto:'',keywords:'',contactoNombre:'',contactoTel:'',web:'',foto1:'',foto2:'',foto3:'',fotoSeleccionada:undefined}];return n;});  },[]);
+  const addMediosArticle=useCallback(function(mk){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk]=[...(n[mk]||[]),{id:Date.now(),titular:'',titular2:'',titular3:'',texto:'',keywords:'',contactoNombre:'',contactoTel:'',web:'',foto1:'',foto2:'',foto3:'',fotoSeleccionada:undefined,status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',historial:[]}];return n;});  },[]);
   const deleteMediosArticle=useCallback(function(mk,i){setMedios(prev=>{const n=JSON.parse(JSON.stringify(prev));n[mk].splice(i,1);return n;});  },[]);
 
   const toggleOnboarding=useCallback(function(id){setOnboarding(prev=>{const n=JSON.parse(JSON.stringify(prev));n.checks[id]=!n.checks[id];return n;});  },[]);
@@ -2778,6 +2895,8 @@ function App(){
         mk:month,monthData:mDataS,monthName:mo.name,
         onUpdateArticle:(i,f,v)=>updateSEOArticle(month,i,f,v),
         onUpdateReport:(v)=>updateSEOReport(month,v),
+        onUpdateTecnico:(v)=>updateSEOTecnico(month,v),
+        onUpdateReporteMensual:(v)=>updateSEOReporteMensual(month,v),
         onAddArticle:()=>addSEOArticle(month),
         onDeleteArticle:(i)=>deleteSEOArticle(month,i),
         onApprove:(i)=>approveSEO(month,i),
