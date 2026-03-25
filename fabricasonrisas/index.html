@@ -606,6 +606,19 @@ body{font-family:Poppins,system-ui,sans-serif;background:#F5F0FF;color:#1A0B2E;m
 .welcome-skip:hover{color:#7C3AED}
 .welcome-video-wrap{border-radius:10px;overflow:hidden;margin-bottom:16px;background:#000;aspect-ratio:16/9}
 .welcome-video{width:100%;height:100%;display:block}
+
+.analisis-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 16px;margin:8px 0 4px;flex-wrap:wrap}
+.analisis-card-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.analisis-card-icon{font-size:22px}
+.analisis-card-title{font-size:13px;font-weight:800;color:#fff;letter-spacing:.02em}
+.analisis-card-sub{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+.analisis-card-right{display:flex;align-items:center;gap:8px;flex:1;min-width:200px}
+.analisis-card-input{flex:1;padding:7px 12px;border:1.5px solid rgba(255,255,255,.25);border-radius:7px;background:rgba(255,255,255,.12);color:#fff !important;font-family:inherit;font-size:12px;outline:none;min-width:0;transition:all .2s}
+.analisis-card-input::placeholder{color:rgba(255,255,255,.45) !important}
+.analisis-card-input:focus{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.2)}
+.analisis-card-btn{padding:7px 16px;border-radius:7px;background:linear-gradient(135deg,#f0c96a,#e8a82a);color:#1a0a2e;font-family:inherit;font-size:11px;font-weight:800;text-decoration:none;letter-spacing:.06em;white-space:nowrap;transition:all .2s;display:inline-block}
+.analisis-card-btn:hover:not(.off){background:linear-gradient(135deg,#f5d170,#f0a020);box-shadow:0 2px 10px rgba(240,201,106,.4)}
+.analisis-card-btn.off{opacity:.4;cursor:default;pointer-events:none}
 </style>
 </head>
 <body>
@@ -3027,6 +3040,7 @@ function App(){
   const[syncing,setSyncing]=useState(true);
   const timer=useRef(null);
   const[pubPlanLink,setPubPlanLink]=useState(()=>lsGet('pub_plan_link')||'');
+  const[analisisLink,setAnalisisLink]=useState(()=>lsGet('analisis_link')||'');
 
   // ── CARGA INICIAL DESDE SUPABASE (multi-key) ──
   useEffect(()=>{
@@ -3042,6 +3056,7 @@ function App(){
         if(remote.medios){setMedios(remote.medios); for(const m of MONTHS){lsSet('medios_'+m.key,(remote.medios||{})[m.key]);}}
         if(remote.pts!=null){setPts(remote.pts); lsSet('pts',remote.pts);}
         if(remote.pubPlanLink!=null){setPubPlanLink(remote.pubPlanLink); lsSet('pub_plan_link',remote.pubPlanLink);}
+        if(remote.analisisLink!=null){setAnalisisLink(remote.analisisLink); lsSet('analisis_link',remote.analisisLink);}
         if(remote.visited){localStorage.setItem('lfs_visited','1');}
       }
       setSyncing(false);
@@ -3058,7 +3073,7 @@ function App(){
       lsSet('pts',pts); lsSet('contact',contact); lsSet('onboarding',onboarding); lsSet('agency',agency);
       const snapshot={
         rrss,seo,pub,contact,onboarding,agency,medios,
-        pts,pubPlanLink,
+        pts,pubPlanLink,analisisLink,
         visited:!!localStorage.getItem('lfs_visited')
       };
       sbSave(snapshot).then(()=>setSaved(true));
@@ -3215,6 +3230,32 @@ function App(){
             )
           ),
           React.createElement('span',{className:'save-badge',style:{color:saved?'#4ade80':'#A855F7'}},saved?'● Guardado':'● Guardando...')
+        )
+      ),
+      // ANÁLISIS COMPETITIVO
+      React.createElement('div',{className:'analisis-card'},
+        React.createElement('div',{className:'analisis-card-left'},
+          React.createElement('span',{className:'analisis-card-icon'},'🔍'),
+          React.createElement('div',null,
+            React.createElement('div',{className:'analisis-card-title'},'Análisis Competitivo'),
+            React.createElement('div',{className:'analisis-card-sub'},'Informe estratégico del sector')
+          )
+        ),
+        React.createElement('div',{className:'analisis-card-right'},
+          React.createElement('input',{
+            className:'analisis-card-input',
+            type:'url',
+            value:analisisLink,
+            placeholder:'Pega aquí el enlace al informe...',
+            onChange:e=>setAnalisisLink(e.target.value)
+          }),
+          React.createElement('a',{
+            className:'analisis-card-btn'+(analisisLink?'':' off'),
+            href:analisisLink||'#',
+            target:'_blank',
+            rel:'noopener noreferrer',
+            onClick:e=>{if(!analisisLink)e.preventDefault();}
+          },'Abrir →')
         )
       ),
       // SECTION SWITCHER — plan content tabs only
