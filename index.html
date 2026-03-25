@@ -106,6 +106,26 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
 .ft-links a:hover{color:var(--lime)}
 .ft-copy{font-size:.6rem;color:rgba(255,255,255,.15);width:100%}
 
+/* TOOLS SECTION */
+.tools-section{padding:0 4rem 3.5rem;max-width:1100px;margin:0 auto}
+.tools-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--rule)}
+.tools-header h2{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);font-weight:500}
+.tools-eyebrow{font-size:9px;color:var(--purple);font-weight:700;letter-spacing:.1em}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.tool-card{background:#fff;border:0.5px solid var(--rule);border-radius:10px;overflow:hidden;transition:transform .2s,box-shadow .2s;text-decoration:none;display:flex;flex-direction:column}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(88,45,129,.1)}
+.tool-card-top{padding:1.6rem 1.6rem 1rem;border-left:4px solid var(--lime)}
+.tool-card-top.pink{border-left-color:var(--pink)}
+.tool-icon{width:44px;height:44px;border-radius:10px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1rem}
+.tool-name{font-size:1rem;font-weight:700;color:var(--slate);margin-bottom:.2rem;letter-spacing:-.01em}
+.tool-desc{font-size:.72rem;color:var(--mid);line-height:1.6;margin-bottom:.8rem}
+.tool-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tool-tag{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:.2rem .6rem;border-radius:2px;background:var(--light);color:var(--purple)}
+.tool-tag.lime{background:#edf7d4;color:#3d6010}
+.tool-card-bottom{padding:.8rem 1.6rem 1.2rem;background:var(--light);margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+.tool-status{display:flex;align-items:center;gap:.5rem;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mid)}
+.tool-arrow{font-size:.7rem;color:var(--purple);font-weight:700;transition:transform .2s}
+.tool-card:hover .tool-arrow{transform:translateX(4px)}
 @media(max-width:768px){
   nav{padding:1rem 1.5rem}
   .hero,.grid-section{padding-left:1.5rem;padding-right:1.5rem}
@@ -139,7 +159,7 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
     <div id="auth-error" class="auth-error"></div>
     <input id="auth-input" class="auth-input" type="password" placeholder="Contraseña" autocomplete="off">
     <button id="auth-btn" class="auth-btn">Acceder →</button>
-    <div class="auth-note">¿Necesitas acceso? Escríbenos a<br>hola@losmartesnohayluna.com</div>
+    <div class="auth-note">¿Necesitas acceso? Escríbenos a<br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="48202724290824273b25293a3c2d3b2627202931243d2629662b2725">[email&#160;protected]</a></div>
   </div>
 </div>
 <nav>
@@ -225,12 +245,43 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
     </a>
 
     <!-- ADD NEW CLIENT -->
-    <a href="mailto:hola@losmartesnohayluna.com?subject=Nuevo cliente portal" class="add-card">
+    <a href="/cdn-cgi/l/email-protection#2d4542414c6d41425e404c5f59485e4342454c544158434c034e4240125e584f47484e59106358485b420d4e4144484359480d5d425f594c41" class="add-card">
       <div class="add-icon-big">+</div>
       <span class="add-label">Añadir cliente</span>
     </a>
 
     <div class="empty" id="emptyState">No hay clientes que coincidan con la búsqueda.</div>
+  </div>
+</section>
+
+<section class="tools-section">
+  <div class="tools-header">
+    <h2>Herramientas del equipo</h2>
+    <span class="tools-eyebrow">Uso interno LMNHL</span>
+  </div>
+  <div class="tools-grid">
+
+    <!-- DASHBOARD COMPETITIVO -->
+    <a href="./dashboard_competitivo.html" class="tool-card" target="_blank">
+      <div class="tool-card-top">
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Análisis Competitivo IA</div>
+        <div class="tool-desc">Dashboard para analizar la competencia de cualquier cliente. Introduce los datos del negocio y genera un informe visual completo con posicionamiento, fortalezas y oportunidades.</div>
+        <div class="tool-tags">
+          <span class="tool-tag">Uso interno</span>
+          <span class="tool-tag lime">IA aplicada</span>
+          <span class="tool-tag">Clientes</span>
+        </div>
+      </div>
+      <div class="tool-card-bottom">
+        <div class="tool-status">
+          <span class="status-dot active"></span>
+          Activa · Lista para usar
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -262,13 +313,13 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
   <span class="ft-logo">Los Martes No Hay Luna</span>
   <div class="ft-links">
     <a href="https://losmartesnohayluna.com">Web</a>
-    <a href="mailto:hola@losmartesnohayluna.com">hola@losmartesnohayluna.com</a>
+    <a href="/cdn-cgi/l/email-protection#bad2d5d6dbfad6d5c9d7dbc8cedfc9d4d5d2dbc3d6cfd4db94d9d5d7"><span class="__cf_email__" data-cfemail="3c5453505d7c50534f515d4e48594f5253545d455049525d125f5351">[email&#160;protected]</span></a>
     <a href="tel:34919997726">91 999 77 26</a>
   </div>
   <p class="ft-copy">© 2026 Los Martes No Hay Luna · Portal privado de clientes · Leganés, Madrid</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const cards = document.querySelectorAll('.client-card');
 const searchInput = document.getElementById('searchInput');
 const filterPills = document.querySelectorAll('.fpill');
@@ -328,18 +379,4 @@ updateVisible();
       setTimeout(function(){o.style.display='none';},420);
     } else {
       document.getElementById('auth-error').textContent='Contraseña incorrecta. Inténtalo de nuevo.';
-      document.getElementById('auth-input').value='';
-      document.getElementById('auth-input').focus();
-      setTimeout(function(){document.getElementById('auth-error').textContent='';},2500);
-    }
-  }
-  document.getElementById('auth-btn').addEventListener('click',tryAccess);
-  document.getElementById('auth-input').addEventListener('keydown',function(e){
-    if(e.key==='Enter')tryAccess();
-  });
-  document.getElementById('auth-input').focus();
-})();
-
-</script>
-</body>
-</html>
+      document.get
