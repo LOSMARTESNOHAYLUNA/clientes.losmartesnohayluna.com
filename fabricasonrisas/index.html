@@ -1408,17 +1408,38 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
   const s=SC[data.status]||SC.pendiente;
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
-  function handleStatusClick(){
-    if(data.status==='pendiente'){setConfirming('revision');setNameInput('');}
-    else if(data.status==='revision'){setConfirming('aprobado');setNameInput('');}
-    else{onUpdate('status','pendiente');setConfirming(null);}
+  const[selectedNombre,setSelectedNombre]=useState('');
+  const[numRevision,setNumRevision]=useState('1ª');
+  function handleStatusChange(newStatus){
+    if(newStatus===data.status)return;
+    if(newStatus==='revision'){setConfirming('enviar_revision');setSelectedNombre('');setNumRevision('1ª');}
+    else if(newStatus==='aprobado'){setConfirming('aprobar');setNameInput('');}
+    else if(newStatus==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
+    else if(newStatus==='pendiente'){setConfirming('reset_pendiente');setSelectedNombre('');}
   }
   function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const name=nameInput.trim()||'Sin nombre';
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);sendEmail('seo','revision',name,now,data.title||'Artículo sin título');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();sendEmail('seo','aprobado',name,now,data.title||'Artículo sin título');}
-    setConfirming(null);setNameInput('');
+    const isAgencia=confirming==='enviar_revision'||confirming==='reset_pendiente';
+    const name=isAgencia?(selectedNombre||'Sin nombre'):(nameInput.trim()||'Cliente');
+    let label=name;let newStatus=data.status;
+    let nuevoHistorial=[...(data.historial||[])];
+    if(confirming==='enviar_revision'){
+      newStatus='revision';label='['+numRevision+' revisión] '+name;
+      nuevoHistorial.push({accion:'revision',nombre:label,fecha:now});
+      onUpdate('revisionBy',label);onUpdate('revisionAt',now);
+      sendEmail('seo','revision',label,now,data.title||'Artículo sin título');
+    } else if(confirming==='aprobar'){
+      newStatus='aprobado';nuevoHistorial.push({accion:'aprobado',nombre:name,fecha:now});
+      onUpdate('approvedBy',name);onUpdate('approvedAt',now);onApprove();
+      sendEmail('seo','aprobado',name,now,data.title||'Artículo sin título');
+    } else if(confirming==='pedir_cambios'){
+      newStatus='cambios';nuevoHistorial.push({accion:'cambios',nombre:name,fecha:now});
+      sendEmail('seo','devolucion',name,now,data.title||'Artículo sin título');
+    } else if(confirming==='reset_pendiente'){
+      newStatus='pendiente';nuevoHistorial.push({accion:'pendiente',nombre:name,fecha:now});
+    }
+    onUpdate('status',newStatus);onUpdate('historial',nuevoHistorial);
+    setConfirming(null);setSelectedNombre('');setNameInput('');
   }
   return React.createElement('div',{className:'seo-card'+(data.status==='aprobado'?' approved':'')},
     React.createElement('div',{className:'card-top'},
@@ -1427,7 +1448,17 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
         data.kw&&React.createElement('span',{className:'pillar-tag',style:{color:'#2c8e8a'}},'🔑 '+data.kw)
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
-        React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
+        React.createElement('select',{
+          className:'status-select',
+          style:{background:s.bg,color:s.color,borderColor:s.bc},
+          value:data.status||'pendiente',
+          onChange:e=>handleStatusChange(e.target.value)
+        },
+          React.createElement('option',{value:'pendiente'},'⬜ Pendiente'),
+          React.createElement('option',{value:'revision'},'🔵 En revisión'),
+          React.createElement('option',{value:'cambios'},'🟠 Cambios solicitados'),
+          React.createElement('option',{value:'aprobado'},'✅ Aprobado')
+        ),
         onDelete&&React.createElement('button',{className:'del-btn',style:{fontSize:14},onClick:()=>setShowDeleteSeo(true)},'🗑️')
       )
     ),
@@ -1436,11 +1467,34 @@ function SEOArticleCard({data,onUpdate,onDelete,onApprove}){
       data.revisionBy&&React.createElement('div',{className:'reg-tag rev'},React.createElement('span',{className:'reg-icon'},'📤'),'Enviado a revisión por ',React.createElement('strong',null,data.revisionBy),' · ',data.revisionAt),
       data.approvedBy&&React.createElement('div',{className:'reg-tag apr'},React.createElement('span',{className:'reg-icon'},'✅'),'Aprobado por ',React.createElement('strong',null,data.approvedBy),' · ',data.approvedAt)
     ),
-    confirming&&React.createElement('div',{className:'confirm-row '+confirming},
-      React.createElement('span',{className:'confirm-label '+confirming},confirming==='revision'?'📤 ¿Quién lo envía a revisión?':'✅ ¿Quién aprueba?'),
-      React.createElement('input',{className:'confirm-input '+confirming,type:'text',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}}),
-      React.createElement('button',{className:'confirm-btn '+confirming,onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}  },'✕')
+    confirming&&React.createElement('div',{className:'confirm-row revision'},
+      React.createElement('span',{className:'confirm-label revision'},
+        confirming==='enviar_revision'?'📤 Enviar a revisión':confirming==='aprobar'?'✅ El cliente aprueba':confirming==='pedir_cambios'?'🟠 El cliente pide cambios':'↩️ Volver a pendiente'
+      ),
+      (confirming==='enviar_revision')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'Número de revisión'),
+        React.createElement('div',{className:'revision-num-btns'},
+          ['1ª','2ª','3ª'].map(function(n){return React.createElement('button',{key:n,className:'revision-num-btn'+(numRevision===n?' sel':''),onClick:function(){setNumRevision(n);}},n);})
+        )
+      ),
+      (confirming==='enviar_revision'||confirming==='reset_pendiente')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'¿Quién lo envía?'),
+        React.createElement('div',{className:'nombre-btns'},
+          AGENCIA_NOMBRES.map(function(n){return React.createElement('button',{key:n,className:'nombre-btn'+(selectedNombre===n?' sel':''),onClick:function(){setSelectedNombre(n);}},n);})
+        )
+      ),
+      (confirming==='aprobar'||confirming==='pedir_cambios')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},confirming==='aprobar'?'Nombre del cliente':'Tu nombre'),
+        React.createElement('input',{className:'confirm-input revision',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);}}})
+      ),
+      React.createElement('div',{style:{display:'flex',gap:6,marginTop:4}},
+        React.createElement('button',{
+          className:'confirm-btn revision',onClick:handleConfirm,
+          disabled:(confirming==='enviar_revision'||confirming==='reset_pendiente')?!selectedNombre:(confirming==='aprobar'||confirming==='pedir_cambios')?!nameInput.trim():false,
+          style:{opacity:((confirming==='enviar_revision'||confirming==='reset_pendiente')&&!selectedNombre)||(('aprobar'===confirming||'pedir_cambios'===confirming)&&!nameInput.trim())?0.5:1}
+        },'Confirmar'),
+        React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setSelectedNombre('');setNameInput('');}},'✕')
+      )
     ),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label',style:{color:'#1a4a48'}},'Título del artículo'),
@@ -1547,10 +1601,12 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     onUpdate('optimizaciones',[...(data.optimizaciones||[]),{id:Date.now(),texto:tipo,fecha:now}]);
     setOptimTipo('');setOptimOtros('');
   }
-  function handleStatusClick(){
-    if(data.status==='pendiente'){setConfirming('revision');setSelectedNombre('');setNumRevision('1ª');}
-    else if(data.status==='revision'){setConfirming('aprobado');setSelectedNombre('');setNameInput('');}
-    else{setConfirming('devolucion');setSelectedNombre('');setNumRevision('1ª');}
+  function handleStatusChange(newStatus){
+    if(newStatus===data.status)return;
+    if(newStatus==='revision'){setConfirming('enviar_revision');setSelectedNombre('');setNumRevision('1ª');}
+    else if(newStatus==='aprobado'){setConfirming('aprobar');setSelectedNombre('');setNameInput('');}
+    else if(newStatus==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
+    else if(newStatus==='pendiente'){setConfirming('reset_pendiente');setSelectedNombre('');}
   }
   function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -1558,9 +1614,18 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
     const label=confirming==='revision'?('['+numRevision+' revisión] '+name):confirming==='devolucion'?('['+numRevision+' revisión devuelta] '+name):name;
     const evento={accion:confirming,nombre:label,fecha:now};
     const nuevoHistorial=[...(data.historial||[]),evento];
-    if(confirming==='revision'){onUpdate('status','revision');onUpdate('revisionBy',label);onUpdate('revisionAt',now);onUpdate('historial',nuevoHistorial);sendEmail('pub','revision',label,now,data.name||'Campaña sin título');}
-    else if(confirming==='aprobado'){onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onUpdate('historial',nuevoHistorial);onApprove();sendEmail('pub','aprobado',name,now,data.name||'Campaña sin título');}
-    else if(confirming==='devolucion'){onUpdate('status','revision');onUpdate('revisionBy',label);onUpdate('revisionAt',now);onUpdate('approvedBy','');onUpdate('approvedAt','');onUpdate('historial',nuevoHistorial);sendEmail('pub','devolucion',label,now,data.name||'Campaña sin título');}
+    if(confirming==='enviar_revision'){
+      onUpdate('status','revision');onUpdate('revisionBy',label);onUpdate('revisionAt',now);onUpdate('historial',nuevoHistorial);
+      sendEmail('pub','revision',label,now,data.name||'Campaña sin título');
+    } else if(confirming==='aprobar'){
+      onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onUpdate('historial',nuevoHistorial);onApprove();
+      sendEmail('pub','aprobado',name,now,data.name||'Campaña sin título');
+    } else if(confirming==='pedir_cambios'){
+      onUpdate('status','cambios');onUpdate('historial',nuevoHistorial);
+      sendEmail('pub','devolucion',name,now,data.name||'Campaña sin título');
+    } else if(confirming==='reset_pendiente'){
+      onUpdate('status','pendiente');onUpdate('historial',nuevoHistorial);
+    }
     setConfirming(null);setSelectedNombre('');setNameInput('');
   }
   function handleEnviarCliente(){
@@ -1580,7 +1645,17 @@ function CampaignCard({data,onUpdate,onDelete,onApprove}){
         )
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
-        React.createElement('button',{className:'st-btn',style:{background:s.bg,color:s.color,borderColor:s.bc},onClick:handleStatusClick},s.label),
+        React.createElement('select',{
+          className:'status-select',
+          style:{background:s.bg,color:s.color,borderColor:s.bc},
+          value:data.status||'pendiente',
+          onChange:e=>handleStatusChange(e.target.value)
+        },
+          React.createElement('option',{value:'pendiente'},'⬜ Pendiente'),
+          React.createElement('option',{value:'revision'},'🔵 En revisión'),
+          React.createElement('option',{value:'cambios'},'🟠 Cambios solicitados'),
+          React.createElement('option',{value:'aprobado'},'✅ Aprobado')
+        ),
         onDelete&&React.createElement('button',{className:'del-btn',style:{fontSize:14},onClick:()=>setShowDeleteCamp(true)},'🗑️')
       )
     ),
@@ -1836,30 +1911,41 @@ function MediosArticleCard({data,idx,onUpdate,onDelete}){
   const[showDeleteMedios,setShowDeleteMedios]=useState(false);
   const[confirming,setConfirming]=useState(null);
   const[nameInput,setNameInput]=useState('');
+  const[selectedNombre,setSelectedNombre]=useState('');
+  const[numRevision,setNumRevision]=useState('1ª');
   function setFoto(i){onUpdate('fotoSeleccionada',i);}
   const status=data.status||'pendiente';
   const sc=SC[status]||SC.pendiente;
-  function handleStatusClick(){
-    if(status==='pendiente'){setConfirming('revision');setNameInput('');}
-    else if(status==='revision'){setConfirming('aprobado');setNameInput('');}
-    else{setConfirming('devolucion');setNameInput('');}
+  function handleStatusChange(newStatus){
+    if(newStatus===status)return;
+    if(newStatus==='revision'){setConfirming('enviar_revision');setSelectedNombre('');setNumRevision('1ª');}
+    else if(newStatus==='aprobado'){setConfirming('aprobar');setNameInput('');}
+    else if(newStatus==='cambios'){setConfirming('pedir_cambios');setNameInput('');}
+    else if(newStatus==='pendiente'){setConfirming('reset_pendiente');setSelectedNombre('');}
   }
   function handleConfirm(){
     const now=new Date().toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const name=nameInput.trim()||'Sin nombre';
-    const evento={accion:confirming,nombre:name,fecha:now};
-    const nuevoHistorial=[...(data.historial||[]),evento];
-    if(confirming==='revision'){
-      onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);onUpdate('historial',nuevoHistorial);
-      sendEmail('medios','revision',name,now,data.titular||'Artículo sin titular');
-    } else if(confirming==='aprobado'){
-      onUpdate('status','aprobado');onUpdate('approvedBy',name);onUpdate('approvedAt',now);onUpdate('historial',nuevoHistorial);
+    const isAgencia=confirming==='enviar_revision'||confirming==='reset_pendiente';
+    const name=isAgencia?(selectedNombre||'Sin nombre'):(nameInput.trim()||'Cliente');
+    let label=name;let newStatus=status;
+    let nuevoHistorial=[...(data.historial||[])];
+    if(confirming==='enviar_revision'){
+      newStatus='revision';label='['+numRevision+' revisión] '+name;
+      nuevoHistorial.push({accion:'revision',nombre:label,fecha:now});
+      onUpdate('revisionBy',label);onUpdate('revisionAt',now);
+      sendEmail('medios','revision',label,now,data.titular||'Artículo sin titular');
+    } else if(confirming==='aprobar'){
+      newStatus='aprobado';nuevoHistorial.push({accion:'aprobado',nombre:name,fecha:now});
+      onUpdate('approvedBy',name);onUpdate('approvedAt',now);
       sendEmail('medios','aprobado',name,now,data.titular||'Artículo sin titular');
-    } else if(confirming==='devolucion'){
-      onUpdate('status','revision');onUpdate('revisionBy',name);onUpdate('revisionAt',now);onUpdate('approvedBy','');onUpdate('approvedAt','');onUpdate('historial',nuevoHistorial);
+    } else if(confirming==='pedir_cambios'){
+      newStatus='cambios';nuevoHistorial.push({accion:'cambios',nombre:name,fecha:now});
       sendEmail('medios','devolucion',name,now,data.titular||'Artículo sin titular');
+    } else if(confirming==='reset_pendiente'){
+      newStatus='pendiente';nuevoHistorial.push({accion:'pendiente',nombre:name,fecha:now});
     }
-    setConfirming(null);setNameInput('');
+    onUpdate('status',newStatus);onUpdate('historial',nuevoHistorial);
+    setConfirming(null);setSelectedNombre('');setNameInput('');
   }
   return React.createElement('div',{className:'medios-card',style:{borderLeftColor:sc.bc}},
     React.createElement('div',{className:'medios-card-hdr'},
@@ -1871,22 +1957,49 @@ function MediosArticleCard({data,idx,onUpdate,onDelete}){
         React.createElement('span',{style:{fontSize:11,color:'#a5b4fc',letterSpacing:'.06em'}},(data.titular||'Sin titular')+(open?'  ▲':'  ▼'))
       ),
       React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8}},
-        React.createElement('button',{
-          className:'st-btn',
+        React.createElement('select',{
+          className:'status-select',
           style:{background:sc.bg,color:sc.color,borderColor:sc.bc},
-          onClick:handleStatusClick
-        },sc.label),
+          value:data.status||'pendiente',
+          onChange:e=>handleStatusChange(e.target.value)
+        },
+          React.createElement('option',{value:'pendiente'},'⬜ Pendiente'),
+          React.createElement('option',{value:'revision'},'🔵 En revisión'),
+          React.createElement('option',{value:'cambios'},'🟠 Cambios solicitados'),
+          React.createElement('option',{value:'aprobado'},'✅ Aprobado')
+        ),
         onDelete&&React.createElement('button',{className:'del-btn',style:{fontSize:14},onClick:()=>setShowDeleteMedios(true)},'🗑️')
-            ),
+      )
     ),
     showDeleteMedios&&React.createElement(DeleteModal,{titulo:data.titular||'Artículo sin titular',onCancel:()=>setShowDeleteMedios(false),onConfirm:function(){onDelete();setShowDeleteMedios(false);}}),
-    confirming&&React.createElement('div',{className:'confirm-row '+confirming},
-      React.createElement('span',{className:'confirm-label '+confirming},
-        confirming==='revision'?'📤 ¿Quién lo envía a revisión?':confirming==='devolucion'?'🔄 ¿Quién lo devuelve a revisión?':'✅ ¿Quién aprueba este artículo?'
+    confirming&&React.createElement('div',{className:'confirm-row revision'},
+      React.createElement('span',{className:'confirm-label revision'},
+        confirming==='enviar_revision'?'📤 Enviar a revisión':confirming==='aprobar'?'✅ El cliente aprueba':confirming==='pedir_cambios'?'🟠 El cliente pide cambios':'↩️ Volver a pendiente'
       ),
-      React.createElement('input',{className:'confirm-input '+confirming,placeholder:'Tu nombre...',value:nameInput,onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);setNameInput('');}}  }),
-      React.createElement('button',{className:'confirm-btn '+confirming,onClick:handleConfirm},'Confirmar'),
-      React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setNameInput('');}},'✕')
+      (confirming==='enviar_revision')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'Número de revisión'),
+        React.createElement('div',{className:'revision-num-btns'},
+          ['1ª','2ª','3ª'].map(function(n){return React.createElement('button',{key:n,className:'revision-num-btn'+(numRevision===n?' sel':''),onClick:function(){setNumRevision(n);}},n);})
+        )
+      ),
+      (confirming==='enviar_revision'||confirming==='reset_pendiente')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},'¿Quién lo envía?'),
+        React.createElement('div',{className:'nombre-btns'},
+          AGENCIA_NOMBRES.map(function(n){return React.createElement('button',{key:n,className:'nombre-btn'+(selectedNombre===n?' sel':''),onClick:function(){setSelectedNombre(n);}},n);})
+        )
+      ),
+      (confirming==='aprobar'||confirming==='pedir_cambios')&&React.createElement('div',{className:'confirm-section'},
+        React.createElement('span',{className:'confirm-section-label'},confirming==='aprobar'?'Nombre del cliente':'Tu nombre'),
+        React.createElement('input',{className:'confirm-input revision',autoFocus:true,value:nameInput,placeholder:'Nombre...',onChange:e=>setNameInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter')handleConfirm();if(e.key==='Escape'){setConfirming(null);}}})
+      ),
+      React.createElement('div',{style:{display:'flex',gap:6,marginTop:4}},
+        React.createElement('button',{
+          className:'confirm-btn revision',onClick:handleConfirm,
+          disabled:(confirming==='enviar_revision'||confirming==='reset_pendiente')?!selectedNombre:(confirming==='aprobar'||confirming==='pedir_cambios')?!nameInput.trim():false,
+          style:{opacity:((confirming==='enviar_revision'||confirming==='reset_pendiente')&&!selectedNombre)||(('aprobar'===confirming||'pedir_cambios'===confirming)&&!nameInput.trim())?0.5:1}
+        },'Confirmar'),
+        React.createElement('button',{className:'confirm-cancel',onClick:()=>{setConfirming(null);setSelectedNombre('');setNameInput('');}},'✕')
+      )
     ),
     (data.historial&&data.historial.length>0)&&React.createElement(HistorialBlock,{historial:data.historial}),
     open&&React.createElement('div',null,
