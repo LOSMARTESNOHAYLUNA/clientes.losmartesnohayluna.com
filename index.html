@@ -159,7 +159,7 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
     <div id="auth-error" class="auth-error"></div>
     <input id="auth-input" class="auth-input" type="password" placeholder="Contraseña" autocomplete="off">
     <button id="auth-btn" class="auth-btn">Acceder →</button>
-    <div class="auth-note">¿Necesitas acceso? Escríbenos a<br>hola@losmartesnohayluna.com</div>
+    <div class="auth-note">¿Necesitas acceso? Escríbenos a<br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="39515655587955564a54584b4d5c4a5756515840554c5758175a5654">[email&#160;protected]</a></div>
   </div>
 </div>
 <nav>
@@ -245,7 +245,7 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
     </a>
 
     <!-- FÁBRICA DE SONRISAS -->
-    <a href="./fabrica-de-sonrisas/" class="client-card" data-status="active" data-name="fabrica de sonrisas">
+    <a href="./fabricasonrisas/" class="client-card" data-status="active" data-name="fabrica de sonrisas">
       <div class="card-top" style="border-left-color:#e72078">
         <div class="card-avatar" style="background:#e72078">FS</div>
         <div class="card-name">Fábrica de Sonrisas</div>
@@ -265,7 +265,7 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
     </a>
 
     <!-- ADD NEW CLIENT -->
-    <a href="mailto:hola@losmartesnohayluna.com?subject=Nuevo%20cliente%20portal" class="add-card">
+    <a href="/cdn-cgi/l/email-protection#d0b8bfbcb190bcbfa3bdb1a2a4b5a3bebfb8b1a9bca5beb1feb3bfbdefa3a5b2bab5b3a4ed9ea5b5a6bff5e2e0b3bcb9b5bea4b5f5e2e0a0bfa2a4b1bc" class="add-card">
       <div class="add-icon-big">+</div>
       <span class="add-label">Añadir cliente</span>
     </a>
@@ -333,13 +333,13 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
   <span class="ft-logo">Los Martes No Hay Luna</span>
   <div class="ft-links">
     <a href="https://losmartesnohayluna.com">Web</a>
-    hola@losmartesnohayluna.com
+    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f0989f9c91b09c9f839d91828495839e9f9891899c859e91de939f9d">[email&#160;protected]</a>
     <a href="tel:34919997726">91 999 77 26</a>
   </div>
   <p class="ft-copy">© 2026 Los Martes No Hay Luna · Portal privado de clientes · Leganés, Madrid</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const cards = document.querySelectorAll('.client-card');
 const searchInput = document.getElementById('searchInput');
 const filterPills = document.querySelectorAll('.fpill');
@@ -389,14 +389,3 @@ updateVisible();
     return;
   }
   document.getElementById('auth-overlay').style.display='flex';
-  function tryAccess(){
-    var val=document.getElementById('auth-input').value;
-    if(val===PWD){
-      sessionStorage.setItem(KEY,'1');
-      var o=document.getElementById('auth-overlay');
-      o.style.transition='opacity .4s';
-      o.style.opacity='0';
-      setTimeout(function(){o.style.display='none';},420);
-    } else {
-      document.getElementById('auth-error').textContent='Contraseña incorrecta. Inténtalo de nuevo.';
-      document.get
