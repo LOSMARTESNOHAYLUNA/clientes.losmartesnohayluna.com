@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Posts LinkedIn — LMNHL</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{font-family:Poppins,sans-serif;background:#f4f0fa;color:#2a1f38;min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{background:#3a1c57;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr-brand{display:flex;flex-direction:column}
+.hdr-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#87B229;font-weight:700;margin-bottom:3px}
+.hdr-title{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.hdr-badge{font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:rgba(135,178,41,.15);color:#87B229;padding:4px 12px;border-radius:20px;font-weight:700;border:1px solid rgba(135,178,41,.25)}
+
+/* ── LAYOUT ── */
+.main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 61px)}
+.panel-left{padding:28px;border-right:1px solid rgba(88,45,129,.12);background:#fff;display:flex;flex-direction:column;gap:20px}
+.panel-right{padding:28px;background:#f4f0fa;display:flex;flex-direction:column;gap:16px}
+
+/* ── SECTION LABELS ── */
+.section-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#7a6f85;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';width:14px;height:2px;background:#87B229;flex-shrink:0}
+
+/* ── TRANSCRIPT ── */
+.transcript-wrap{position:relative}
+.transcript-textarea{width:100%;min-height:160px;padding:12px 14px;border:1.5px solid rgba(88,45,129,.15);border-radius:8px;font-family:Poppins,sans-serif;font-size:12px;color:#2a1f38;line-height:1.7;resize:vertical;outline:none;background:#fafafa;transition:border-color .2s}
+.transcript-textarea:focus{border-color:#582D81;background:#fff}
+.transcript-textarea::placeholder{color:#bbb;font-size:11px}
+.optional-tag{font-size:9px;color:#87B229;font-weight:700;background:#edf7d4;padding:2px 7px;border-radius:10px;margin-left:6px;letter-spacing:.06em}
+
+/* ── TONE BUTTONS ── */
+.tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tone-btn{padding:10px 12px;border:1.5px solid rgba(88,45,129,.15);border-radius:8px;background:#fff;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:#7a6f85;transition:all .2s;text-align:left;display:flex;flex-direction:column;gap:3px}
+.tone-btn .tone-name{font-size:12px;font-weight:700;color:#2a1f38}
+.tone-btn .tone-desc{font-size:10px;color:#7a6f85;font-weight:400;line-height:1.4}
+.tone-btn:hover{border-color:#582D81;background:#faf8fd}
+.tone-btn.on{border-color:#582D81;background:#ede8f7}
+.tone-btn.on .tone-name{color:#582D81}
+.tone-btn.on .tone-dot{background:#582D81}
+.tone-btn.on-lime{border-color:#87B229;background:#edf7d4}
+.tone-btn.on-lime .tone-name{color:#3d6010}
+.tone-btn.on-pink{border-color:#e72078;background:#fce7f3}
+.tone-btn.on-pink .tone-name{color:#b5005a}
+.tone-btn.on-grey{border-color:#aaa;background:#f4f0fa}
+.tone-btn.on-grey .tone-name{color:#555}
+
+/* ── TOPIC INPUT ── */
+.topic-input{width:100%;padding:10px 14px;border:1.5px solid rgba(88,45,129,.15);border-radius:8px;font-family:Poppins,sans-serif;font-size:13px;color:#2a1f38;outline:none;background:#fafafa;transition:border-color .2s}
+.topic-input:focus{border-color:#582D81;background:#fff}
+.topic-input::placeholder{color:#bbb;font-size:11px}
+
+/* ── FORMAT SELECTOR ── */
+.format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fmt-btn{padding:8px 6px;border:1.5px solid rgba(88,45,129,.15);border-radius:7px;background:#fff;cursor:pointer;font-family:Poppins,sans-serif;font-size:10px;font-weight:600;color:#7a6f85;transition:all .2s;text-align:center}
+.fmt-btn:hover{border-color:#582D81;background:#faf8fd}
+.fmt-btn.on{border-color:#582D81;background:#ede8f7;color:#582D81}
+.fmt-btn .fmt-icon{font-size:16px;display:block;margin-bottom:3px}
+
+/* ── EXTRA OPTIONS ── */
+.extras-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.extra-toggle{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid rgba(88,45,129,.12);border-radius:7px;background:#fff;cursor:pointer;transition:all .2s}
+.extra-toggle:hover{border-color:#582D81}
+.extra-toggle.on{border-color:#87B229;background:#edf7d4}
+.extra-toggle input[type=checkbox]{accent-color:#582D81;width:14px;height:14px;cursor:pointer}
+.extra-label{font-size:11px;font-weight:600;color:#2a1f38;cursor:pointer}
+
+/* ── CHAR COUNTER ── */
+.char-info{font-size:10px;color:#7a6f85;display:flex;align-items:center;gap:6px}
+.char-target{font-weight:700;color:#582D81}
+
+/* ── GENERATE BUTTON ── */
+.gen-btn{width:100%;padding:14px;background:#582D81;color:#fff;border:none;border-radius:10px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
+.gen-btn:hover:not(:disabled){background:#6e3d9a;transform:translateY(-1px)}
+.gen-btn:disabled{background:#ccc;cursor:not-allowed;transform:none}
+.gen-btn .btn-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.gen-btn.loading .btn-spinner{display:block}
+.gen-btn.loading .btn-text{opacity:.6}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── API KEY ── */
+.api-key-wrap{display:flex;align-items:center;gap:8px}
+.api-key-input{flex:1;padding:9px 12px;border:1.5px solid rgba(88,45,129,.15);border-radius:7px;font-family:Poppins,sans-serif;font-size:11px;color:#2a1f38;outline:none;background:#fff;transition:border-color .2s}
+.api-key-input:focus{border-color:#582D81}
+.api-key-input::placeholder{color:#bbb;font-size:10px}
+.api-key-toggle{padding:9px 12px;border:1px solid rgba(88,45,129,.15);border-radius:7px;background:#f4f0fa;cursor:pointer;font-size:11px;color:#7a6f85;font-family:Poppins,sans-serif;transition:all .2s;white-space:nowrap}
+.api-key-toggle:hover{border-color:#582D81;color:#582D81}
+
+/* ── RESULT PANEL ── */
+.result-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.result-title{font-size:13px;font-weight:700;color:#582D81}
+.result-actions{display:flex;gap:6px}
+.action-btn{padding:6px 14px;border:1.5px solid rgba(88,45,129,.2);border-radius:6px;background:#fff;cursor:pointer;font-family:Poppins,sans-serif;font-size:10px;font-weight:600;color:#582D81;transition:all .2s;letter-spacing:.06em;text-transform:uppercase}
+.action-btn:hover{background:#582D81;color:#fff;border-color:#582D81}
+.action-btn.copied{background:#87B229;color:#fff;border-color:#87B229}
+.result-box{background:#fff;border:1.5px solid rgba(88,45,129,.15);border-radius:10px;padding:20px;min-height:280px;font-size:13px;line-height:1.8;color:#2a1f38;white-space:pre-wrap;word-break:break-word;position:relative}
+.result-box.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ccc;gap:8px;text-align:center}
+.empty-icon{font-size:40px;opacity:.4}
+.empty-text{font-size:11px;line-height:1.6}
+.result-box.loading-state{display:flex;align-items:center;justify-content:center}
+.loading-dots{display:flex;gap:6px}
+.loading-dots span{width:10px;height:10px;border-radius:50%;background:#582D81;animation:dotPulse 1.2s ease-in-out infinite}
+.loading-dots span:nth-child(2){animation-delay:.2s;background:#87B229}
+.loading-dots span:nth-child(3){animation-delay:.4s;background:#e72078}
+@keyframes dotPulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:12px;flex-wrap:wrap}
+.stat-pill{font-size:10px;font-weight:600;padding:4px 10px;border-radius:12px;background:#fff;border:1px solid rgba(88,45,129,.12)}
+.stat-pill.over{background:#fce7f3;border-color:#e72078;color:#b5005a}
+.stat-pill.ok{background:#edf7d4;border-color:#87B229;color:#3d6010}
+
+/* ── HISTORY ── */
+.history-section{margin-top:4px}
+.history-title{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#7a6f85;font-weight:700;margin-bottom:8px}
+.history-list{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto}
+.history-item{background:#fff;border:0.5px solid rgba(88,45,129,.1);border-radius:7px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:8px}
+.history-item:hover{border-color:#582D81;background:#faf8fd}
+.hist-tone{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:10px;flex-shrink:0;margin-top:2px}
+.hist-preview{font-size:10px;color:#7a6f85;line-height:1.5;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hist-time{font-size:9px;color:#bbb;flex-shrink:0;margin-top:2px}
+
+/* ── ERROR ── */
+.error-box{background:#fce7f3;border:1px solid #e72078;border-radius:8px;padding:12px 16px;font-size:11px;color:#b5005a;line-height:1.6}
+
+/* ── RESPONSIVE ── */
+@media(max-width:800px){
+  .main{grid-template-columns:1fr}
+  .panel-left{border-right:none;border-bottom:1px solid rgba(88,45,129,.12)}
+  .tone-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .format-grid{grid-template-columns:1fr 1fr}
+  .extras-grid{grid-template-columns:1fr}
+  .hdr{padding:14px 18px}
+  .panel-left,.panel-right{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-eyebrow">Los Martes No Hay Luna</span>
+    <span class="hdr-title">Generador de Posts LinkedIn</span>
+  </div>
+  <span class="hdr-badge">IA aplicada · LMNHL</span>
+</div>
+
+<div class="main">
+
+  <!-- ── PANEL IZQUIERDO ── -->
+  <div class="panel-left">
+
+    <!-- API KEY -->
+    <div>
+      <div class="section-label">Clave API de Anthropic</div>
+      <div class="api-key-wrap">
+        <input id="apiKey" class="api-key-input" type="password" placeholder="sk-ant-api03-...  (se guarda localmente en tu navegador)">
+        <button class="api-key-toggle" onclick="toggleApiKey()">Mostrar</button>
+      </div>
+    </div>
+
+    <!-- TRANSCRIPCIÓN -->
+    <div class="transcript-wrap">
+      <div class="section-label">
+        Transcripción o contexto extra
+        <span class="optional-tag">opcional</span>
+      </div>
+      <textarea id="transcript" class="transcript-textarea" placeholder="Pega aquí la transcripción de un vídeo de YouTube, notas de una reunión, ideas sueltas... El post se construirá sobre este contenido. Si lo dejas vacío, Claude usará el tema y el tono que elijas."></textarea>
+    </div>
+
+    <!-- TEMA -->
+    <div>
+      <div class="section-label">Tema del post <span style="color:#e72078;font-size:10px;margin-left:4px">requerido</span></div>
+      <input id="topicInput" class="topic-input" type="text" placeholder="Ej: Por qué la identidad visual es el primer paso en marketing, no el último">
+    </div>
+
+    <!-- TONO -->
+    <div>
+      <div class="section-label">Tono del post</div>
+      <div class="tone-grid">
+        <button class="tone-btn on" data-tone="autoridad" data-class="on" onclick="selectTone(this)">
+          <span class="tone-name">Autoridad</span>
+          <span class="tone-desc">Expertise, datos y posicionamiento como experta. Genera confianza y credibilidad.</span>
+        </button>
+        <button class="tone-btn" data-tone="estrategia" data-class="on-lime" onclick="selectTone(this)">
+          <span class="tone-name">Estrategia</span>
+          <span class="tone-desc">Cómo trabajamos, procesos y metodología. Muestra el detrás de LMNHL.</span>
+        </button>
+        <button class="tone-btn" data-tone="opinion" data-class="on-pink" onclick="selectTone(this)">
+          <span class="tone-name">Opinión</span>
+          <span class="tone-desc">Punto de vista propio, debate y ruptura. Genera conversación real.</span>
+        </button>
+        <button class="tone-btn" data-tone="historia" data-class="on-grey" onclick="selectTone(this)">
+          <span class="tone-name">Historia</span>
+          <span class="tone-desc">Momentos personales, equipo y valores. Humaniza la marca.</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- FORMATO -->
+    <div>
+      <div class="section-label">Formato del post</div>
+      <div class="format-grid">
+        <button class="fmt-btn on" data-fmt="fluido" onclick="selectFmt(this)">
+          <span class="fmt-icon">¶</span>
+          Texto fluido
+        </button>
+        <button class="fmt-btn" data-fmt="numerado" onclick="selectFmt(this)">
+          <span class="fmt-icon">①</span>
+          Lista numerada
+        </button>
+        <button class="fmt-btn" data-fmt="microhistoria" onclick="selectFmt(this)">
+          <span class="fmt-icon">📖</span>
+          Microhistoria
+        </button>
+        <button class="fmt-btn" data-fmt="pregunta" onclick="selectFmt(this)">
+          <span class="fmt-icon">❓</span>
+          Pregunta + respuesta
+        </button>
+        <button class="fmt-btn" data-fmt="contraste" onclick="selectFmt(this)">
+          <span class="fmt-icon">⚡</span>
+          Contraste / antes-después
+        </button>
+        <button class="fmt-btn" data-fmt="dato" onclick="selectFmt(this)">
+          <span class="fmt-icon">📊</span>
+          Dato + desarrollo
+        </button>
+      </div>
+    </div>
+
+    <!-- EXTRAS -->
+    <div>
+      <div class="section-label">Opciones adicionales</div>
+      <div class="extras-grid">
+        <label class="extra-toggle" id="toggle-cta">
+          <input type="checkbox" id="extra-cta" checked onchange="toggleExtra('toggle-cta',this)">
+          <span class="extra-label">CTA al final</span>
+        </label>
+        <label class="extra-toggle" id="toggle-hashtags">
+          <input type="checkbox" id="extra-hashtags" checked onchange="toggleExtra('toggle-hashtags',this)">
+          <span class="extra-label">Hashtags (máx. 3)</span>
+        </label>
+        <label class="extra-toggle" id="toggle-emoji">
+          <input type="checkbox" id="extra-emoji" onchange="toggleExtra('toggle-emoji',this)">
+          <span class="extra-label">Emojis puntuales</span>
+        </label>
+        <label class="extra-toggle" id="toggle-corto">
+          <input type="checkbox" id="extra-corto" onchange="toggleExtra('toggle-corto',this)">
+          <span class="extra-label">Versión corta (&lt;800c)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- GENERATE -->
+    <button id="genBtn" class="gen-btn" onclick="generate()">
+      <div class="btn-spinner"></div>
+      <span class="btn-text">Generar post LinkedIn</span>
+    </button>
+
+  </div>
+
+  <!-- ── PANEL DERECHO ── -->
+  <div class="panel-right">
+
+    <!-- RESULT -->
+    <div class="result-header">
+      <span class="result-title">Post generado</span>
+      <div class="result-actions">
+        <button class="action-btn" id="copyBtn" onclick="copyPost()" style="display:none">Copiar</button>
+        <button class="action-btn" id="regenerateBtn" onclick="generate()" style="display:none">Regenerar</button>
+        <button class="action-btn" id="saveBtn" onclick="saveToHistory()" style="display:none">Guardar</button>
+      </div>
+    </div>
+
+    <div id="resultBox" class="result-box empty">
+      <span class="empty-icon">✍️</span>
+      <span class="empty-text">El post aparecerá aquí.<br>Elige el tono, el tema y pulsa Generar.</span>
+    </div>
+
+    <!-- STATS -->
+    <div id="statsBar" class="stats-bar" style="display:none"></div>
+
+    <!-- ERROR -->
+    <div id="errorBox" class="error-box" style="display:none"></div>
+
+    <!-- HISTORY -->
+    <div class="history-section">
+      <div class="history-title">Historial de esta sesión</div>
+      <div id="historyList" class="history-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────
+let currentTone = 'autoridad';
+let currentFmt  = 'fluido';
+let currentPost = '';
+let history     = [];
+
+// Load API key
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('lmnhl_li_apikey');
+  if (saved) document.getElementById('apiKey').value = saved;
+  document.getElementById('toggle-cta').classList.add('on');
+  document.getElementById('toggle-hashtags').classList.add('on');
+});
+
+// ── UI HELPERS ─────────────────────────────────────────────────────────
+function selectTone(btn) {
+  document.querySelectorAll('.tone-btn').forEach(b => b.className = 'tone-btn');
+  currentTone = btn.dataset.tone;
+  btn.classList.add(btn.dataset.class);
+}
+
+function selectFmt(btn) {
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  currentFmt = btn.dataset.fmt;
+}
+
+function toggleExtra(wrapId, cb) {
+  document.getElementById(wrapId).classList.toggle('on', cb.checked);
+}
+
+function toggleApiKey() {
+  const inp = document.getElementById('apiKey');
+  const btn = inp.nextElementSibling;
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Ocultar'; }
+  else { inp.type = 'password'; btn.textContent = 'Mostrar'; }
+}
+
+function setLoading(loading) {
+  const btn = document.getElementById('genBtn');
+  btn.disabled = loading;
+  btn.classList.toggle('loading', loading);
+  if (loading) {
+    document.getElementById('resultBox').className = 'result-box loading-state';
+    document.getElementById('resultBox').innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('errorBox').style.display = 'none';
+    document.getElementById('copyBtn').style.display = 'none';
+    document.getElementById('regenerateBtn').style.display = 'none';
+    document.getElementById('saveBtn').style.display = 'none';
+  }
+}
+
+function showPost(text) {
+  const box = document.getElementById('resultBox');
+  box.className = 'result-box';
+  box.textContent = text;
+  currentPost = text;
+  document.getElementById('copyBtn').style.display = '';
+  document.getElementById('regenerateBtn').style.display = '';
+  document.getElementById('saveBtn').style.display = '';
+  showStats(text);
+}
+
+function showStats(text) {
+  const chars = text.length;
+  const words = text.trim().split(/\s+/).length;
+  const over = chars > 1300;
+  const bar = document.getElementById('statsBar');
+  bar.style.display = 'flex';
+  bar.innerHTML =
+    `<span class="stat-pill ${over?'over':'ok'}">${chars} caracteres ${over?'⚠ supera 1.300':''}</span>` +
+    `<span class="stat-pill">${words} palabras</span>` +
+    `<span class="stat-pill">${Math.ceil(words/238)} min lectura</span>`;
+}
+
+function showError(msg) {
+  setLoading(false);
+  const box = document.getElementById('resultBox');
+  box.className = 'result-box empty';
+  box.innerHTML = '<span class="empty-icon">⚠️</span><span class="empty-text">Error al generar</span>';
+  const err = document.getElementById('errorBox');
+  err.style.display = 'block';
+  err.textContent = msg;
+}
+
+async function copyPost() {
+  if (!currentPost) return;
+  await navigator.clipboard.writeText(currentPost);
+  const btn = document.getElementById('copyBtn');
+  btn.classList.add('copied');
+  btn.textContent = '✓ Copiado';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copiar'; }, 2000);
+}
+
+function saveToHistory() {
+  if (!currentPost) return;
+  const toneLabels = {autoridad:'Autoridad',estrategia:'Estrategia',opinion:'Opinión',historia:'Historia'};
+  const toneBg = {autoridad:'#ede8f7',estrategia:'#edf7d4',opinion:'#fce7f3',historia:'#f4f0fa'};
+  const toneColor = {autoridad:'#582D81',estrategia:'#3d6010',opinion:'#b5005a',historia:'#555'};
+  const entry = { tone: currentTone, post: currentPost, time: new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) };
+  history.unshift(entry);
+  const list = document.getElementById('historyList');
+  const item = document.createElement('div');
+  item.className = 'history-item';
+  item.innerHTML =
+    `<span class="hist-tone" style="background:${toneBg[entry.tone]};color:${toneColor[entry.tone]}">${toneLabels[entry.tone]}</span>` +
+    `<span class="hist-preview">${entry.post}</span>` +
+    `<span class="hist-time">${entry.time}</span>`;
+  item.onclick = () => showPost(entry.post);
+  list.prepend(item);
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '✓ Guardado';
+  setTimeout(() => { btn.textContent = 'Guardar'; }, 1500);
+}
+
+// ── BUILD PROMPT ───────────────────────────────────────────────────────
+function buildPrompt() {
+  const topic      = document.getElementById('topicInput').value.trim();
+  const transcript = document.getElementById('transcript').value.trim();
+  const withCTA    = document.getElementById('extra-cta').checked;
+  const withHash   = document.getElementById('extra-hashtags').checked;
+  const withEmoji  = document.getElementById('extra-emoji').checked;
+  const isShort    = document.getElementById('extra-corto').checked;
+
+  const toneInstructions = {
+    autoridad: 'Tono de autoridad: posiciona a Sheila como experta con datos, metodología o aprendizajes directos. Voz directa, segura y sin rodeos. No soberbia, sí convicción.',
+    estrategia: 'Tono estratégico: muestra cómo trabaja LMNHL por dentro. Procesos, decisiones, metodología. El lector aprende algo concreto y aplicable.',
+    opinion: 'Tono de opinión: Sheila toma partido por algo. Genera debate con una postura clara. Puede ser disruptivo o contracorriente. Que invite a comentar.',
+    historia: 'Tono de historia: un momento real, una reflexión personal, una decisión que marcó un antes y un después. Humaniza la marca sin perder el foco profesional.',
+  };
+
+  const fmtInstructions = {
+    fluido: 'Formato texto fluido: párrafos naturales, sin listas ni bullets. Ritmo de lectura rápida.',
+    numerado: 'Formato lista numerada: máximo 5 puntos, cada uno de 1-2 líneas. Titulillo + desarrollo breve.',
+    microhistoria: 'Formato microhistoria: empieza in media res (en medio de la acción), desarrolla y cierra con el aprendizaje.',
+    pregunta: 'Formato pregunta + respuesta: abre con una pregunta que el cliente ideal se hace, y respóndela con autoridad.',
+    contraste: 'Formato contraste: estructura antes / después o error / solución. Muy visual y fácil de procesar.',
+    dato: 'Formato dato + desarrollo: empieza con un dato o estadística llamativa y desarrolla el porqué y la implicación para la PYME.',
+  };
+
+  const maxChars = isShort ? 800 : 1300;
+
+  return `Actúa como Sheila Aguilar, fundadora de Los Martes No Hay Luna (LMNHL), agencia de marketing boutique en Leganés, Madrid.
+
+CONTEXTO DE MARCA:
+- LMNHL es una agencia boutique de 8 personas especializada en marketing digital, identidad de marca, SEO, diseño web y consultoría de IA para PYMEs españolas.
+- Cliente ideal: Carlos Romero (CEO escéptico, orientado a ROI) y Marta Salgado (directora de operaciones que quiere sistematizar).
+- Voz: cercana, directa, sin lenguaje de agencia genérica. Primera persona siempre. Nunca corporativa.
+- Propuesta diferencial: no somos una agencia más. Hacemos pedagogía, acompañamos de verdad y los resultados se miden.
+- Sheila viene del diseño gráfico, lleva 25 años en imagen corporativa, pasó de freelance a agencia, triplicó facturación en 3 años.
+
+TEMA DEL POST:
+${topic || 'El tema que consideres más relevante según el tono elegido.'}
+
+${transcript ? `CONTENIDO BASE (transcripción o notas):\n${transcript.substring(0, 3000)}\n` : ''}
+
+TONO Y ESTILO:
+${toneInstructions[currentTone]}
+
+${fmtInstructions[currentFmt]}
+
+REGLAS ESTRICTAS:
+- Máximo ${maxChars} caracteres en total.
+- Primer párrafo gancho: una sola frase que pare el scroll. Sin presentaciones ("Hoy os cuento...").
+- Sin hashtags genéricos${withHash ? '. Máximo 3 hashtags MUY relevantes al final.' : '. Sin hashtags.'}
+- Sin bullet points decorativos salvo en formato lista.
+${withEmoji ? '- Puedes usar 1-2 emojis puntuales si refuerzan el mensaje, nunca decorativos.' : '- Sin emojis.'}
+- ${withCTA ? 'Cierra con una pregunta reflexiva o CTA claro y específico.' : 'No pongas CTA explícito al final.'}
+- No uses gerundios en exceso. No empieces por "En LMNHL...". No uses "os" (tutéalo siempre).
+- Voz activa. Frases cortas. Que se lea de una pasada.
+
+Escribe SOLO el post, sin explicaciones previas, sin título, sin comillas envolventes.`;
+}
+
+// ── GENERATE ───────────────────────────────────────────────────────────
+async function generate() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const topic  = document.getElementById('topicInput').value.trim();
+
+  if (!apiKey) { showError('Necesitas introducir tu clave de API de Anthropic para generar posts.'); return; }
+  if (!topic)  { document.getElementById('topicInput').focus(); document.getElementById('topicInput').style.borderColor='#e72078'; setTimeout(()=>document.getElementById('topicInput').style.borderColor='',2000); return; }
+
+  localStorage.setItem('lmnhl_li_apikey', apiKey);
+  setLoading(true);
+
+  const prompt = buildPrompt();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(()=>({}));
+      throw new Error(err?.error?.message || `Error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.content?.find(b => b.type === 'text')?.text || '';
+    if (!text) throw new Error('La API no devolvió contenido. Inténtalo de nuevo.');
+
+    setLoading(false);
+    showPost(text.trim());
+
+  } catch (err) {
+    showError('Error: ' + err.message);
+  }
+}
+</script>
+</body>
+</html>
