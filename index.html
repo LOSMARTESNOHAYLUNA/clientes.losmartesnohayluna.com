@@ -199,7 +199,7 @@ footer{background:var(--slate);padding:1.5rem 4rem;display:flex;align-items:cent
 <section class="grid-section">
   <div class="grid-header">
     <h2>Clientes</h2>
-    <span class="grid-count" id="visibleCount">2 clientes</span>
+    <span class="grid-count" id="visibleCount">cargando...</span>
   </div>
   <div class="clients-grid" id="clientsGrid">
 
@@ -431,6 +431,7 @@ const totalClients = document.getElementById('totalClients');
 
 const activeCount = [...cards].filter(c=>c.dataset.status==='active').length;
 totalClients.textContent = activeCount;
+document.getElementById('visibleCount').textContent = cards.length + (cards.length===1?' cliente':' clientes');
 
 let currentFilter = 'all';
 
