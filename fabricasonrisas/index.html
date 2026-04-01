@@ -1394,7 +1394,7 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onAddCustom,onU
         React.createElement('span',{className:'plat-count'},total+' publicaciones')
       ),
       React.createElement('div',{className:'posts-grid'},
-        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{key:'ig'+i,planCfg:cfg,seccion:'rrss',data:{...dataWeek.ig[i],topic:dataWeek.ig[i]?.topic!==undefined?dataWeek.ig[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('ig',i,f,v),onApprove:()=>onApprove('ig',i)})),
+        planWeek.ig.map((cfg,i)=>React.createElement(PostCard,{key:'ig'+i,planCfg:cfg,seccion:'rrss',data:{...dataWeek.ig[i],topic:dataWeek.ig[i]?.topic!==undefined?dataWeek.ig[i].topic:cfg.topic},onUpdate:(f,v)=>onUpdate('ig',i,f,v),onDelete:()=>onDeleteBase(i),onApprove:()=>onApprove('ig',i)})),
         (dataWeek.customIg||[]).map((item,i)=>React.createElement(PostCard,{key:'cig'+i,planCfg:null,seccion:'rrss',data:item,onUpdate:(f,v)=>onUpdateCustom('ig',i,f,v),onDelete:()=>onDeleteCustom('ig',i),onApprove:()=>onApprove('custom',i)}))
       ),
       React.createElement(AddButton,{onAdd:type=>onAddCustom('ig',type)})
