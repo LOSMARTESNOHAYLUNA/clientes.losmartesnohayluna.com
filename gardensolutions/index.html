@@ -636,14 +636,14 @@ function showToast(){
   setTimeout(()=>el.remove(),3000);
 }
 
-const LS_PFX='garden26v1_';
+const LS_PFX='gardensolution26v1_';
 function lsGet(k){try{return JSON.parse(localStorage.getItem(LS_PFX+k)||'null');}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(LS_PFX+k,JSON.stringify(v));}catch(e){}}
 
 // ── SUPABASE ────────────────────────────────────────────────────────────
 const SB_URL='https://kbfipabrgwmqethkczvi.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiZmlwYWJyZ3dtcWV0aGtjenZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MTIzMDUsImV4cCI6MjA4OTM4ODMwNX0.wguzar4qoB5RnE1xWc91ckkPe4xp5qi2xdsZ6M0sUi8';
-const CLIENT_ID='gardensolutions';
+const CLIENT_ID='gardensolution';
 
 async function sbLoad(){
   try{
@@ -685,7 +685,7 @@ async function sendEmail(seccion,accion,nombre,fecha,titulo){
     await fetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({seccion,accion,nombre,fecha,titulo,cliente:'gardensolutions'})
+      body:JSON.stringify({seccion,accion,nombre,fecha,titulo,cliente:'gardensolution'})
     });
   }catch(e){}
 }
@@ -695,7 +695,7 @@ async function sendEmailCliente(to,cc,seccion,titulo,portalUrl){
     await fetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({seccion,accion:'cliente_revision',titulo,to,cc,cliente:'gardensolutions',portalUrl:'https://clientes.losmartesnohayluna.com/gardensolutions'})
+      body:JSON.stringify({seccion,accion:'cliente_revision',titulo,to,cc,cliente:'gardensolution',portalUrl:'https://clientes.losmartesnohayluna.com/gardensolution'})
     });
   }catch(e){}
 }
