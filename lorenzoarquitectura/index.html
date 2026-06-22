@@ -167,6 +167,21 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f5f5;color:#0a1a26;m
 .pub-card.cambios{border-left-color:#f97316}
 .medios-card.cambios{border-left-color:#f97316}
 
+.backup-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:rgba(0,0,0,.03);border:1px solid #003B5640;border-radius:10px;padding:10px 14px;margin-bottom:16px}
+.backup-label{font-size:11px;font-weight:700;color:#002a3d;letter-spacing:.04em}
+.backup-btns{display:flex;gap:8px;flex-wrap:wrap}
+.backup-btn{padding:7px 14px;border-radius:8px;border:1.5px solid;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;transition:all .2s}
+.backup-btn.dl{background:#003B56;border-color:#003B56;color:#fff}
+.backup-btn.dl:hover{opacity:.85}
+.backup-btn.up{background:#fff;border-color:#003B56;color:#002a3d}
+.backup-btn.up:hover{background:rgba(0,0,0,.03)}
+.save-btn{display:flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;border:1.5px solid;cursor:pointer;font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.save-btn.saved{background:rgba(34,197,94,.15);border-color:#22c55e;color:#16a34a}
+.save-btn.dirty{background:#003B56;border-color:#003B56;color:#fff;animation:pulse 1.5s ease-in-out infinite}
+.save-btn.saving{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7);cursor:default}
+.save-btn.error{background:#ef4444;border-color:#ef4444;color:#fff;animation:pulse 1s ease-in-out infinite}
+.save-btn:hover:not(:disabled){opacity:.85}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .del-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(2px)}
 .del-modal{background:#fff;border-radius:14px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;animation:modalIn .2s ease}
 @keyframes modalIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
@@ -592,6 +607,7 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f5f5;color:#0a1a26;m
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const {useState,useEffect,useRef,useCallback}=React;
 
@@ -663,12 +679,13 @@ async function sbSave(snapshot){
     const rows=Object.entries(snapshot).map(function([k,v]){
       return {client_id:CLIENT_ID,key:k,data:v,updated_at:new Date().toISOString()};
     });
-    await fetch(`${SB_URL}/rest/v1/portal_data`,{
+    const r=await fetch(`${SB_URL}/rest/v1/portal_data`,{
       method:'POST',
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
       body:JSON.stringify(rows)
     });
-  }catch(e){}
+    return r.ok;
+  }catch(e){return false;}
 }
 
 // ── EMAIL ────────────────────────────────────────────────────────────────
@@ -3179,6 +3196,110 @@ function ContactSection({data,onUpdateFiscal,onUpdateContact,onAddContact,onDele
   );
 }
 
+// ── BACKUP / RESTORE ────────────────────────────────────────────────────
+function buildBackupData(section, month, rrss, seo, pub, medios, onboarding){
+  const stamp=new Date().toISOString().slice(0,16).replace('T',' ');
+  const meta={ _portal:CLIENT_ID, _seccion:section, _mes:month, _fecha:stamp };
+  if(section==='rrss'){
+    const weeks=rrss[month]||[];
+    const rows=[];
+    weeks.forEach(function(w,wi){
+      (w.ig||[]).forEach(function(p,pi){
+        if((w.deletedIg||[]).indexOf(pi)!==-1)return;
+        rows.push({Semana:wi+1,Origen:'base',Tipo:p.type||'',Tema:p.topic||'',Copy:p.text||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
+      });
+      (w.customIg||[]).forEach(function(p){
+        rows.push({Semana:wi+1,Origen:'extra',Tipo:p.type||'',Tema:p.topic||'',Copy:p.text||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
+      });
+    });
+    return { json:{...meta,data:rrss[month]}, rows, sheet:'RRSS '+month };
+  }
+  if(section==='seo'){
+    const md=seo[month]||{articles:[],reportLink:'',seoTecnico:''};
+    const rows=(md.articles||[]).map(function(a){
+      return {Titulo:a.title||'',Keyword:a.kw||a.keyword||'',Tipo:a.type||'',Notas:a.notas||'',Enlace:a.linkArticulo||'',Estado:a.status||''};
+    });
+    return { json:{...meta,data:md}, rows, sheet:'SEO '+month };
+  }
+  if(section==='pub'){
+    const md=pub[month]||{campaigns:[],reportLink:''};
+    const rows=(md.campaigns||[]).map(function(c){
+      return {Campaña:c.name||'',Plataforma:c.platform||'',Presupuesto:c.budget||'',Objetivo:c.objetivo||'',Estado:c.status||''};
+    });
+    return { json:{...meta,data:md}, rows, sheet:'Publicidad '+month };
+  }
+  if(section==='medios'){
+    const arr=medios[month]||[];
+    const rows=arr.map(function(a){
+      return {Titular:a.titular||a.titular1||'',Texto:a.texto||'',Keywords:a.keywords||'',Contacto:a.contactoNombre||'',Telefono:a.contactoTel||'',Web:a.web||'',Reporte:a.reporteLink||'',Estado:a.status||''};
+    });
+    return { json:{...meta,data:arr}, rows, sheet:'Medios '+month };
+  }
+  if(section==='onboarding'){
+    const rows=[{Info:'Backup de onboarding (ver JSON para el detalle completo)'}];
+    return { json:{...meta,data:onboarding}, rows, sheet:'Onboarding' };
+  }
+  return { json:{...meta,data:null}, rows:[], sheet:'Datos' };
+}
+function downloadBackup(section, month, rrss, seo, pub, medios, onboarding){
+  const b=buildBackupData(section,month,rrss,seo,pub,medios,onboarding);
+  const fname=CLIENT_ID+'_'+section+'_'+month+'_'+new Date().toISOString().slice(0,10);
+  const jsonBlob=new Blob([JSON.stringify(b.json,null,2)],{type:'application/json'});
+  const a1=document.createElement('a');
+  a1.href=URL.createObjectURL(jsonBlob); a1.download=fname+'.json'; a1.click();
+  try{
+    const ws=XLSX.utils.json_to_sheet(b.rows.length?b.rows:[{Info:'Sin datos'}]);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,b.sheet.slice(0,31));
+    XLSX.writeFile(wb,fname+'.xlsx');
+  }catch(e){console.error('Excel export error',e);}
+}
+function BackupBar({section, month, rrss, seo, pub, medios, onboarding, onRestore}){
+  const fileRef=useRef(null);
+  const[pending,setPending]=useState(null);
+  const labels={rrss:'RRSS',seo:'SEO',pub:'Publicidad',medios:'Medios',onboarding:'Onboarding'};
+  function handleFile(e){
+    const file=e.target.files[0]; if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        if(!parsed._seccion){alert('El archivo no es una copia válida del portal.');return;}
+        setPending(parsed);
+      }catch(err){alert('No se pudo leer el archivo. ¿Es un JSON de copia válido?');}
+    };
+    reader.readAsText(file);
+    e.target.value='';
+  }
+  function confirmRestore(){ if(!pending)return; onRestore(pending); setPending(null); }
+  return React.createElement('div',{className:'backup-bar'},
+    React.createElement('span',{className:'backup-label'},'💾 Copia de seguridad · '+(labels[section]||section)),
+    React.createElement('div',{className:'backup-btns'},
+      React.createElement('button',{className:'backup-btn dl',onClick:function(){downloadBackup(section,month,rrss,seo,pub,medios,onboarding);}},'⬇️ Descargar copia'),
+      React.createElement('button',{className:'backup-btn up',onClick:function(){fileRef.current&&fileRef.current.click();}},'📥 Importar copia'),
+      React.createElement('input',{ref:fileRef,type:'file',accept:'.json',style:{display:'none'},onChange:handleFile})
+    ),
+    pending&&React.createElement('div',{className:'del-modal-overlay',onClick:function(e){if(e.target===e.currentTarget)setPending(null);}},
+      React.createElement('div',{className:'del-modal'},
+        React.createElement('div',{className:'del-modal-hdr'},
+          React.createElement('span',{className:'del-modal-icon'},'⚠️'),
+          React.createElement('div',null,
+            React.createElement('div',{className:'del-modal-title'},'¿Sobreescribir los datos actuales?'),
+            React.createElement('div',{className:'del-modal-sub'},
+              'Vas a importar: '+(labels[pending._seccion]||pending._seccion)+(pending._mes?(' · '+pending._mes):'')+
+              (pending._fecha?(' · copia del '+pending._fecha):'')+
+              '. Esto reemplazará el contenido actual de esa sección.'
+            )
+          )
+        ),
+        React.createElement('div',{className:'del-modal-actions',style:{paddingTop:20}},
+          React.createElement('button',{className:'del-modal-cancel',onClick:function(){setPending(null);}},'Cancelar'),
+          React.createElement('button',{className:'del-modal-confirm',style:{background:'#0a7d3c'},onClick:confirmRestore},'Sí, importar y reemplazar')
+        )
+      )
+    )
+  );
+}
 // ── MAIN APP ────────────────────────────────────────────────────────────
 function App(){
   const[section,setSection]=useState('rrss');
@@ -3198,10 +3319,40 @@ function App(){
     return d;
   });
   const[pts,setPts]=useState(()=>loadPts());
-  const[saved,setSaved]=useState(true);
+  const[saveStatus,setSaveStatus]=useState('saved');
+  const[loaded,setLoaded]=useState(false);
   const[syncing,setSyncing]=useState(true);
   const timer=useRef(null);
   const[pubPlanLink,setPubPlanLink]=useState(()=>lsGet('pub_plan_link')||'');
+
+  function buildSnapshot(){
+    const snap={contact,onboarding,agency,pts,pub_plan_link:pubPlanLink};
+    for(const m of MONTHS){
+      snap['rrss_'+m.key]=rrss[m.key];
+      snap['seo_'+m.key]=seo[m.key];
+      snap['pub_'+m.key]=pub[m.key];
+      snap['medios_'+m.key]=medios[m.key];
+    }
+    return snap;
+  }
+  async function saveNow(){
+    clearTimeout(timer.current);
+    setSaveStatus('saving');
+    for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);lsSet('medios_'+m.key,medios[m.key]);}
+    lsSet('pts',pts); lsSet('contact',contact); lsSet('onboarding',onboarding); lsSet('agency',agency); lsSet('pub_plan_link',pubPlanLink);
+    const ok=await sbSave(buildSnapshot());
+    setSaveStatus(ok?'saved':'error');
+  }
+  function handleRestore(parsed){
+    const sec=parsed._seccion;
+    const mes=parsed._mes||month;
+    if(sec==='rrss'){setRRSS(function(prev){const n={...prev};n[mes]=parsed.data;return n;});}
+    else if(sec==='seo'){setSEO(function(prev){const n={...prev};n[mes]=parsed.data;return n;});}
+    else if(sec==='pub'){setPUB(function(prev){const n={...prev};n[mes]=parsed.data;return n;});}
+    else if(sec==='medios'){setMedios(function(prev){const n={...prev};n[mes]=parsed.data;return n;});}
+    else if(sec==='onboarding'){setOnboarding(parsed.data);}
+    setSaveStatus('dirty');
+  }
 
   // Load from Supabase on mount
   useEffect(()=>{
@@ -3235,23 +3386,34 @@ function App(){
         setMedios(newMedios);
       }
       setSyncing(false);
+      setLoaded(true);
     });
   },[]);
 
-  // autosave
+  // autosave — solo después de cargar, con estado real
   useEffect(()=>{
-    setSaved(false);
+    if(!loaded)return;
+    setSaveStatus('dirty');
     clearTimeout(timer.current);
-    timer.current=setTimeout(()=>{
+    timer.current=setTimeout(async ()=>{
       for(const m of MONTHS){lsSet('rrss_'+m.key,rrss[m.key]);lsSet('seo_'+m.key,seo[m.key]);lsSet('pub_'+m.key,pub[m.key]);lsSet('medios_'+m.key,medios[m.key]);}
       lsSet('pts',pts); lsSet('contact',contact); lsSet('onboarding',onboarding); lsSet('agency',agency);
-      // Sync to Supabase
-      const snapshot={contact,onboarding,agency,pts};
-      for(const m of MONTHS){snapshot['rrss_'+m.key]=rrss[m.key];snapshot['seo_'+m.key]=seo[m.key];snapshot['pub_'+m.key]=pub[m.key];snapshot['medios_'+m.key]=medios[m.key];}
-      sbSave(snapshot);
-      setSaved(true);
+      setSaveStatus('saving');
+      const ok=await sbSave(buildSnapshot());
+      setSaveStatus(ok?'saved':'error');
     },800);
-  },[rrss,seo,pub,pts,contact,onboarding,agency,medios]);
+  },[rrss,seo,pub,pts,contact,onboarding,agency,medios,loaded]);
+  // Aviso al cerrar con cambios sin guardar
+  useEffect(()=>{
+    function onBeforeUnload(e){
+      if(saveStatus==='dirty'||saveStatus==='saving'||saveStatus==='error'){
+        e.preventDefault(); e.returnValue='Tienes cambios sin guardar. ¿Seguro que quieres salir?';
+        return e.returnValue;
+      }
+    }
+    window.addEventListener('beforeunload',onBeforeUnload);
+    return function(){window.removeEventListener('beforeunload',onBeforeUnload);};
+  },[saveStatus]);
 
   useEffect(()=>{lsSet('pub_plan_link',pubPlanLink);},[pubPlanLink]);
 
@@ -3384,7 +3546,9 @@ function App(){
         React.createElement('div',{className:'util-nav-inline'},
           React.createElement('button',{className:'util-btn '+(section==='agencia'?'on':''),onClick:()=>setSection('agencia')},'🌙 Agencia'),
           React.createElement('button',{className:'util-btn '+(section==='contacto'?'on':''),onClick:()=>setSection('contacto')},'👤 Cliente'),
-          React.createElement('button',{className:'util-btn '+(section==='onboarding'?'on':''),onClick:()=>setSection('onboarding')},'🚀 Onboarding')
+          React.createElement('button',{className:'util-btn '+(section==='onboarding'?'on':''),onClick:()=>setSection('onboarding')},'🚀 Onboarding'),
+          React.createElement('button',{className:'save-btn '+saveStatus,onClick:saveNow,disabled:saveStatus==='saving',title:'Guardar cambios ahora'},
+            saveStatus==='saved'?'✓ Guardado':saveStatus==='saving'?'⏳ Guardando...':saveStatus==='error'?'⚠️ Reintentar guardar':'💾 Guardar')
         ),
         React.createElement('div',{className:'hdr-stats'},
           section==='rrss'&&React.createElement('div',{className:'stat'},React.createElement('div',{className:'stat-n',style:{color:'#4ade80'}},aprR),React.createElement('div',{className:'stat-l'},'Aprob.')),
@@ -3398,7 +3562,8 @@ function App(){
               React.createElement('div',{className:'pts-l'},'pts')
             )
           ),
-          React.createElement('span',{className:'save-badge',style:{color:saved?'#4ade80':'#fbbf24'}},saved?'● Guardado':'● Guardando...')
+          React.createElement('span',{className:'save-badge',style:{color:saveStatus==='saved'?'#4ade80':saveStatus==='error'?'#ef4444':'#fbbf24'}},
+            saveStatus==='saved'?'● Guardado':saveStatus==='saving'?'● Guardando...':saveStatus==='error'?'● Error al guardar':'● Sin guardar')
         )
       ),
       // SECTION SWITCHER — plan content tabs only
@@ -3429,6 +3594,9 @@ function App(){
 
     // BODY
     React.createElement('div',{className:'body'},
+      (section==='rrss'||section==='seo'||section==='pub'||section==='medios'||section==='onboarding')&&React.createElement(BackupBar,{
+        section,month,rrss,seo,pub,medios,onboarding,onRestore:handleRestore
+      }),
       section!=='contacto'&&section!=='onboarding'&&section!=='agencia'&&React.createElement('div',{className:'mth-hd'},
         React.createElement('div',{className:'mth-accent '+section}),
         React.createElement('div',null,
