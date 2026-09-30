@@ -93,6 +93,7 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f0f9fa;color:#0a2a2e;m
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .card-badges{display:flex;flex-direction:column;gap:3px}
 .type-badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:4px;align-self:flex-start}
+.type-select{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:4px;border:1.5px solid;cursor:pointer;font-family:inherit;align-self:flex-start;outline:none}
 .pillar-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#3a8a94;font-weight:500}
 .st-btn{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:12px;cursor:pointer;border:1.5px solid;white-space:nowrap;flex-shrink:0;font-family:inherit;transition:all .15s}
 .st-btn:hover{transform:scale(1.05)}
@@ -781,22 +782,22 @@ const PLAN_RRSS={
   {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
 ],
 '2026-10':[
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
 ],
 '2026-11':[
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
 ],
 '2026-12':[
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
-  {ig:[{type:'reel',topic:'',pillar:''},{type:'carrusel',topic:'',pillar:''},{type:'historia',topic:'',pillar:''}]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
+  {ig:[]},
 ],
 };
 
@@ -881,11 +882,20 @@ const PLAN_PUB={
 };
 
 // ── LOCAL STORAGE HELPERS ──────────────────────────────────────────────
+// Fusiona hashtags antiguos dentro del copy (descarta los genéricos por defecto)
+function mergeHashtags(text, tags){
+  if(!tags) return text;
+  const t=tags.trim();
+  if(!t) return text;
+  if(t===DEFAULT_HASHTAGS) return text; // genéricos automáticos: se descartan
+  if(text && text.indexOf(t)!==-1) return text; // ya están en el copy
+  return text ? (text.replace(/\s+$/,'')+'\n\n'+t) : t;
+}
 function buildDefaultRRSS(){
   const s={};
   for(const m of MONTHS){
     s[m.key]=PLAN_RRSS[m.key].map(w=>({
-      ig:w.ig.map(c=>({topic:c.topic,text:'',hashtags:DEFAULT_HASHTAGS,link:'',materialLink:'',date:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',revisionNum:0,correcciones:[],historial:[]})),
+      ig:w.ig.map(c=>({topic:c.topic,text:'',hashtags:'',link:'',materialLink:'',date:'',status:'pendiente',revisionBy:'',revisionAt:'',approvedBy:'',approvedAt:'',revisionNum:0,correcciones:[],historial:[]})),
       customIg:[],
       deletedIg:[],
     }));
@@ -897,7 +907,7 @@ function loadRRSS(){
   for(const m of MONTHS){
     const r=lsGet('rrss_'+m.key);
     if(r)d[m.key]=r.map((w,wi)=>({
-      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:s.text||'',hashtags:s.hashtags||DEFAULT_HASHTAGS,link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
+      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:mergeHashtags(s.text||'',s.hashtags),hashtags:'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
       customIg:w.customIg||[],
       deletedIg:w.deletedIg||[],
     }));
@@ -1159,7 +1169,7 @@ function SendToClientBlock({seccion,titulo}){
 }
 
 function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
-  const type=planCfg?planCfg.type:(data.type||'reel');
+  const type=data.type||(planCfg?planCfg.type:'reel');
   const t=TC_RRSS[type]||TC_RRSS.reel;
   const s=SC[data.status]||SC.pendiente;
   const pillar=planCfg?planCfg.pillar:(data.pillar||'');
@@ -1234,7 +1244,16 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     // CARD TOP — solo tipo, estado y borrar
     React.createElement('div',{className:'card-top'},
       React.createElement('div',{className:'card-badges'},
-        React.createElement('span',{className:'type-badge',style:{color:t.color,background:t.bg}},t.label),
+        React.createElement('select',{
+          className:'type-select',
+          value:type,
+          style:{color:t.color,background:t.bg,borderColor:t.border},
+          onChange:function(e){onUpdate('type',e.target.value);}
+        },
+          React.createElement('option',{value:'reel'},'Reel'),
+          React.createElement('option',{value:'carrusel'},'Carrusel'),
+          React.createElement('option',{value:'historia'},'Historia')
+        ),
         pillar&&React.createElement('span',{className:'pillar-tag'},pillar)
       ),
       React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
@@ -1259,13 +1278,9 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
     ),
     React.createElement('div',null,
       React.createElement('label',{className:'field-label'},'Copy del post'),
-      React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el texto principal del post...'}),
+      React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el copy del post, incluyendo los hashtags al final...'}),
       React.createElement('div',{className:'firma-box'},FIRMA),
       React.createElement('div',{className:'firma-hint'},'👆 Añadir al final del copy del post')
-    ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label'},'Hashtags'),
-      React.createElement('textarea',{className:'hashtag-textarea',value:data.hashtags||DEFAULT_HASHTAGS,onChange:e=>onUpdate('hashtags',e.target.value)})
     ),
     React.createElement('div',{className:'design-link-block'},
       React.createElement('div',{className:'design-link-label'},'Enlace al diseño'),
@@ -3428,7 +3443,7 @@ function App(){
     setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk]?.[wi]?.[plat]?.[pi])n[mk][wi][plat][pi][f]=v;return n;});
   },[]);
   const addCustomRRSS=useCallback((mk,wi,plat,type)=>{
-    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[mk][wi].customIg)n[mk][wi].customIg=[];n[mk][wi].customIg.push({type,topic:'',text:'',hashtags:DEFAULT_HASHTAGS,link:'',date:'',status:'pendiente'});return n;});
+    setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(!n[mk][wi].customIg)n[mk][wi].customIg=[];n[mk][wi].customIg.push({type,topic:'',text:'',hashtags:'',link:'',date:'',status:'pendiente'});return n;});
   },[]);
   const updateCustomRRSS=useCallback((mk,wi,plat,ci,f,v)=>{
     setRRSS(prev=>{const n=JSON.parse(JSON.stringify(prev));if(n[mk][wi].customIg?.[ci])n[mk][wi].customIg[ci][f]=v;return n;});
