@@ -907,7 +907,7 @@ function loadRRSS(){
   for(const m of MONTHS){
     const r=lsGet('rrss_'+m.key);
     if(r)d[m.key]=r.map((w,wi)=>({
-      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:mergeHashtags(s.text||'',s.hashtags),hashtags:'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
+      ig:(w.ig||[]).map((s,i)=>({type:s.type,captionLinkedin:s.captionLinkedin||'',captionSonia:s.captionSonia||'',topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:mergeHashtags(s.text||'',s.hashtags),hashtags:'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
       customIg:w.customIg||[],
       deletedIg:w.deletedIg||[],
     }));
@@ -1168,7 +1168,8 @@ function SendToClientBlock({seccion,titulo}){
   );
 }
 
-function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
+function PostCard({planCfg,data,onUpdate,onDelete,onApprove,mk}){
+  const multiCaption=!!mk&&mk>='2026-10';
   const type=data.type||(planCfg?planCfg.type:'reel');
   const t=TC_RRSS[type]||TC_RRSS.reel;
   const s=SC[data.status]||SC.pendiente;
@@ -1276,12 +1277,27 @@ function PostCard({planCfg,data,onUpdate,onDelete,onApprove}){
       React.createElement('label',{className:'field-label'},'Tema'),
       React.createElement('input',{className:'topic-input',type:'text',value:data.topic,onChange:e=>onUpdate('topic',e.target.value),placeholder:'Escribe o edita el tema del post...'})
     ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label'},'Copy del post'),
-      React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el copy del post, incluyendo los hashtags al final...'}),
-      React.createElement('div',{className:'firma-box'},FIRMA),
-      React.createElement('div',{className:'firma-hint'},'👆 Añadir al final del copy del post')
-    ),
+    multiCaption
+      ?React.createElement(React.Fragment,null,
+        React.createElement('div',null,
+          React.createElement('label',{className:'field-label'},'Caption Instagram'),
+          React.createElement('textarea',{className:'post-textarea',value:data.text||'',onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el caption de Instagram, incluyendo los hashtags al final...'})
+        ),
+        React.createElement('div',null,
+          React.createElement('label',{className:'field-label'},'Caption página LinkedIn'),
+          React.createElement('textarea',{className:'post-textarea',value:data.captionLinkedin||'',onChange:e=>onUpdate('captionLinkedin',e.target.value),placeholder:'Escribe aquí el caption para la página de LinkedIn...'})
+        ),
+        React.createElement('div',null,
+          React.createElement('label',{className:'field-label'},'Caption Sonia'),
+          React.createElement('textarea',{className:'post-textarea',value:data.captionSonia||'',onChange:e=>onUpdate('captionSonia',e.target.value),placeholder:'Escribe aquí el caption para el perfil de Sonia...'})
+        )
+      )
+      :React.createElement('div',null,
+        React.createElement('label',{className:'field-label'},'Copy del post'),
+        React.createElement('textarea',{className:'post-textarea',value:data.text,onChange:e=>onUpdate('text',e.target.value),placeholder:'Escribe aquí el copy del post, incluyendo los hashtags al final...'}),
+        React.createElement('div',{className:'firma-box'},FIRMA),
+        React.createElement('div',{className:'firma-hint'},'👆 Añadir al final del copy del post')
+      ),
     React.createElement('div',{className:'design-link-block'},
       React.createElement('div',{className:'design-link-label'},'Enlace al diseño'),
       React.createElement(UrlInput,{value:data.link,onChange:v=>onUpdate('link',v),placeholder:'https://drive.google.com/...',variant:'rrss'})
@@ -1431,7 +1447,7 @@ function WeekSection({mk,wi,weekLabel,planWeek,dataWeek,onUpdate,onAddCustom,onU
             ?function(){onApprove('ig',p.idx);}
             :function(){onApprove('custom',p.idx);};
           return React.createElement(PostCard,{
-            key:key,
+            key:key,mk:mk,
             planCfg:p.planCfg,
             data:{...p.data,topic:p.data.topic!==undefined?p.data.topic:(p.planCfg?.topic||'')},
             onUpdate:onUpd,
@@ -3221,10 +3237,10 @@ function buildBackupData(section, month, rrss, seo, pub, medios, onboarding){
     weeks.forEach(function(w,wi){
       (w.ig||[]).forEach(function(p,pi){
         if((w.deletedIg||[]).indexOf(pi)!==-1)return;
-        rows.push({Semana:wi+1,Origen:'base',Tipo:p.type||'',Tema:p.topic||'',Copy:p.text||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
+        rows.push({Semana:wi+1,Origen:'base',Tipo:p.type||'',Tema:p.topic||'',Caption_Instagram:p.text||'',Caption_LinkedIn:p.captionLinkedin||'',Caption_Sonia:p.captionSonia||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
       });
       (w.customIg||[]).forEach(function(p){
-        rows.push({Semana:wi+1,Origen:'extra',Tipo:p.type||'',Tema:p.topic||'',Copy:p.text||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
+        rows.push({Semana:wi+1,Origen:'extra',Tipo:p.type||'',Tema:p.topic||'',Caption_Instagram:p.text||'',Caption_LinkedIn:p.captionLinkedin||'',Caption_Sonia:p.captionSonia||'',Hashtags:p.hashtags||'',Enlace:p.link||'',Fecha:p.date||'',Estado:p.status||'',Material:p.materialLink||''});
       });
     });
     return { json:{...meta,data:rrss[month]}, rows, sheet:'RRSS '+month };
