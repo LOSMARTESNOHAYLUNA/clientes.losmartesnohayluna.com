@@ -27,5 +27,5 @@ window.LMNHL_CONFIG = {
     messagingSenderId: "102995792261",
     appId: "1:102995792261:web:c6a62724ff4588f59bf4ec"
   },
-  emailFn: "PEGAR_AQUI"
+  emailFn: "https://europe-west1-lmnhl-portales.cloudfunctions.net/sendEmail"
 };
