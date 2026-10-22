@@ -609,6 +609,9 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f0f9fa;color:#0a2a2e;m
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="/firebase-config.js"></script>
 <script>
 const {useState,useEffect,useRef,useCallback}=React;
 
@@ -657,40 +660,84 @@ const LS_PFX='fisio26v1_';
 function lsGet(k){try{return JSON.parse(localStorage.getItem(LS_PFX+k)||'null');}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(LS_PFX+k,JSON.stringify(v));}catch(e){}}
 
-// ── SUPABASE ────────────────────────────────────────────────────────────
-const SB_URL='https://kbfipabrgwmqethkczvi.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiZmlwYWJyZ3dtcWV0aGtjenZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MTIzMDUsImV4cCI6MjA4OTM4ODMwNX0.wguzar4qoB5RnE1xWc91ckkPe4xp5qi2xdsZ6M0sUi8';
+// ── FIREBASE (Firestore) ────────────────────────────────────────────────
+// Los datos de cada portal viven en  portales/{CLIENT_ID}/datos/{clave}
+// (un documento por sección y mes, igual que las filas de la antigua tabla).
+// La configuración compartida está en /firebase-config.js (raíz del dominio).
 const CLIENT_ID='fisiodomicili';
+const _CFG=window.LMNHL_CONFIG||{};
+const _FB_MAX_BYTES=1000000;
+const _fbSaved={};   // último JSON guardado de cada clave → solo se escriben los cambios
+let _fbDb=null;
+
+function fbDb(){
+  if(_fbDb)return _fbDb;
+  const c=_CFG.firebase;
+  if(!window.firebase||!c||!c.projectId||String(c.projectId).indexOf('PEGAR')>=0){
+    console.error('[Firebase] Falta la configuración: revisa /firebase-config.js');
+    return null;
+  }
+  if(!firebase.apps.length)firebase.initializeApp(c);
+  _fbDb=firebase.firestore();
+  try{_fbDb.settings({experimentalAutoDetectLongPolling:true});}catch(e){}
+  return _fbDb;
+}
+function fbCol(db){return db.collection('portales').doc(CLIENT_ID).collection('datos');}
+function fbTimeout(p,ms){
+  return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej(new Error('Tiempo de espera agotado'));},ms);})]);
+}
 
 async function sbLoad(){
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/portal_data?client_id=eq.${CLIENT_ID}&select=key,data`,{
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-    });
-    if(!r.ok)return null;
-    const rows=await r.json();
+    const db=fbDb();
+    if(!db)return null;
+    // source:'server' → si no hay conexión falla en vez de devolver una caché vacía
+    const snap=await fbTimeout(fbCol(db).get({source:'server'}),15000);
     const out={};
-    rows.forEach(function(row){out[row.key]=row.data;});
+    snap.forEach(function(d){
+      const j=d.data().json;
+      if(typeof j!=='string')return;
+      try{out[d.id]=JSON.parse(j);_fbSaved[d.id]=j;}
+      catch(e){console.error('[Firebase] Datos ilegibles en '+d.id,e);}
+    });
     return out;
-  }catch(e){return null;}
+  }catch(e){console.error('[Firebase] Error al cargar:',e);return null;}
 }
 
 async function sbSave(snapshot){
   try{
-    const rows=Object.entries(snapshot).map(function([k,v]){
-      return {client_id:CLIENT_ID,key:k,data:v,updated_at:new Date().toISOString()};
+    const db=fbDb();
+    if(!db)return false;
+    const cambios=[];
+    Object.keys(snapshot).forEach(function(k){
+      if(snapshot[k]===undefined)return;
+      const j=JSON.stringify(snapshot[k]);
+      if(j===undefined||_fbSaved[k]===j)return;
+      cambios.push([k,j]);
     });
-    const r=await fetch(`${SB_URL}/rest/v1/portal_data`,{
-      method:'POST',
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify(rows)
-    });
-    return r.ok;
-  }catch(e){return false;}
+    if(!cambios.length)return true;
+    for(let i=0;i<cambios.length;i++){
+      if(new TextEncoder().encode(cambios[i][1]).length>_FB_MAX_BYTES){
+        console.error('[Firebase] "'+cambios[i][0]+'" supera 1 MB y no se puede guardar.');
+        return false;
+      }
+    }
+    const col=fbCol(db);
+    for(let i=0;i<cambios.length;i+=400){
+      const batch=db.batch();
+      cambios.slice(i,i+400).forEach(function(c){
+        batch.set(col.doc(c[0]),{json:c[1],updated_at:firebase.firestore.FieldValue.serverTimestamp()});
+      });
+      await fbTimeout(batch.commit(),20000);
+    }
+    cambios.forEach(function(c){_fbSaved[c[0]]=c[1];});
+    return true;
+  }catch(e){console.error('[Firebase] Error al guardar:',e);return false;}
 }
 
 // ── EMAIL ────────────────────────────────────────────────────────────────
-const EMAIL_FN='https://kbfipabrgwmqethkczvi.supabase.co/functions/v1/dynamic-api';
+const EMAIL_FN=(_CFG.emailFn&&String(_CFG.emailFn).indexOf('PEGAR')<0)?_CFG.emailFn:'';
+function emailFetch(u,o){return u?fetch(u,o):Promise.resolve(null);}
 const EMAIL_TO={
   rrss:   {to:'rrss@losmartesnohayluna.com',   cc:'comercial@losmartesnohayluna.com'},
   seo:    {to:'proyectos@losmartesnohayluna.com',cc:'comercial@losmartesnohayluna.com'},
@@ -700,7 +747,7 @@ const EMAIL_TO={
 };
 async function sendEmail(seccion,accion,nombre,fecha,titulo){
   try{
-    await fetch(EMAIL_FN,{
+    await emailFetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({seccion,accion,nombre,fecha,titulo,cliente:'fisiodomicili'})
@@ -710,7 +757,7 @@ async function sendEmail(seccion,accion,nombre,fecha,titulo){
 
 async function sendEmailCliente(to,cc,seccion,titulo,portalUrl){
   try{
-    await fetch(EMAIL_FN,{
+    await emailFetch(EMAIL_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({seccion,accion:'cliente_revision',titulo,to,cc,cliente:'fisiodomicili',portalUrl:'https://clientes.losmartesnohayluna.com/fisiodomicili'})
@@ -907,7 +954,7 @@ function loadRRSS(){
   for(const m of MONTHS){
     const r=lsGet('rrss_'+m.key);
     if(r)d[m.key]=r.map((w,wi)=>({
-      ig:(w.ig||[]).map((s,i)=>({topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:mergeHashtags(s.text||'',s.hashtags),hashtags:'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
+      ig:(w.ig||[]).map((s,i)=>({type:s.type,topic:s.topic!==undefined?s.topic:(PLAN_RRSS[m.key][wi]?.ig[i]?.topic||''),text:mergeHashtags(s.text||'',s.hashtags),hashtags:'',link:s.link||'',materialLink:s.materialLink||'',date:s.date||'',status:s.status||'pendiente',revisionBy:s.revisionBy||'',revisionAt:s.revisionAt||'',approvedBy:s.approvedBy||'',approvedAt:s.approvedAt||'',correcciones:s.correcciones||[],historial:s.historial||[]})),
       customIg:w.customIg||[],
       deletedIg:w.deletedIg||[],
     }));
@@ -3369,7 +3416,7 @@ function App(){
     setSaveStatus('dirty');
   }
 
-  // Load from Supabase on mount
+  // Cargar desde Firebase al montar
   useEffect(()=>{
     sbLoad().then(function(remote){
       if(remote){
