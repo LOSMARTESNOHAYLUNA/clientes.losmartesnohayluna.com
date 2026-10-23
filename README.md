@@ -50,3 +50,6 @@ y en el CSS, debajo de `.sec-btn:hover`:
 ```css
 .sec-btn.svd{text-decoration:none;margin-left:auto;color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)}
 ```
+
+### Reportes del SVD (Firebase Storage)
+El bloque "Sube tus reportes" guarda los archivos en Firebase Storage, en `portales/{CLIENT_ID}/reportes/`, y la lista en Firestore con la clave `svd_reportes`. Requiere activar **Storage** en el proyecto `lmnhl-portales` y publicar `storage.rules` (lista de clientes, igual que en `firestore.rules`; al dar de alta un cliente nuevo, añadirlo en las dos). De los reportes en CSV o Excel el SVD lee columnas como Alcance, Impresiones, Clics, Sesiones, Leads, Conversiones, Resultados, Importe gastado o Compras y propone aplicarlas al embudo.

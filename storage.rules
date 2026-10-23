@@ -1,0 +1,13 @@
+rules_version = '2';
+// Reglas de Firebase Storage para los reportes del SVD.
+// Mismo criterio que firestore.rules: solo los clientes de la lista pueden leer y subir en su carpeta.
+// Desplegar: firebase deploy --only storage   (o pegar en Consola → Storage → Reglas)
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /portales/{clientId}/reportes/{fileName} {
+      allow read: if clientId in ['cleanup','docrys','englishwithlydia','fisiodomicili','gardensolution','kawi','lorenzo','segui'];
+      allow write: if clientId in ['cleanup','docrys','englishwithlydia','fisiodomicili','gardensolution','kawi','lorenzo','segui']
+                   && request.resource.size < 25 * 1024 * 1024;
+    }
+  }
+}

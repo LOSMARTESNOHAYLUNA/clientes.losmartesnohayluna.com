@@ -6,6 +6,7 @@
 <title>SVD · Portal de clientes LMNHL</title>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <script src="/firebase-config.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
 <style>
@@ -135,6 +136,26 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
 .step{min-width:0}
 .step b{font-family:var(--display);display:block;margin-bottom:2px}
 .step p{margin:0;font-size:.88rem;color:var(--muted)}
+/* Reportes */
+.drop{display:block;border:2px dashed var(--line);background:var(--surface);padding:22px 18px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.drop.over,.drop:hover{border-color:var(--lime);background:var(--surface-2)}
+.drop b{display:block;font-weight:700;color:var(--accent);margin-bottom:4px}
+.drop span{font-size:.85rem;color:var(--muted)}
+.drop input{display:none}
+.reps{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.rep{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);padding:10px 12px}
+.rep .nm{font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rep .nm a{color:var(--accent);text-decoration:none}
+.rep .sub{font-size:.75rem;color:var(--muted)}
+.rep .ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.rep select{font:inherit;font-size:.75rem;padding:5px 8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:0}
+.rep .prog{height:4px;background:var(--bar-track);grid-column:1/-1}
+.rep .prog div{height:100%;background:var(--lime);transition:width .3s}
+.sugg{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--lime);padding:16px}
+.sugg h3{font-size:.95rem;color:var(--accent);margin-bottom:8px}
+.sugg table{min-width:0}
+.sugg td.r{text-align:right;font-weight:600}
+.sugg label{display:flex;gap:8px;align-items:center;font-size:.85rem}
 .notice{background:var(--accent-soft);border-left:3px solid var(--pink);padding:10px 14px;font-size:.88rem;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-block:16px 0}
 .notice .btn{padding:5px 10px;font-size:.85rem}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
@@ -185,6 +206,20 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
     <div class="track"><div class="fill" id="gfill" style="width:0%"></div></div>
     <span class="lbl num" id="gtext">0 / 11</span>
   </div>
+
+  <section>
+    <div class="sec-head">
+      <div><h2>Sube tus reportes</h2>
+      <p>Informes de publicidad (Meta Ads, Google Ads), SEO (Search Console, Analytics) o cualquier otro documento de la campaña. Quedan guardados junto a tu embudo y, si son Excel o CSV, la app lee las métricas y te propone rellenar las fases.</p></div>
+    </div>
+    <label class="drop" id="drop" for="fileInput">
+      <b>Arrastra aquí tus archivos o haz clic para elegirlos</b>
+      <span>Sube tantos archivos como necesites, de una vez o en varias subidas. PDF, Excel, CSV, imágenes… hasta 25 MB cada uno.</span>
+      <input type="file" id="fileInput" multiple accept=".pdf,.csv,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.doc,.docx,.txt">
+    </label>
+    <div class="reps" id="reps"></div>
+    <div class="sugg" id="sugg" hidden></div>
+  </section>
 
   <section>
     <div class="sec-head">
@@ -557,6 +592,122 @@ function render(){
  renderHistory();
 }
 
+
+/* ---------- Reportes: subida a Storage + metadatos en Firestore (svd_reportes) ---------- */
+let reports=[]; const MAX_MB=25;
+function fbStorage(){try{return fbDb()?firebase.storage():null;}catch(e){return null;}}
+function fmtSize(b){return b<1048576?Math.round(b/1024)+" KB":(b/1048576).toFixed(1)+" MB";}
+function cleanName(n){return n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9._-]+/g,"_").slice(0,120);}
+async function persistReports(){
+ const meta=reports.map(r=>({id:r.id,name:r.name,size:r.size,tipo:r.tipo,path:r.path||null,url:r.url||null,uploadedAt:r.uploadedAt,periodo:r.periodo||""}));
+ try{localStorage.setItem(LS_PFX+"reportes",JSON.stringify(meta));}catch(e){}
+ if(fbDb()){try{await fbWrite("svd_reportes",meta);}catch(e){console.error("[Firebase] reportes:",e);}}
+}
+async function loadReports(){
+ reports=[];
+ if(fbDb()){try{const v=await fbRead("svd_reportes");if(Array.isArray(v))reports=v;}catch(e){console.error("[Firebase] reportes:",e);}}
+ if(!reports.length){try{const loc=JSON.parse(localStorage.getItem(LS_PFX+"reportes")||"[]");if(Array.isArray(loc))reports=loc.filter(r=>r.url);}catch(e){}}
+ renderReports();
+}
+const TIPOS={pub:"Publicidad",seo:"SEO",otro:"Otro"};
+function guessTipo(n){n=n.toLowerCase();if(/ads|meta|facebook|instagram|campa|anuncio|google_ads|adwords|tiktok|linkedin/.test(n))return"pub";if(/seo|search|console|analytics|ga4|posici|keyword|organic|org[aá]nico/.test(n))return"seo";return"otro";}
+function renderReports(){
+ const box=$("reps");
+ if(!reports.length){box.innerHTML='<p class="muted" style="margin:8px 0 0;font-size:.85rem">Todavía no hay reportes subidos.</p>';return;}
+ box.innerHTML=reports.map(r=>`<div class="rep" data-id="${r.id}">
+   <div><div class="nm">${r.url?`<a href="${r.url}" target="_blank" rel="noopener">${esc(r.name)}</a>`:esc(r.name)}</div>
+   <div class="sub">${fmtSize(r.size)} · ${r.uploadedAt?new Date(r.uploadedAt).toLocaleDateString("es-ES"):""}${r.periodo?" · "+esc(r.periodo):""}${r.error?' · <span style="color:var(--bad)">'+esc(r.error)+'</span>':''}</div></div>
+   <div class="ctl">
+     <select data-tipo>${Object.keys(TIPOS).map(k=>`<option value="${k}" ${r.tipo===k?"selected":""}>${TIPOS[k]}</option>`).join("")}</select>
+     ${/\.(csv|xlsx|xls)$/i.test(r.name)&&(r.url||r.file)?'<button class="btn small" type="button" data-extract>Leer métricas</button>':''}
+     <button class="btn small" type="button" data-rdel title="Eliminar">✕</button>
+   </div>
+   ${r.progress!==undefined&&r.progress<100?`<div class="prog"><div style="width:${r.progress}%"></div></div>`:""}
+  </div>`).join("");
+ box.querySelectorAll("[data-tipo]").forEach(sel=>sel.addEventListener("change",e=>{const r=reports.find(x=>x.id===e.target.closest("[data-id]").dataset.id);r.tipo=e.target.value;persistReports();}));
+ box.querySelectorAll("[data-rdel]").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.confirm){deleteReport(b.closest("[data-id]").dataset.id);}else{b.dataset.confirm="1";b.textContent="¿Eliminar?";setTimeout(()=>{delete b.dataset.confirm;b.textContent="✕";},3000);}}));
+ box.querySelectorAll("[data-extract]").forEach(b=>b.addEventListener("click",()=>extractFrom(b.closest("[data-id]").dataset.id)));
+}
+async function deleteReport(id){
+ const i=reports.findIndex(r=>r.id===id); if(i<0)return; const [r]=reports.splice(i,1);
+ if(r.path&&fbStorage()){try{await fbStorage().ref(r.path).delete();}catch(e){}}
+ await persistReports(); renderReports(); toast("Reporte eliminado.");
+}
+async function addFiles(files){
+ const list=Array.from(files||[]); if(!list.length)return;
+ for(const f of list){
+  if(f.size>MAX_MB*1048576){toast(`«${f.name}» supera ${MAX_MB} MB y no se ha subido.`);continue;}
+  const r={id:newId(),name:f.name,size:f.size,tipo:guessTipo(f.name),uploadedAt:new Date().toISOString(),periodo:(state&&state.periodo)||"",file:f,progress:0};
+  reports.unshift(r); renderReports();
+  const st=fbStorage();
+  if(st&&CLIENT_ID){
+   try{
+    const path=`portales/${CLIENT_ID}/reportes/${Date.now()}_${cleanName(f.name)}`;
+    const task=st.ref(path).put(f,{contentType:f.type||"application/octet-stream"});
+    await new Promise((res,rej)=>task.on("state_changed",snap=>{r.progress=Math.round(snap.bytesTransferred/snap.totalBytes*100);const bar=document.querySelector(`[data-id="${r.id}"] .prog div`);if(bar)bar.style.width=r.progress+"%";},rej,res));
+    r.path=path; r.url=await task.snapshot.ref.getDownloadURL(); r.progress=100;
+   }catch(e){console.error("[Storage]",e);r.error="No se pudo guardar en el servidor";r.progress=100;}
+  }else{r.progress=100;r.error=CLIENT_ID?"Sin conexión con el servidor: solo disponible en esta sesión":"Sin cliente en la URL: solo disponible en esta sesión";}
+ }
+ await persistReports(); renderReports();
+ toast(list.length===1?"Reporte subido.":list.length+" reportes subidos.");
+}
+$("fileInput").addEventListener("change",e=>{addFiles(e.target.files);e.target.value="";});
+const drop=$("drop");
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop",e=>addFiles(e.dataTransfer.files));
+
+/* ---------- Lectura de métricas en CSV / Excel ---------- */
+const METRICS=[
+ {key:"alcance",label:"Alcance / impresiones",re:/^(alcance|reach|impresiones|impressions|impr\.?|personas alcanzadas|cuentas alcanzadas)$/i,target:{f:0,k:"med"}},
+ {key:"clics",label:"Clics / visitas",re:/^(clics?|clicks?|clics en el enlace|link clicks|visitas|sesiones|sessions|usuarios|users|visitantes|clics en el sitio web)$/i,target:{f:1,k:"med"}},
+ {key:"leads",label:"Leads / conversiones / contactos",re:/^(leads?|clientes potenciales|conversiones|conversions|contactos|resultados|results|formularios|formularios enviados|mensajes|llamadas|registros)$/i,target:{f:2,k:"med"}},
+ {key:"coste",label:"Coste / importe gastado",re:/^(coste|costo|cost|gasto|spend|importe gastado|amount spent|inversi[oó]n|coste total)$/i,target:{gastos:true}},
+ {key:"ventas",label:"Compras / ventas",re:/^(compras|purchases|ventas|sales|pedidos|orders)$/i,target:{f:7,k:"med"}}
+];
+function toNum(v){if(typeof v==="number")return v;if(v==null)return null;let t=String(v).trim().replace(/[€$%\s]/g,"");if(!t)return null;
+ if(/,\d{1,2}$/.test(t)&&t.indexOf(".")>=0)t=t.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(\.\d{3})+$/.test(t))t=t.replace(/\./g,"");else if(/^\d{1,3}(,\d{3})+$/.test(t))t=t.replace(/,/g,"");else t=t.replace(",",".");
+ const n=Number(t);return isNaN(n)?null:n;}
+const hdr=c=>String(c||"").replace(/\(.*?\)/g,"").replace(/[:€$]/g,"").trim();
+async function extractFrom(id){
+ const r=reports.find(x=>x.id===id); if(!r)return;
+ toast("Leyendo «"+r.name+"»…");
+ let buf; try{ if(r.file)buf=await r.file.arrayBuffer(); else{const res=await fetch(r.url);buf=await res.arrayBuffer();} }catch(e){toast("No se pudo abrir el archivo.");return;}
+ let wb; try{wb=XLSX.read(buf,{type:"array",raw:false});}catch(e){toast("No se pudo leer el archivo como tabla.");return;}
+ const found={};
+ wb.SheetNames.forEach(sn=>{
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null}); if(!rows.length)return;
+  let hi=rows.findIndex(row=>row&&row.filter(c=>c!=null&&String(c).trim()!=="").length>=2&&row.some(c=>METRICS.some(m=>m.re.test(hdr(c)))));
+  if(hi<0)return; const head=rows[hi].map(c=>String(c||"").trim());
+  head.forEach((h,ci)=>{const m=METRICS.find(m=>m.re.test(hdr(h))); if(!m||found[m.key])return;
+   const body=rows.slice(hi+1); let total=null;
+   const trow=body.find(row=>row&&row.some(c=>/^(total|totales|total general|resultados totales)$/i.test(String(c||"").trim())));
+   if(trow&&toNum(trow[ci])!==null)total=toNum(trow[ci]);
+   else{let sum=0,n=0;body.forEach(row=>{const v=row?toNum(row[ci]):null;if(v!==null){sum+=v;n++;}});if(n)total=sum;}
+   if(total!==null)found[m.key]={m,value:total,col:h,sheet:sn};});
+ });
+ const keys=Object.keys(found);
+ const box=$("sugg"); box.hidden=false;
+ if(!keys.length){box.innerHTML=`<h3>No se han encontrado métricas reconocibles en «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">La app busca columnas como Alcance, Impresiones, Clics, Sesiones, Leads, Conversiones, Resultados, Coste o Importe gastado. Si el informe las llama de otra forma, anota los datos a mano en el embudo.</p>`;return;}
+ box.innerHTML=`<h3>Métricas encontradas en «${esc(r.name)}»</h3>
+  <p class="muted" style="margin:0 0 10px;font-size:.85rem">Marca las que quieras aplicar al embudo. Se usa el total de la columna (o la fila "Total" si existe).</p>
+  <table><thead><tr><th></th><th>Columna del informe</th><th>Se aplica a</th><th style="text-align:right">Valor</th></tr></thead><tbody>
+  ${keys.map(k=>{const x=found[k];const t=x.m.target;const dest=t.gastos?"Gastos totales (se suma)":PHASES[t.f].id+" · "+PHASES[t.f].name+" · medición";
+   return `<tr><td><input type="checkbox" checked data-k="${k}" id="sg_${k}"></td><td><label for="sg_${k}">${esc(x.col)}${wb.SheetNames.length>1?' <span class="muted">('+esc(x.sheet)+')</span>':''}</label></td><td>${dest}</td><td class="r">${num(x.value,2)}</td></tr>`;}).join("")}
+  </tbody></table>
+  <div class="toolbar" style="margin-top:12px"><button class="btn primary" type="button" id="applySugg">Aplicar al SVD</button><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;
+ $("closeSugg").addEventListener("click",()=>{box.hidden=true;});
+ $("applySugg").addEventListener("click",()=>{
+  let n=0; box.querySelectorAll("input[data-k]:checked").forEach(cb=>{const x=found[cb.dataset.k];const t=x.m.target;
+   if(t.gastos){state.gastos=(n_(state.gastos)||0)+Math.round(x.value);} else {state.fases[t.f][t.k]=Math.round(x.value);} n++;});
+  if(state.example){state.example=false;}
+  fill(); changed(); box.hidden=true; toast(n+" dato(s) aplicados al embudo."); document.querySelector(".phases").scrollIntoView({behavior:"smooth"});
+ });
+}
+const n_=v=>(v===null||v===undefined||v===""||isNaN(v))?null:Number(v);
+
 /* Persistencia: Firestore portales/{CLIENT_ID}/datos/svd (+ copia local) */
 function setSave(kind,text){const d=$("saveState").querySelector(".dot");d.className="dot "+kind;$("saveText").textContent=text;}
 function changed(){render();setSave("pending","Guardando…");clearTimeout(saveTimer);saveTimer=setTimeout(persist,700);}
@@ -582,6 +733,7 @@ async function load(){
   if(loc&&loc.fases){state=loc;if(dbOk)persist();}else{state=exampleState();}}
  if(!state.fases||state.fases.length!==PHASES.length){state=exampleState();}
  await loadHistory();
+ await loadReports();
  fill();
  if(!CLIENT_ID){setSave("local","Sin cliente en la URL (/svd/?c=ID): se guarda solo en este navegador");}
  else if(!dbOk){setSave("pending","Sin conexión con el servidor: guardado solo en este navegador");}
