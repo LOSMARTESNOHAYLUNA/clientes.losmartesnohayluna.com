@@ -210,7 +210,7 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
   <section>
     <div class="sec-head">
       <div><h2>Sube tus reportes</h2>
-      <p>Informes de publicidad (Meta Ads, Google Ads), SEO (Search Console, Analytics) o cualquier otro documento de la campaña. Quedan guardados junto a tu embudo y, si son Excel o CSV, la app lee las métricas y te propone rellenar las fases.</p></div>
+      <p>Informes de publicidad (Meta Ads, Google Ads), SEO (Search Console, Analytics) o cualquier otro documento de la campaña. Quedan guardados junto a tu embudo. Con <b>Leer métricas</b> la app extrae las cifras del reporte y te propone en qué fase va cada una; tú decides cuáles aplicar.</p></div>
     </div>
     <label class="drop" id="drop" for="fileInput">
       <b>Arrastra aquí tus archivos o haz clic para elegirlos</b>
@@ -619,7 +619,7 @@ function renderReports(){
    <div class="sub">${fmtSize(r.size)} · ${r.uploadedAt?new Date(r.uploadedAt).toLocaleDateString("es-ES"):""}${r.periodo?" · "+esc(r.periodo):""}${r.error?' · <span style="color:var(--bad)">'+esc(r.error)+'</span>':''}</div></div>
    <div class="ctl">
      <select data-tipo>${Object.keys(TIPOS).map(k=>`<option value="${k}" ${r.tipo===k?"selected":""}>${TIPOS[k]}</option>`).join("")}</select>
-     ${/\.(csv|xlsx|xls)$/i.test(r.name)&&(r.url||r.file)?'<button class="btn small" type="button" data-extract>Leer métricas</button>':''}
+     ${(AI_FN||/\.(csv|xlsx|xls)$/i.test(r.name))&&(r.url||r.file||r.path)?'<button class="btn small" type="button" data-extract>Leer métricas</button>':''}
      <button class="btn small" type="button" data-rdel title="Eliminar">✕</button>
    </div>
    ${r.progress!==undefined&&r.progress<100?`<div class="prog"><div style="width:${r.progress}%"></div></div>`:""}
@@ -671,12 +671,33 @@ function toNum(v){if(typeof v==="number")return v;if(v==null)return null;let t=S
  if(/,\d{1,2}$/.test(t)&&t.indexOf(".")>=0)t=t.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(\.\d{3})+$/.test(t))t=t.replace(/\./g,"");else if(/^\d{1,3}(,\d{3})+$/.test(t))t=t.replace(/,/g,"");else t=t.replace(",",".");
  const n=Number(t);return isNaN(n)?null:n;}
 const hdr=c=>String(c||"").replace(/\(.*?\)/g,"").replace(/[:€$]/g,"").trim();
+const AI_FN=(_CFG.svdExtractFn&&String(_CFG.svdExtractFn).indexOf("http")===0)?_CFG.svdExtractFn:"";
+const FASE_IDX=Object.fromEntries(PHASES.map((p,i)=>[p.id,i]));
 async function extractFrom(id){
  const r=reports.find(x=>x.id===id); if(!r)return;
- toast("Leyendo «"+r.name+"»…");
- let buf; try{ if(r.file)buf=await r.file.arrayBuffer(); else{const res=await fetch(r.url);buf=await res.arrayBuffer();} }catch(e){toast("No se pudo abrir el archivo.");return;}
- let wb; try{wb=XLSX.read(buf,{type:"array",raw:false});}catch(e){toast("No se pudo leer el archivo como tabla.");return;}
- const found={};
+ const box=$("sugg"); box.hidden=false; box.innerHTML=`<h3>Leyendo «${esc(r.name)}»…</h3><p class="muted" style="margin:0;font-size:.85rem">${AI_FN?"La IA está extrayendo las métricas del reporte. Suele tardar entre 10 y 30 segundos.":"Buscando columnas de métricas en la tabla…"}</p>`;
+ box.scrollIntoView({behavior:"smooth",block:"nearest"});
+ let out;
+ try{ out=AI_FN?await extractWithAI(r):await extractLocal(r); }
+ catch(e){box.innerHTML=`<h3>No se pudo leer «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">${esc(e.message||"Error desconocido")}. Puedes anotar los datos a mano en el embudo.</p><div class="toolbar" style="margin-top:12px"><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;$("closeSugg").addEventListener("click",()=>{box.hidden=true;});return;}
+ renderSuggestions(r,out);
+}
+async function extractWithAI(r){
+ const body={clientId:CLIENT_ID,fases:state.fases.map(f=>({id:f.id,crit:f.crit||""}))};
+ if(r.path) body.path=r.path;
+ else if(r.file){ if(r.file.size>8*1048576) throw new Error("Sin Storage activo solo se pueden leer archivos de hasta 8 MB"); body.name=r.name; body.mime=r.file.type; body.data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(",")[1]);fr.onerror=rej;fr.readAsDataURL(r.file);}); }
+ else throw new Error("El archivo ya no está disponible en esta sesión; vuelve a subirlo");
+ const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),120000);
+ let res; try{res=await fetch(AI_FN,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});}
+ catch(e){throw new Error(e.name==="AbortError"?"La lectura ha tardado demasiado":"No se pudo conectar con el servicio de lectura");}
+ finally{clearTimeout(t);}
+ const j=await res.json().catch(()=>({})); if(!res.ok) throw new Error(j.error||("Error "+res.status));
+ return {sugerencias:j.sugerencias||[],periodo:j.periodo||"",resumen:j.resumen||"",ia:true};
+}
+async function extractLocal(r){
+ if(!/\.(csv|xlsx|xls)$/i.test(r.name)) throw new Error("La lectura automática de PDF e imágenes requiere activar la función de IA (ver firebase_svd/README.md)");
+ let buf; if(r.file)buf=await r.file.arrayBuffer(); else{const res=await fetch(r.url);buf=await res.arrayBuffer();}
+ const wb=XLSX.read(buf,{type:"array",raw:false}); const found={};
  wb.SheetNames.forEach(sn=>{
   const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null}); if(!rows.length)return;
   let hi=rows.findIndex(row=>row&&row.filter(c=>c!=null&&String(c).trim()!=="").length>=2&&row.some(c=>METRICS.some(m=>m.re.test(hdr(c)))));
@@ -686,22 +707,28 @@ async function extractFrom(id){
    const trow=body.find(row=>row&&row.some(c=>/^(total|totales|total general|resultados totales)$/i.test(String(c||"").trim())));
    if(trow&&toNum(trow[ci])!==null)total=toNum(trow[ci]);
    else{let sum=0,n=0;body.forEach(row=>{const v=row?toNum(row[ci]):null;if(v!==null){sum+=v;n++;}});if(n)total=sum;}
-   if(total!==null)found[m.key]={m,value:total,col:h,sheet:sn};});
+   if(total!==null)found[m.key]={fase:m.target.gastos?"gastos":PHASES[m.target.f].id,valor:total,concepto:h+(wb.SheetNames.length>1?" ("+sn+")":""),motivo:"Total de la columna "+m.label,confianza:"media"};});
  });
- const keys=Object.keys(found);
- const box=$("sugg"); box.hidden=false;
- if(!keys.length){box.innerHTML=`<h3>No se han encontrado métricas reconocibles en «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">La app busca columnas como Alcance, Impresiones, Clics, Sesiones, Leads, Conversiones, Resultados, Coste o Importe gastado. Si el informe las llama de otra forma, anota los datos a mano en el embudo.</p>`;return;}
- box.innerHTML=`<h3>Métricas encontradas en «${esc(r.name)}»</h3>
-  <p class="muted" style="margin:0 0 10px;font-size:.85rem">Marca las que quieras aplicar al embudo. Se usa el total de la columna (o la fila "Total" si existe).</p>
-  <table><thead><tr><th></th><th>Columna del informe</th><th>Se aplica a</th><th style="text-align:right">Valor</th></tr></thead><tbody>
-  ${keys.map(k=>{const x=found[k];const t=x.m.target;const dest=t.gastos?"Gastos totales (se suma)":PHASES[t.f].id+" · "+PHASES[t.f].name+" · medición";
-   return `<tr><td><input type="checkbox" checked data-k="${k}" id="sg_${k}"></td><td><label for="sg_${k}">${esc(x.col)}${wb.SheetNames.length>1?' <span class="muted">('+esc(x.sheet)+')</span>':''}</label></td><td>${dest}</td><td class="r">${num(x.value,2)}</td></tr>`;}).join("")}
-  </tbody></table>
+ return {sugerencias:Object.values(found),periodo:"",resumen:"",ia:false};
+}
+function renderSuggestions(r,out){
+ const box=$("sugg"); const sug=out.sugerencias||[];
+ if(!sug.length){box.innerHTML=`<h3>No se han encontrado métricas en «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">${out.resumen?esc(out.resumen)+" ":""}Si el informe tiene las cifras con otro nombre, anótalas a mano en el embudo.</p><div class="toolbar" style="margin-top:12px"><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;$("closeSugg").addEventListener("click",()=>{box.hidden=true;});return;}
+ const conf={alta:"var(--good)",media:"var(--warn)",baja:"var(--bad)"};
+ box.innerHTML=`<h3>Métricas encontradas en «${esc(r.name)}»${out.periodo?' · '+esc(out.periodo):''}</h3>
+  ${out.resumen?`<p style="margin:0 0 8px;font-size:.88rem">${esc(out.resumen)}</p>`:""}
+  <p class="muted" style="margin:0 0 10px;font-size:.85rem">Marca las que quieras aplicar al embudo. Si dos propuestas apuntan a la misma fase, deja marcada solo una.</p>
+  <div style="overflow-x:auto"><table><thead><tr><th></th><th>Se aplica a</th><th>Métrica del reporte</th><th>Por qué</th><th>Confianza</th><th style="text-align:right">Valor</th></tr></thead><tbody>
+  ${sug.map((x,i)=>{const dest=x.fase==="gastos"?"Gastos totales (se suma)":(FASE_IDX[x.fase]!==undefined?x.fase+" · "+PHASES[FASE_IDX[x.fase]].name+" · medición":x.fase);
+   return `<tr><td><input type="checkbox" ${x.confianza==="baja"?"":"checked"} data-i="${i}" id="sg_${i}"></td><td><label for="sg_${i}"><b>${esc(dest)}</b></label></td><td>${esc(x.concepto||"")}</td><td class="muted" style="font-size:.8rem">${esc(x.motivo||"")}</td><td><span class="pill" style="background:transparent;color:${conf[x.confianza]||"var(--muted)"};padding:0">${esc(x.confianza||"")}</span></td><td class="r">${num(x.valor,2)}</td></tr>`;}).join("")}
+  </tbody></table></div>
   <div class="toolbar" style="margin-top:12px"><button class="btn primary" type="button" id="applySugg">Aplicar al SVD</button><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;
  $("closeSugg").addEventListener("click",()=>{box.hidden=true;});
  $("applySugg").addEventListener("click",()=>{
-  let n=0; box.querySelectorAll("input[data-k]:checked").forEach(cb=>{const x=found[cb.dataset.k];const t=x.m.target;
-   if(t.gastos){state.gastos=(n_(state.gastos)||0)+Math.round(x.value);} else {state.fases[t.f][t.k]=Math.round(x.value);} n++;});
+  let n=0; box.querySelectorAll("input[data-i]:checked").forEach(cb=>{const x=sug[+cb.dataset.i];
+   if(x.fase==="gastos"){state.gastos=(n_(state.gastos)||0)+Math.round(x.valor);n++;}
+   else if(FASE_IDX[x.fase]!==undefined){state.fases[FASE_IDX[x.fase]].med=Math.round(x.valor);n++;}});
+  if(out.periodo&&!state.periodo){state.periodo=out.periodo;}
   if(state.example){state.example=false;}
   fill(); changed(); box.hidden=true; toast(n+" dato(s) aplicados al embudo."); document.querySelector(".phases").scrollIntoView({behavior:"smooth"});
  });

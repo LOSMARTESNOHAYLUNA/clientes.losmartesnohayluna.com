@@ -1,0 +1,9 @@
+{
+  "functions": [
+    {
+      "codebase": "svd",
+      "source": "functions",
+      "runtime": "nodejs22"
+    }
+  ]
+}
