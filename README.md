@@ -25,3 +25,28 @@ Portal privado de planes de contenidos para clientes de Los Martes No Hay Luna.
 
 HTML + CSS + JavaScript puro. Sin frameworks ni dependencias externas.  
 Los datos se guardan en el `localStorage` del navegador de cada cliente.
+
+## SVD — El Sistema Definitivo de Ventas
+
+`/svd/index.html` es una única página para todos los clientes. Cada portal la abre desde el botón **SVD** de su barra de secciones con su identificador de Firestore:
+
+```
+https://clientes.losmartesnohayluna.com/svd/?c=CLIENT_ID
+```
+
+`CLIENT_ID` es el mismo valor que lleva el portal en `const CLIENT_ID='…'` (ojo: Lorenzo es `lorenzo`, no `lorenzoarquitectura`). Guarda en el mismo proyecto Firebase que los portales, dentro de `portales/{CLIENT_ID}/datos/`, con las claves `svd` (embudo en curso) y `svd_periodos` (periodos guardados). No requiere cambios en `firestore.rules`.
+
+Para añadir el botón a un portal nuevo, en el `section-switcher` después del último `sec-btn`:
+
+```js
+React.createElement('a',{className:'sec-btn svd',href:'/svd/?c=CLIENT_ID',target:'_blank',rel:'noopener',title:'Tu Sistema Definitivo de Ventas'},
+  React.createElement('span',{className:'sec-icon'},'📈'),
+  'SVD'
+)
+```
+
+y en el CSS, debajo de `.sec-btn:hover`:
+
+```css
+.sec-btn.svd{text-decoration:none;margin-left:auto;color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)}
+```

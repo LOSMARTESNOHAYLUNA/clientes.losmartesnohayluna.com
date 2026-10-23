@@ -571,7 +571,8 @@ async function persist(){
 }
 async function load(){
  build();
- const back=document.referrer&&document.referrer.indexOf(location.host)>=0?document.referrer:(CLIENT_ID?"/"+CLIENT_ID+"/":"/");
+ const FOLDERS={lorenzo:"lorenzoarquitectura",segui:"seguiarquitectos"};
+ const back=document.referrer&&document.referrer.indexOf(location.host)>=0?document.referrer:(CLIENT_ID?"/"+(FOLDERS[CLIENT_ID]||CLIENT_ID)+"/":"/");
  $("backLink").href=back;
  $("clientLabel").textContent=CLIENT_ID?"Cliente: "+CLIENT_ID:"";
  let fromDb=null, dbOk=false;
