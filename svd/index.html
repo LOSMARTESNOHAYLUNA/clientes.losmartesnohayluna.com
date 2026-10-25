@@ -136,6 +136,15 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
 .step{min-width:0}
 .step b{font-family:var(--display);display:block;margin-bottom:2px}
 .step p{margin:0;font-size:.88rem;color:var(--muted)}
+.src{display:block;color:var(--muted);font-size:.72rem;margin-top:2px;line-height:1.4}
+.src b{font-weight:700;color:var(--accent)}
+.fdesc{font-size:.76rem;color:var(--fg);line-height:1.4;margin:2px 0 0;text-align:left;max-width:60ch}
+.fdesc .src{display:inline}
+.guide{margin-top:12px;border:1px solid var(--line);padding:0}
+.guide summary{padding:10px 14px;font-size:.85rem}
+.guide table{min-width:560px}
+.guide td{font-size:.82rem;vertical-align:top}
+.guide td.n{font-weight:800;color:var(--accent);white-space:nowrap}
 /* Simulador del embudo */
 .sim{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--lime);padding:18px;margin-block:4px 28px}
 .sim-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
@@ -234,13 +243,17 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
   <div class="sim" id="sim">
     <div class="sim-head">
       <div><h2>Tu embudo</h2>
-      <p>Cada fase se calcula sobre la anterior. Mueve un porcentaje y verás cómo cambia todo lo que hay debajo: clientes, ventas y lo que te deja cada persona alcanzada. La barra clara es tu base; la morada, la simulación.</p></div>
+      <p>Cada fase se calcula sobre la anterior: el porcentaje entre dos fases es cuántas personas pasan de una a la siguiente. Mueve un porcentaje y verás cómo cambia todo lo que hay debajo: clientes, ventas y lo que te deja cada persona alcanzada. Debajo de cada barra tienes qué cuenta en esa fase y de qué informe sale el dato.</p></div>
       <div class="sim-tabs" id="simTabs"><button type="button" data-base="obj" class="on">Sobre objetivos</button><button type="button" data-base="med">Sobre medición</button></div>
     </div>
     <div class="funnel">
       <div id="funnelRows"></div>
       <div class="sim-side" id="simSide"></div>
     </div>
+    <details class="guide">
+      <summary>De dónde sale cada dato del embudo</summary>
+      <div style="overflow-x:auto;padding:0 14px 12px"><table><thead><tr><th>Fase</th><th>Qué cuenta</th><th>Dato que buscas</th><th>Dónde está</th></tr></thead><tbody id="guideBody"></tbody></table></div>
+    </details>
     <div class="sim-foot">
       <button class="btn small" type="button" id="simPlus2">+2 % en todas las fases</button>
       <button class="btn small" type="button" id="simReset">Volver a la base</button>
@@ -258,7 +271,7 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
   <section>
     <div class="sec-head">
       <div><h2>Sube tus reportes</h2>
-      <p>Informes de publicidad (Meta Ads, Google Ads), SEO (Search Console, Analytics) o cualquier otro documento de la campaña. Quedan guardados junto a tu embudo. Con <b>Leer métricas</b> la app extrae las cifras del reporte y te propone en qué fase va cada una; tú decides cuáles aplicar.</p></div>
+      <p>Informes de publicidad (Meta Ads, Google Ads), SEO (Search Console, Analytics) o cualquier otro documento de la campaña. Quedan guardados junto a tu embudo. Con <b>Leer métricas</b> la app busca en el reporte cifras como alcance, clics, leads, compras o importe gastado y te propone en qué fase va cada una; tú decides cuáles aplicar. Todo se procesa en tu navegador.</p></div>
     </div>
     <label class="drop" id="drop" for="fileInput">
       <b>Arrastra aquí tus archivos o haz clic para elegirlos</b>
@@ -284,7 +297,7 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
       <h2 style="margin-bottom:12px">Ciclo de vida del cliente</h2>
       <div class="rows">
         <span class="k">Ventas totales</span><span class="v num" id="cvVentas">0 €</span>
-        <span class="k">Gastos totales de la campaña</span><input type="number" id="gastos" min="0" step="1" placeholder="0">
+        <span class="k">Gastos totales de la campaña<span class="src"><b>De:</b> «Importe gastado» en Meta Ads, «Coste» en Google Ads, más honorarios y herramientas</span></span><input type="number" id="gastos" min="0" step="1" placeholder="0">
         <span class="k">Beneficio</span><span class="v big num" id="cvBenef">0 €</span>
         <span class="k">CdV ventas <span class="muted">(ventas ÷ alcance)</span></span><span class="v num" id="cvV">—</span>
         <span class="k">CdV beneficio <span class="muted">(beneficio ÷ alcance)</span></span><span class="v num" id="cvB">—</span>
@@ -359,6 +372,22 @@ const PHASES=[
  {id:"6",name:"Negociación"},{id:"7",name:"Sistema P10-15-15"},{id:"8",name:"Resolución: € o motivo"},
  {id:"9",name:"Entrega"},{id:"10",name:"Post-venta"}];
 
+/* Qué dato es cada fase y de qué informe se saca */
+const FUENTES={
+ "1":{que:"Personas que han visto tu anuncio o tu negocio en Google.",dato:"«Alcance» o «Impresiones»",de:"informe de Meta Ads o Google Ads; «Impresiones» en Search Console"},
+ "2":{que:"Personas que hacen clic y llegan a tu web o landing.",dato:"«Clics en el enlace», «Clics», «Sesiones» o «Usuarios»",de:"Meta Ads, Google Ads, Search Console o Analytics"},
+ "3":{que:"Personas que te dejan sus datos o te contactan.",dato:"«Resultados» / «Clientes potenciales», «Conversiones», formularios, llamadas, WhatsApp",de:"Meta Ads, Google Ads y tu CRM o bandeja de entrada"},
+ "4a":{que:"Primera compra o reserva: tu producto de entrada.",dato:"pedidos, presupuestos aceptados o reservas",de:"tu CRM, facturación o tienda online"},
+ "4b":{que:"Segundo paso comercial: asisten a la demo, segunda compra o ampliación.",dato:"asistentes, pedidos o ampliaciones",de:"tu CRM o agenda"},
+ "5":{que:"Clientes a los que presentas tu servicio principal.",dato:"propuestas presentadas",de:"tu CRM o agenda"},
+ "6":{que:"Clientes con los que negocias condiciones y precio.",dato:"negociaciones abiertas",de:"tu CRM"},
+ "7":{que:"Acuerdo cerrado, pendiente de la reserva del 25 %.",dato:"acuerdos pendientes de reserva",de:"tu CRM"},
+ "8":{que:"Pagan la reserva: ya son clientes.",dato:"reservas pagadas, «Compras» o pedidos cobrados",de:"facturación, TPV, Stripe o tienda online"},
+ "9":{que:"Proyectos cuya entrega arranca en plazo.",dato:"proyectos iniciados",de:"tu gestión de proyectos"},
+ "10":{que:"Encuesta de satisfacción y sesión de optimización a los 3 meses.",dato:"encuestas y sesiones realizadas",de:"tu registro de post-venta"},
+ "gastos":{que:"Todo lo invertido en la campaña.",dato:"«Importe gastado» / «Coste» más honorarios y herramientas",de:"Meta Ads, Google Ads y tus facturas"}
+};
+function fuenteTxt(id,crit){const f=FUENTES[id]||{};return (crit?esc(crit):f.que||"")+(f.dato?` <span class="src"><b>Dato:</b> ${f.dato} · <b>De:</b> ${f.de}</span>`:"");}
 function blankState(){return{v:1,example:false,nombre:"",periodo:"",gastos:null,
  fases:PHASES.map(p=>({id:p.id,crit:"",objAlc:null,objPct:null,med:null,precio:null,slaObj:null,slaMed:null,accion:"",nuevoPct:null,nuevoAlc:null}))};}
 
@@ -438,7 +467,8 @@ function build(){
    <div class="top">
     <div class="id">${p.id}</div>
     <div class="crit"><div class="name">${p.name}</div>
-     <textarea data-k="crit" rows="1" placeholder="Criterio: ¿qué cuenta exactamente en esta fase?"></textarea></div>
+     <span class="src"><b>Dato:</b> ${FUENTES[p.id].dato} · <b>De:</b> ${FUENTES[p.id].de}</span>
+     <textarea data-k="crit" rows="1" placeholder="${FUENTES[p.id].que} Escribe aquí tu criterio exacto." style="margin-top:6px"></textarea></div>
     <div class="state"><span class="pill none" data-pill>Sin medir</span><span class="muted num" style="font-size:.78rem" data-sub></span></div>
    </div>
    <div class="fields">
@@ -668,7 +698,7 @@ function renderReports(){
    <div class="sub">${fmtSize(r.size)} · ${r.uploadedAt?new Date(r.uploadedAt).toLocaleDateString("es-ES"):""}${r.periodo?" · "+esc(r.periodo):""}${r.error?' · <span style="color:var(--bad)">'+esc(r.error)+'</span>':''}</div></div>
    <div class="ctl">
      <select data-tipo>${Object.keys(TIPOS).map(k=>`<option value="${k}" ${r.tipo===k?"selected":""}>${TIPOS[k]}</option>`).join("")}</select>
-     ${(AI_FN||/\.(csv|xlsx|xls)$/i.test(r.name))&&(r.url||r.file||r.path)?'<button class="btn small" type="button" data-extract>Leer métricas</button>':''}
+     ${/\.(csv|xlsx|xls|tsv|pdf|png|jpe?g|webp|gif|txt|md)$/i.test(r.name)&&(r.url||r.file)?'<button class="btn small" type="button" data-extract>Leer métricas</button>':''}
      <button class="btn small" type="button" data-rdel title="Eliminar">✕</button>
    </div>
    ${r.progress!==undefined&&r.progress<100?`<div class="prog"><div style="width:${r.progress}%"></div></div>`:""}
@@ -710,56 +740,85 @@ drop.addEventListener("drop",e=>addFiles(e.dataTransfer.files));
 
 /* ---------- Lectura de métricas en CSV / Excel ---------- */
 const METRICS=[
- {key:"alcance",label:"Alcance / impresiones",re:/^(alcance|reach|impresiones|impressions|impr\.?|personas alcanzadas|cuentas alcanzadas)$/i,target:{f:0,k:"med"}},
- {key:"clics",label:"Clics / visitas",re:/^(clics?|clicks?|clics en el enlace|link clicks|visitas|sesiones|sessions|usuarios|users|visitantes|clics en el sitio web)$/i,target:{f:1,k:"med"}},
- {key:"leads",label:"Leads / conversiones / contactos",re:/^(leads?|clientes potenciales|conversiones|conversions|contactos|resultados|results|formularios|formularios enviados|mensajes|llamadas|registros)$/i,target:{f:2,k:"med"}},
- {key:"coste",label:"Coste / importe gastado",re:/^(coste|costo|cost|gasto|spend|importe gastado|amount spent|inversi[oó]n|coste total)$/i,target:{gastos:true}},
- {key:"ventas",label:"Compras / ventas",re:/^(compras|purchases|ventas|sales|pedidos|orders)$/i,target:{f:7,k:"med"}}
-];
+ {key:"alcance",label:"Alcance / impresiones",words:"alcance|reach|impresiones|impressions|personas alcanzadas|cuentas alcanzadas",target:{f:0,k:"med"}},
+ {key:"clics",label:"Clics / visitas",words:"clics en el enlace|link clicks|clics en el sitio web|clics?|clicks?|visitas|sesiones|sessions|usuarios|users|visitantes",target:{f:1,k:"med"}},
+ {key:"leads",label:"Leads / conversiones / contactos",words:"clientes potenciales|formularios enviados|leads?|conversiones|conversions|contactos|resultados|results|formularios|mensajes|llamadas|registros",target:{f:2,k:"med"}},
+ {key:"coste",label:"Coste / importe gastado",words:"importe gastado|amount spent|coste total|inversi[oó]n|coste|costo|cost|gasto|spend",target:{gastos:true}},
+ {key:"ventas",label:"Compras / ventas",words:"compras|purchases|ventas|sales|pedidos|orders",target:{f:7,k:"med"}}
+].map(m=>Object.assign(m,{re:new RegExp("^("+m.words+")$","i")}));
 function toNum(v){if(typeof v==="number")return v;if(v==null)return null;let t=String(v).trim().replace(/[€$%\s]/g,"");if(!t)return null;
  if(/,\d{1,2}$/.test(t)&&t.indexOf(".")>=0)t=t.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(\.\d{3})+$/.test(t))t=t.replace(/\./g,"");else if(/^\d{1,3}(,\d{3})+$/.test(t))t=t.replace(/,/g,"");else t=t.replace(",",".");
  const n=Number(t);return isNaN(n)?null:n;}
 const hdr=c=>String(c||"").replace(/\(.*?\)/g,"").replace(/[:€$]/g,"").trim();
-const AI_FN=(_CFG.svdExtractFn&&String(_CFG.svdExtractFn).indexOf("http")===0)?_CFG.svdExtractFn:"";
 const FASE_IDX=Object.fromEntries(PHASES.map((p,i)=>[p.id,i]));
+function loadScript(src){return new Promise((res,rej)=>{if(document.querySelector(`script[src="${src}"]`))return res();const sc=document.createElement("script");sc.src=src;sc.onload=res;sc.onerror=()=>rej(new Error("No se pudo cargar una librería de lectura"));document.head.appendChild(sc);});}
 async function extractFrom(id){
  const r=reports.find(x=>x.id===id); if(!r)return;
- const box=$("sugg"); box.hidden=false; box.innerHTML=`<h3>Leyendo «${esc(r.name)}»…</h3><p class="muted" style="margin:0;font-size:.85rem">${AI_FN?"La IA está extrayendo las métricas del reporte. Suele tardar entre 10 y 30 segundos.":"Buscando columnas de métricas en la tabla…"}</p>`;
+ const box=$("sugg"); box.hidden=false; box.innerHTML=`<h3>Leyendo «${esc(r.name)}»…</h3><p class="muted" id="suggMsg" style="margin:0;font-size:.85rem">Todo ocurre en tu navegador: el archivo no se envía a ningún servicio externo.</p>`;
  box.scrollIntoView({behavior:"smooth",block:"nearest"});
  let out;
- try{ out=AI_FN?await extractWithAI(r):await extractLocal(r); }
+ try{ out=await extractLocal(r,msg=>{const m=$("suggMsg");if(m)m.textContent=msg;}); }
  catch(e){box.innerHTML=`<h3>No se pudo leer «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">${esc(e.message||"Error desconocido")}. Puedes anotar los datos a mano en el embudo.</p><div class="toolbar" style="margin-top:12px"><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;$("closeSugg").addEventListener("click",()=>{box.hidden=true;});return;}
  renderSuggestions(r,out);
 }
-async function extractWithAI(r){
- const body={clientId:CLIENT_ID,fases:state.fases.map(f=>({id:f.id,crit:f.crit||""}))};
- if(r.path) body.path=r.path;
- else if(r.file){ if(r.file.size>8*1048576) throw new Error("Sin Storage activo solo se pueden leer archivos de hasta 8 MB"); body.name=r.name; body.mime=r.file.type; body.data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(",")[1]);fr.onerror=rej;fr.readAsDataURL(r.file);}); }
- else throw new Error("El archivo ya no está disponible en esta sesión; vuelve a subirlo");
- const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),120000);
- let res; try{res=await fetch(AI_FN,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});}
- catch(e){throw new Error(e.name==="AbortError"?"La lectura ha tardado demasiado":"No se pudo conectar con el servicio de lectura");}
- finally{clearTimeout(t);}
- const j=await res.json().catch(()=>({})); if(!res.ok) throw new Error(j.error||("Error "+res.status));
- return {sugerencias:j.sugerencias||[],periodo:j.periodo||"",resumen:j.resumen||"",ia:true};
+async function getBuf(r){ if(r.file)return r.file.arrayBuffer(); if(r.url){const res=await fetch(r.url);if(!res.ok)throw new Error("No se pudo descargar el archivo");return res.arrayBuffer();} throw new Error("El archivo ya no está disponible en esta sesión; vuelve a subirlo"); }
+async function extractLocal(r,say){
+ const ext=(r.name.split(".").pop()||"").toLowerCase();
+ if(["csv","xlsx","xls","tsv"].includes(ext)){ const wb=XLSX.read(await getBuf(r),{type:"array",raw:false}); const found={}; wb.SheetNames.forEach(sn=>scanTable(XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null}),sn,found)); return {sugerencias:Object.values(found)}; }
+ let text="";
+ if(ext==="pdf"){ say("Extrayendo el texto del PDF…"); text=await pdfText(await getBuf(r),say); }
+ else if(["png","jpg","jpeg","webp","gif"].includes(ext)){ say("Reconociendo el texto de la imagen (la primera vez descarga el motor de OCR, unos segundos)…"); text=await ocrText(r,say); }
+ else if(["txt","md"].includes(ext)){ text=new TextDecoder().decode(await getBuf(r)); }
+ else throw new Error("Formato no compatible con la lectura automática (vale PDF, Excel, CSV, imágenes y texto)");
+ if(!text.trim()) throw new Error("No se ha encontrado texto legible en el archivo (si es un PDF escaneado, sube una captura de pantalla en PNG o JPG)");
+ const found={}; scanLines(text.split(/\r?\n/),found); return {sugerencias:Object.values(found)};
 }
-async function extractLocal(r){
- if(!/\.(csv|xlsx|xls)$/i.test(r.name)) throw new Error("La lectura automática de PDF e imágenes requiere activar la función de IA (ver firebase_svd/README.md)");
- let buf; if(r.file)buf=await r.file.arrayBuffer(); else{const res=await fetch(r.url);buf=await res.arrayBuffer();}
- const wb=XLSX.read(buf,{type:"array",raw:false}); const found={};
- wb.SheetNames.forEach(sn=>{
-  const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null}); if(!rows.length)return;
-  let hi=rows.findIndex(row=>row&&row.filter(c=>c!=null&&String(c).trim()!=="").length>=2&&row.some(c=>METRICS.some(m=>m.re.test(hdr(c)))));
-  if(hi<0)return; const head=rows[hi].map(c=>String(c||"").trim());
-  head.forEach((h,ci)=>{const m=METRICS.find(m=>m.re.test(hdr(h))); if(!m||found[m.key])return;
-   const body=rows.slice(hi+1); let total=null;
-   const trow=body.find(row=>row&&row.some(c=>/^(total|totales|total general|resultados totales)$/i.test(String(c||"").trim())));
-   if(trow&&toNum(trow[ci])!==null)total=toNum(trow[ci]);
-   else{let sum=0,n=0;body.forEach(row=>{const v=row?toNum(row[ci]):null;if(v!==null){sum+=v;n++;}});if(n)total=sum;}
-   if(total!==null)found[m.key]={fase:m.target.gastos?"gastos":PHASES[m.target.f].id,valor:total,concepto:h+(wb.SheetNames.length>1?" ("+sn+")":""),motivo:"Total de la columna "+m.label,confianza:"media"};});
- });
- return {sugerencias:Object.values(found),periodo:"",resumen:"",ia:false};
+async function pdfText(buf,say){
+ await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+ const lib=window.pdfjsLib; lib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+ const pdf=await lib.getDocument({data:buf}).promise; let out=[];
+ for(let p=1;p<=Math.min(pdf.numPages,40);p++){ say(`Leyendo página ${p} de ${pdf.numPages}…`); const page=await pdf.getPage(p); const tc=await page.getTextContent();
+  /* agrupar por línea según la coordenada vertical */
+  const lines={}; tc.items.forEach(it=>{if(!it.str||!it.str.trim())return;const y=Math.round(it.transform[5]/3);(lines[y]=lines[y]||[]).push({x:it.transform[4],s:it.str});});
+  Object.keys(lines).map(Number).sort((a,b)=>b-a).forEach(y=>{out.push(lines[y].sort((a,b)=>a.x-b.x).map(i=>i.s).join("  "));}); out.push(""); }
+ return out.join("\n");
 }
+async function ocrText(r,say){
+ await loadScript("https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js");
+ const src=r.file?r.file:r.url; const worker=await Tesseract.createWorker("spa+eng",1,{logger:m=>{if(m.status==="recognizing text")say(`Reconociendo texto… ${Math.round(m.progress*100)} %`);}});
+ try{ const {data}=await worker.recognize(src); return data.text||""; } finally{ await worker.terminate(); }
+}
+/* Tabla (Excel/CSV): cabecera con etiquetas + total de columna */
+function scanTable(rows,sn,found){
+ if(!rows.length)return;
+ let hi=rows.findIndex(row=>row&&row.filter(c=>c!=null&&String(c).trim()!=="").length>=2&&row.some(c=>METRICS.some(m=>m.re.test(hdr(c)))));
+ if(hi<0)return; const head=rows[hi].map(c=>String(c||"").trim());
+ head.forEach((h,ci)=>{const m=METRICS.find(m=>m.re.test(hdr(h))); if(!m||found[m.key])return;
+  const body=rows.slice(hi+1); let total=null;
+  const trow=body.find(row=>row&&row.some(c=>/^(total|totales|total general|resultados totales)$/i.test(String(c||"").trim())));
+  if(trow&&toNum(trow[ci])!==null)total=toNum(trow[ci]);
+  else{let sum=0,n=0;body.forEach(row=>{const v=row?toNum(row[ci]):null;if(v!==null){sum+=v;n++;}});if(n)total=sum;}
+  if(total!==null)found[m.key]=sug(m,total,h+(sn?" ("+sn+")":""),"Total de la columna");});
+}
+/* Texto (PDF/OCR): «Etiqueta  1.234» en la misma línea, o cabecera + fila Total */
+const NUMRE=/-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?|-?\d+(?:[.,]\d+)?/g;
+function scanLines(lines,found){
+ const raw=lines.map(l=>l.replace(/\t/g,"    ").trim()).filter(Boolean);
+ lines=raw.map(l=>l.replace(/\s+/g," "));
+ /* A) etiqueta seguida de número en la misma línea */
+ lines.forEach(l=>{ METRICS.forEach(m=>{ if(found[m.key])return; const re=new RegExp("(?:^|[^a-záéíóúñ])("+m.words+")\\b[^0-9%-]{0,25}("+NUMRE.source+")","i"); const mm=l.match(re); if(mm){const v=toNum(mm[2]); if(v!==null&&!/%/.test(l.slice(mm.index,mm.index+mm[0].length+1))) found[m.key]=sug(m,v,mm[1],"Línea: «"+l.slice(0,70)+(l.length>70?"…":"")+"»");} }); });
+ /* B) cabecera en columnas (separadas por 2+ espacios) + fila "Total" con un número por columna */
+ for(let i=0;i<raw.length;i++){
+  const cells=raw[i].split(/\s{2,}|;/).map(c=>c.trim()).filter(Boolean); if(cells.length<3)continue;
+  const map=cells.map(c=>METRICS.find(m=>m.re.test(hdr(c)))||null); if(map.filter(Boolean).length<2)continue;
+  const tl=raw.slice(i+1,i+80).find(l=>/^(total|totales|total general|resultados totales)\b/i.test(l)); if(!tl)continue;
+  const tcells=tl.split(/\s{2,}|;/).map(c=>c.trim()).filter(Boolean);
+  /* alinear por la derecha: las últimas N celdas de Total corresponden a las últimas N columnas */
+  const off=tcells.length-cells.length;
+  map.forEach((m,k)=>{ if(!m||found[m.key])return; const cell=tcells[k+off]; const v=cell!==undefined?toNum(cell):null; if(v!==null)found[m.key]=sug(m,v,cells[k],"Fila Total del informe"); });
+ }
+}
+function sug(m,valor,concepto,motivo){return {fase:m.target.gastos?"gastos":PHASES[m.target.f].id,valor,concepto,motivo,confianza:"media"};}
 function renderSuggestions(r,out){
  const box=$("sugg"); const sug=out.sugerencias||[];
  if(!sug.length){box.innerHTML=`<h3>No se han encontrado métricas en «${esc(r.name)}»</h3><p class="muted" style="margin:0;font-size:.85rem">${out.resumen?esc(out.resumen)+" ":""}Si el informe tiene las cifras con otro nombre, anótalas a mano en el embudo.</p><div class="toolbar" style="margin-top:12px"><button class="btn" type="button" id="closeSugg">Cerrar</button></div>`;$("closeSugg").addEventListener("click",()=>{box.hidden=true;});return;}
@@ -809,12 +868,14 @@ function renderSim(){
  const rows=$("funnelRows");
  rows.innerHTML=state.fases.map((f,i)=>{
   const v=sim.vals[i], bv=base.vals[i]; const pr=n_(f.precio);
-  const pctRow=i===0?`<div class="fpct"><span>Alcance</span><input type="number" data-simalc min="0" step="1000" style="width:96px" value="${alc!==null?Math.round(alc):""}" placeholder="—"></div>`
-   :`<div class="fpct"><span class="arrow">▼</span><span>${PHASES[i-1].id} → ${PHASES[i].id}</span><input type="number" data-simpct="${i}" min="0" max="100" step="0.5" value="${pcts[i]!==null?Math.round(pcts[i]*1000)/10:""}" placeholder="—"><span>%</span>${b.pcts[i]!==null&&pcts[i]!==null&&Math.abs(pcts[i]-b.pcts[i])>1e-9?`<span class="${pcts[i]>b.pcts[i]?"up":"down"}">${pcts[i]>b.pcts[i]?"▲":"▼"} ${num(Math.abs(pcts[i]-b.pcts[i])*100,1)} pts</span>`:""}${pr!==null&&v!==null?`<span class="euro">· ${eur(v*pr)}</span>`:""}</div>`;
+  const pctRow=i===0?`<div class="fpct"><span>Personas alcanzadas</span><input type="number" data-simalc min="0" step="1000" style="width:96px" value="${alc!==null?Math.round(alc):""}" placeholder="—"></div>`
+   :`<div class="fpct"><span class="arrow">▼</span><span>De ${PHASES[i-1].id} a ${PHASES[i].id} pasan el</span><input type="number" data-simpct="${i}" min="0" max="100" step="0.5" value="${pcts[i]!==null?Math.round(pcts[i]*1000)/10:""}" placeholder="—"><span>%</span>${b.pcts[i]!==null&&pcts[i]!==null&&Math.abs(pcts[i]-b.pcts[i])>1e-9?`<span class="${pcts[i]>b.pcts[i]?"up":"down"}">${pcts[i]>b.pcts[i]?"▲":"▼"} ${num(Math.abs(pcts[i]-b.pcts[i])*100,1)} pts</span>`:""}${pr!==null&&v!==null?`<span class="euro">· ${eur(v*pr)}</span>`:""}</div>`;
   return `<div class="frow"><div class="fid">${PHASES[i].id}</div><div>
     <div class="fbar-wrap"><div class="base" style="width:${w(bv)}%"></div><div class="fbar" style="width:${w(v)}%"><span class="fn">${PHASES[i].name}</span><span class="fv">${v===null?"—":num(v,v<100?1:0)}</span></div></div>
+    <p class="fdesc">${fuenteTxt(f.id,f.crit)}</p>
     ${pctRow}</div></div>`;
  }).join("");
+ const gb=$("guideBody"); if(gb&&!gb.children.length){gb.innerHTML=Object.keys(FUENTES).map(k=>{const f=FUENTES[k];return `<tr><td class="n">${k==="gastos"?"Gastos":k+" · "+PHASES[FASE_IDX[k]].name}</td><td>${f.que}</td><td>${f.dato}</td><td>${f.de}</td></tr>`;}).join("");}
  rows.querySelectorAll("[data-simpct]").forEach(inp=>inp.addEventListener("input",e=>{const v=n_(e.target.value);simPct[+e.target.dataset.simpct]=v===null?null:v/100;renderSim(true);}));
  rows.querySelectorAll("[data-simalc]").forEach(inp=>inp.addEventListener("input",e=>{simAlc=n_(e.target.value);renderSim(true);}));
  const d=(a,bb,fmt,inv)=>{if(a===null||bb===null||bb===0)return"";const ch=(a-bb)/Math.abs(bb);if(Math.abs(ch)<1e-9)return`<div class="d">igual que la base</div>`;return`<div class="d ${ch>0?"up":"down"}">${ch>0?"▲":"▼"} ${pct(Math.abs(ch))} · base ${fmt(bb)}</div>`;};

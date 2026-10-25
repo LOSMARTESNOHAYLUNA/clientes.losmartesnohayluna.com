@@ -27,7 +27,5 @@ window.LMNHL_CONFIG = {
     messagingSenderId: "102995792261",
     appId: "1:102995792261:web:c6a62724ff4588f59bf4ec"
   },
-  emailFn: "https://europe-west1-lmnhl-portales.cloudfunctions.net/sendEmail",
-  // URL de la función svdExtract (lectura de reportes con IA para el SVD). Vacío = lectura básica solo de CSV/Excel.
-  svdExtractFn: ""
+  emailFn: "https://europe-west1-lmnhl-portales.cloudfunctions.net/sendEmail"
 };
