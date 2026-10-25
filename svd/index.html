@@ -166,6 +166,20 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
 .fpct .euro{color:var(--muted)}
 .fpct .arrow{color:var(--line)}
 .sim-side{display:grid;gap:10px;min-width:0}
+.fpct input.fnum{width:88px;color:var(--fg)}
+.fpct .calc{background:var(--surface-2);border:1px solid var(--line);padding:3px 8px;font-weight:700;color:var(--accent);min-width:58px;text-align:right}
+.goal{border:1px solid var(--accent);padding:14px}
+.goal .k{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.goal .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:.85rem}
+.goal input{width:90px;padding:5px 8px;font-weight:700;color:var(--accent)}
+.goal .res{margin-top:10px;font-size:.85rem;line-height:1.55}
+.goal .res b{color:var(--accent)}
+.goal .res .big{display:block;font-size:1.35rem;font-weight:800;color:var(--accent);margin:2px 0 6px}
+.goal ul{margin:6px 0 0;padding-left:18px;font-size:.82rem}
+.goal li{margin:3px 0}
+.goal li .ok{color:var(--good);font-weight:700} .goal li .no{color:var(--muted)}
+.goal .cpm{font-size:.78rem;color:var(--muted);margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.goal .cpm input{width:70px;font-size:.8rem;padding:3px 6px}
 .sim-kpi{border:1px solid var(--line);padding:12px 14px}
 .sim-kpi .k{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .sim-kpi .v{font-size:1.45rem;font-weight:700;color:var(--accent);line-height:1.15;margin-top:4px}
@@ -243,7 +257,7 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
   <div class="sim" id="sim">
     <div class="sim-head">
       <div><h2>Tu embudo</h2>
-      <p>Cada fase se calcula sobre la anterior: el porcentaje entre dos fases es cuántas personas pasan de una a la siguiente. Mueve un porcentaje y verás cómo cambia todo lo que hay debajo: clientes, ventas y lo que te deja cada persona alcanzada. Debajo de cada barra tienes qué cuenta en esa fase y de qué informe sale el dato.</p></div>
+      <p>Escribe las personas de cada fase (por ejemplo 10.000 alcanzadas y 300 que hacen clic) y la app calcula el porcentaje de paso. Cambia cualquier número o porcentaje y verás cómo se mueve todo lo que hay debajo: clientes, ventas y lo que te deja cada persona alcanzada. A la derecha, dile cuántos clientes quieres y te dirá qué alcance e inversión hacen falta, o qué fase tendrías que mejorar.</p></div>
       <div class="sim-tabs" id="simTabs"><button type="button" data-base="obj" class="on">Sobre objetivos</button><button type="button" data-base="med">Sobre medición</button></div>
     </div>
     <div class="funnel">
@@ -868,8 +882,9 @@ function renderSim(){
  const rows=$("funnelRows");
  rows.innerHTML=state.fases.map((f,i)=>{
   const v=sim.vals[i], bv=base.vals[i]; const pr=n_(f.precio);
-  const pctRow=i===0?`<div class="fpct"><span>Personas alcanzadas</span><input type="number" data-simalc min="0" step="1000" style="width:96px" value="${alc!==null?Math.round(alc):""}" placeholder="—"></div>`
-   :`<div class="fpct"><span class="arrow">▼</span><span>De ${PHASES[i-1].id} a ${PHASES[i].id} pasan el</span><input type="number" data-simpct="${i}" min="0" max="100" step="0.5" value="${pcts[i]!==null?Math.round(pcts[i]*1000)/10:""}" placeholder="—"><span>%</span>${b.pcts[i]!==null&&pcts[i]!==null&&Math.abs(pcts[i]-b.pcts[i])>1e-9?`<span class="${pcts[i]>b.pcts[i]?"up":"down"}">${pcts[i]>b.pcts[i]?"▲":"▼"} ${num(Math.abs(pcts[i]-b.pcts[i])*100,1)} pts</span>`:""}${pr!==null&&v!==null?`<span class="euro">· ${eur(v*pr)}</span>`:""}</div>`;
+  const prevV=i>0?sim.vals[i-1]:null;
+  const pctRow=i===0?`<div class="fpct"><span>Personas alcanzadas</span><input type="number" class="fnum" data-simalc min="0" step="100" value="${alc!==null?Math.round(alc):""}" placeholder="10000"></div>`
+   :`<div class="fpct"><span class="arrow">▼</span><span>Personas en ${PHASES[i].id}</span><input type="number" class="fnum" data-simnum="${i}" min="0" step="1" value="${v!==null?Math.round(v*10)/10:""}" placeholder="${prevV!==null?"p. ej. "+Math.round(prevV*0.1):"—"}" ${prevV===null?"disabled":""}><span>=</span><input type="number" data-simpct="${i}" min="0" max="100" step="0.1" value="${pcts[i]!==null?Math.round(pcts[i]*1000)/10:""}" placeholder="—"><span>% de ${PHASES[i-1].id}</span>${b.pcts[i]!==null&&pcts[i]!==null&&Math.abs(pcts[i]-b.pcts[i])>1e-9?`<span class="${pcts[i]>b.pcts[i]?"up":"down"}">${pcts[i]>b.pcts[i]?"▲":"▼"} ${num(Math.abs(pcts[i]-b.pcts[i])*100,1)} pts</span>`:""}${pr!==null&&v!==null?`<span class="euro">· ${eur(v*pr)}</span>`:""}</div>`;
   return `<div class="frow"><div class="fid">${PHASES[i].id}</div><div>
     <div class="fbar-wrap"><div class="base" style="width:${w(bv)}%"></div><div class="fbar" style="width:${w(v)}%"><span class="fn">${PHASES[i].name}</span><span class="fv">${v===null?"—":num(v,v<100?1:0)}</span></div></div>
     <p class="fdesc">${fuenteTxt(f.id,f.crit)}</p>
@@ -878,22 +893,58 @@ function renderSim(){
  const gb=$("guideBody"); if(gb&&!gb.children.length){gb.innerHTML=Object.keys(FUENTES).map(k=>{const f=FUENTES[k];return `<tr><td class="n">${k==="gastos"?"Gastos":k+" · "+PHASES[FASE_IDX[k]].name}</td><td>${f.que}</td><td>${f.dato}</td><td>${f.de}</td></tr>`;}).join("");}
  rows.querySelectorAll("[data-simpct]").forEach(inp=>inp.addEventListener("input",e=>{const v=n_(e.target.value);simPct[+e.target.dataset.simpct]=v===null?null:v/100;renderSim(true);}));
  rows.querySelectorAll("[data-simalc]").forEach(inp=>inp.addEventListener("input",e=>{simAlc=n_(e.target.value);renderSim(true);}));
+ rows.querySelectorAll("[data-simnum]").forEach(inp=>inp.addEventListener("input",e=>{const i=+e.target.dataset.simnum;const v=n_(e.target.value);const prev=sim.vals[i-1];if(v===null){simPct[i]=null;}else if(prev){simPct[i]=Math.min(1,v/prev);}renderSim(true);}));
  const d=(a,bb,fmt,inv)=>{if(a===null||bb===null||bb===0)return"";const ch=(a-bb)/Math.abs(bb);if(Math.abs(ch)<1e-9)return`<div class="d">igual que la base</div>`;return`<div class="d ${ch>0?"up":"down"}">${ch>0?"▲":"▼"} ${pct(Math.abs(ch))} · base ${fmt(bb)}</div>`;};
+ /* Objetivo de clientes: trabajar hacia atrás */
+ const goal=n_(state.objClientes); const ratesOk=pcts.slice(1,FASE_IDX["8"]+1).every(p=>p!==null&&p>0);
+ const prodRates=ratesOk?pcts.slice(1,FASE_IDX["8"]+1).reduce((a,p)=>a*p,1):null;
+ const c0=compute(state); const cpmMed=(c0.r[0].med&&n_(state.gastos))?n_(state.gastos)/c0.r[0].med*1000:null;
+ const cpm=n_(state.cpm)!==null?n_(state.cpm):cpmMed;
+ let goalHtml="";
+ if(goal&&prodRates){
+  const needAlc=goal/prodRates; const inv=cpm!==null?needAlc/1000*cpm:null; const nowCli=sim.clientes;
+  const factor=nowCli?goal/nowCli:null;
+  const needVals=[]; let pv=needAlc; state.fases.forEach((f,i)=>{ if(i===0){needVals.push(pv);return;} pv=pcts[i]!==null?pv*pcts[i]:null; needVals.push(pv); });
+  let alts="";
+  if(factor&&factor>1.0001&&alc){
+   const items=[]; for(let i=1;i<=FASE_IDX["8"];i++){ const p=pcts[i]; if(p===null)continue; const np=p*factor; if(np<=1) items.push(`<li>De ${PHASES[i-1].id} a ${PHASES[i].id}: pasar del <b>${pct(p)}</b> al <span class="ok">${pct(np)}</span> (+${num((np-p)*100,1)} pts)</li>`); }
+   const k=pcts.slice(1,FASE_IDX["8"]+1).filter(p=>p!==null).length; const uni=Math.pow(factor,1/k);
+   alts=`<div class="res" style="margin-top:12px">O, <b>sin aumentar el alcance</b> (${num(alc)} personas):</div><ul>${items.length?items.map(x=>x).join(""):"<li class=\"no\">Ninguna fase por sí sola puede cubrir la diferencia.</li>"}<li>O mejorar <b>todas</b> las fases hasta la 8 un <b>${pct(uni-1)}</b> cada una (relativo).</li></ul>`;
+  } else if(factor&&factor<=1.0001){ alts=`<div class="res" style="color:var(--good);font-weight:600;margin-top:10px">Con tu embudo actual ya llegas a ${num(goal)} clientes.</div>`; }
+  goalHtml=`<div class="res">Con tus porcentajes actuales necesitas:<span class="big">${num(needAlc)} personas alcanzadas</span>
+   ${inv!==null?`Inversión estimada: <b>${eur(inv)}</b> (a ${num(cpm,2)} € por cada 1.000 personas)`:`<span class="muted">Para estimar la inversión, indica el coste por 1.000 personas alcanzadas.</span>`}
+   <details style="margin-top:8px;border:0;padding:0;border-left:3px solid var(--line)"><summary style="font-size:.8rem;padding:2px 8px;font-weight:600">Personas necesarias en cada fase</summary><ul style="margin-top:4px">${needVals.map((v,i)=>`<li>${PHASES[i].id} · ${PHASES[i].name}: <b>${v===null?"—":num(v,v<100?1:0)}</b></li>`).join("")}</ul></details>
+   ${alts}</div>`;
+ } else if(goal&&!prodRates){ goalHtml=`<div class="res muted">Rellena las personas (o porcentajes) de las fases 1 a 8 para poder calcular hacia atrás.</div>`; }
  $("simSide").innerHTML=`
+  <div class="goal"><div class="k">Tu objetivo</div>
+   <div class="row"><span>Quiero conseguir</span><input type="number" id="objClientes" min="0" step="1" value="${goal!==null?goal:""}" placeholder="p. ej. 20"><span>clientes (fase 8)</span></div>
+   ${goalHtml}
+   <div class="cpm"><span>Coste por 1.000 personas alcanzadas:</span><input type="number" id="cpmInput" min="0" step="0.5" value="${n_(state.cpm)!==null?state.cpm:""}" placeholder="${cpmMed!==null?num(cpmMed,2):"p. ej. 8"}"><span>€</span>${cpmMed!==null&&n_(state.cpm)===null?`<span>(calculado de tu medición: ${eur(n_(state.gastos))} ÷ ${num(c0.r[0].med)} personas)</span>`:""}</div>
+   ${goal&&prodRates?`<div class="toolbar" style="margin-top:10px"><button class="btn small primary" type="button" id="goalApply">Fijar como objetivos del embudo</button></div>`:""}
+  </div>
   <div class="sim-kpi hero"><div class="k">Beneficio por persona alcanzada (CdV)</div><div class="v num">${sim.cdvB===null?"—":num(sim.cdvB,2)+" €"}</div>${d(sim.cdvB,base.cdvB,x=>num(x,2)+" €")}</div>
   <div class="sim-kpi"><div class="k">Clientes (fase 8)</div><div class="v num">${sim.clientes===null?"—":num(sim.clientes,1)}</div>${d(sim.clientes,base.clientes,x=>num(x,1))}</div>
   <div class="sim-kpi"><div class="k">Ventas totales</div><div class="v num">${eur(sim.ventas)}</div>${d(sim.ventas,base.ventas,eur)}</div>
   <div class="sim-kpi"><div class="k">Beneficio</div><div class="v num">${eur(sim.benef)}</div>${d(sim.benef,base.benef,eur)}</div>
   <div class="sim-kpi"><div class="k">Beneficio por cliente</div><div class="v num">${sim.porCliente===null?"—":eur(sim.porCliente)}</div>${d(sim.porCliente,base.porCliente,eur)}</div>`;
+ $("objClientes").addEventListener("input",e=>{state.objClientes=n_(e.target.value);renderSim(true);clearTimeout(saveTimer);saveTimer=setTimeout(persist,900);});
+ $("cpmInput").addEventListener("input",e=>{state.cpm=n_(e.target.value);renderSim(true);clearTimeout(saveTimer);saveTimer=setTimeout(persist,900);});
+ const ga=$("goalApply"); if(ga) ga.addEventListener("click",()=>{
+  const needAlc=goal/prodRates; state.fases[0].objAlc=Math.round(needAlc);
+  state.fases.forEach((f,i)=>{ if(i>0&&pcts[i]!==null) f.objPct=pcts[i]; });
+  simPct={}; simAlc=null; fill(); changed(); toast(`Objetivo fijado: ${num(goal)} clientes → ${num(needAlc)} personas alcanzadas.`); 
+ });
  const touched=simAlc!==null||Object.keys(simPct).length>0;
  $("simNote").textContent=touched?"Simulación activa: no cambia nada en tu embudo hasta que pulses «Usar como nuevos objetivos».":(simBase==="med"?"Base: tus porcentajes reales medidos.":"Base: tus porcentajes objetivo.");
 }
 /* Mantener el foco al re-renderizar */
 const _renderSim=renderSim;
 renderSim=function(keepFocus){
- const a=document.activeElement; const key=a&&(a.dataset.simpct!==undefined?"p"+a.dataset.simpct:a.dataset.simalc!==undefined?"alc":null); const pos=a&&a.selectionStart;
+ const a=document.activeElement; let sel=null; if(a){ if(a.dataset.simpct!==undefined)sel=`[data-simpct="${a.dataset.simpct}"]`; else if(a.dataset.simnum!==undefined)sel=`[data-simnum="${a.dataset.simnum}"]`; else if(a.dataset.simalc!==undefined)sel="[data-simalc]"; else if(a.id==="objClientes"||a.id==="cpmInput")sel="#"+a.id; }
+ const val=a&&a.value, pos=a&&a.selectionStart;
  _renderSim();
- if(keepFocus&&key){const el=key==="alc"?document.querySelector("[data-simalc]"):document.querySelector(`[data-simpct="${key.slice(1)}"]`); if(el){el.focus();try{el.setSelectionRange(pos,pos);}catch(e){}}}
+ if(keepFocus&&sel){const el=document.querySelector(sel); if(el){ el.value=val; el.focus(); try{el.setSelectionRange(pos,pos);}catch(e){} }}
 };
 $("simTabs").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{simBase=b.dataset.base;simPct={};simAlc=null;$("simTabs").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));renderSim();}));
 $("simPlus2").addEventListener("click",()=>{const b=simBaseline();b.pcts.forEach((p,i)=>{if(i>0&&p!==null)simPct[i]=Math.min(1,(simPct[i]!==undefined?simPct[i]:p)+0.02);});renderSim();});
