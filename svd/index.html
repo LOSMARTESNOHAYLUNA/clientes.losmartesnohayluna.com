@@ -136,6 +136,36 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
 .step{min-width:0}
 .step b{font-family:var(--display);display:block;margin-bottom:2px}
 .step p{margin:0;font-size:.88rem;color:var(--muted)}
+/* Simulador del embudo */
+.sim{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--lime);padding:18px;margin-block:4px 28px}
+.sim-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sim-head p{margin:4px 0 0;color:var(--muted);font-size:.88rem;max-width:70ch}
+.sim-tabs{display:flex;gap:0;border:1px solid var(--accent)}
+.sim-tabs button{background:transparent;border:0;color:var(--accent);padding:7px 12px;font:inherit;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.sim-tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.funnel{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.frow{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.frow .fid{font-weight:800;color:var(--accent);font-size:.9rem;text-align:right;padding-top:6px}
+.fbar-wrap{position:relative;height:32px;display:flex;align-items:center;justify-content:center}
+.fbar-wrap .base{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);background:var(--accent-soft);border:1px dashed var(--line)}
+.fbar{position:relative;z-index:1;height:32px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px;color:#fff;font-size:.74rem;font-weight:600;white-space:nowrap;transition:width .35s ease;min-width:210px;background:var(--purple);box-shadow:0 1px 0 var(--purple-dk)}
+.fbar .fn{overflow:hidden;text-overflow:ellipsis}
+.fbar .fv{font-weight:800;font-size:.8rem}
+.fpct{display:flex;align-items:center;gap:6px;justify-content:center;font-size:.72rem;color:var(--muted);height:34px;flex-wrap:wrap}
+.fpct input{width:66px;padding:3px 6px;font-size:.8rem;text-align:right;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--accent)}
+.fpct .up{color:var(--good);font-weight:700} .fpct .down{color:var(--bad);font-weight:700}
+.fpct .euro{color:var(--muted)}
+.fpct .arrow{color:var(--line)}
+.sim-side{display:grid;gap:10px;min-width:0}
+.sim-kpi{border:1px solid var(--line);padding:12px 14px}
+.sim-kpi .k{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sim-kpi .v{font-size:1.45rem;font-weight:700;color:var(--accent);line-height:1.15;margin-top:4px}
+.sim-kpi .d{font-size:.78rem;margin-top:2px}
+.sim-kpi .d.up{color:var(--good)} .sim-kpi .d.down{color:var(--bad)}
+.sim-kpi.hero{background:var(--band);border-color:var(--band)}
+.sim-kpi.hero .k{color:var(--lime-lt)} .sim-kpi.hero .v{color:#fff} .sim-kpi.hero .d{color:rgba(255,255,255,.8)} .sim-kpi.hero .d.up{color:var(--lime-lt)} .sim-kpi.hero .d.down{color:#ff9fc4}
+.sim-foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;font-size:.82rem;color:var(--muted)}
+@media (max-width:760px){.funnel{grid-template-columns:minmax(0,1fr)}.fbar{min-width:150px;font-size:.66rem}}
 /* Reportes */
 .drop{display:block;border:2px dashed var(--line);background:var(--surface);padding:22px 18px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
 .drop.over,.drop:hover{border-color:var(--lime);background:var(--surface-2)}
@@ -200,6 +230,24 @@ summary{cursor:pointer;font-weight:700;color:var(--accent)}
   </div>
 
   <div class="kpis" id="kpis"></div>
+
+  <div class="sim" id="sim">
+    <div class="sim-head">
+      <div><h2>Tu embudo</h2>
+      <p>Cada fase se calcula sobre la anterior. Mueve un porcentaje y verás cómo cambia todo lo que hay debajo: clientes, ventas y lo que te deja cada persona alcanzada. La barra clara es tu base; la morada, la simulación.</p></div>
+      <div class="sim-tabs" id="simTabs"><button type="button" data-base="obj" class="on">Sobre objetivos</button><button type="button" data-base="med">Sobre medición</button></div>
+    </div>
+    <div class="funnel">
+      <div id="funnelRows"></div>
+      <div class="sim-side" id="simSide"></div>
+    </div>
+    <div class="sim-foot">
+      <button class="btn small" type="button" id="simPlus2">+2 % en todas las fases</button>
+      <button class="btn small" type="button" id="simReset">Volver a la base</button>
+      <button class="btn small primary" type="button" id="simApply">Usar como nuevos objetivos</button>
+      <span id="simNote"></span>
+    </div>
+  </div>
 
   <div class="global">
     <span class="lbl"><b>Progreso del embudo</b> <span class="muted">(fases que alcanzan su objetivo)</span></span>
@@ -590,6 +638,7 @@ function render(){
   ["Fases medidas",c.measured+" / "+PHASES.length,c.hit+" alcanzan su objetivo"]
  ].map(k=>`<div class="kpi"><div class="eyebrow">${k[0]}</div><div class="v num">${k[1]}</div><div class="s">${k[2]}</div></div>`).join("");
  renderHistory();
+ if(typeof renderSim==="function")renderSim();
 }
 
 
@@ -734,6 +783,65 @@ function renderSuggestions(r,out){
  });
 }
 const n_=v=>(v===null||v===undefined||v===""||isNaN(v))?null:Number(v);
+
+/* ---------- Simulador del embudo ---------- */
+let simBase="obj", simPct={}, simAlc=null;
+function simBaseline(){
+ const c=compute(state); const alc=simBase==="med"?c.r[0].med:c.r[0].obj;
+ const pcts=state.fases.map((f,i)=>{ if(i===0)return null; if(simBase==="med")return c.r[i].medPct!==null?c.r[i].medPct:n_(f.objPct); return n_(f.objPct); });
+ return {alc,pcts};
+}
+function simRun(alc,pcts){
+ const vals=[],tot=[]; let prev=null;
+ state.fases.forEach((f,i)=>{ let v; if(i===0)v=alc; else v=(prev!==null&&pcts[i]!==null)?prev*pcts[i]:null; const pr=n_(f.precio); vals.push(v); tot.push(v!==null&&pr!==null?v*pr:null); prev=v; });
+ const ventas=tot.reduce((a,x)=>a+(x||0),0); const g=n_(state.gastos)||0; const benef=ventas-g;
+ const clientes=vals[FASE_IDX["8"]]; 
+ return {vals,tot,ventas,benef,cdvV:alc?ventas/alc:null,cdvB:alc?benef/alc:null,clientes,porCliente:clientes?benef/clientes:null};
+}
+function renderSim(){
+ const b=simBaseline(); const alc=simAlc!==null?simAlc:b.alc;
+ const pcts=b.pcts.map((p,i)=>i===0?null:(simPct[i]!==undefined?simPct[i]:p));
+ const base=simRun(b.alc,b.pcts), sim=simRun(alc,pcts);
+ const maxV=Math.max(1,...sim.vals.filter(v=>v!==null),...base.vals.filter(v=>v!==null));
+ const minV=Math.max(1,Math.min(...sim.vals.filter(v=>v!==null&&v>0),...base.vals.filter(v=>v!==null&&v>0)));
+ const span=Math.log(maxV)-Math.log(minV)||1;
+ const w=v=>v===null?0:(v<=0?24:24+(Math.log(Math.max(v,minV))-Math.log(minV))/span*76);  /* escala logarítmica: la forma del embudo se ve entera */
+ const rows=$("funnelRows");
+ rows.innerHTML=state.fases.map((f,i)=>{
+  const v=sim.vals[i], bv=base.vals[i]; const pr=n_(f.precio);
+  const pctRow=i===0?`<div class="fpct"><span>Alcance</span><input type="number" data-simalc min="0" step="1000" style="width:96px" value="${alc!==null?Math.round(alc):""}" placeholder="—"></div>`
+   :`<div class="fpct"><span class="arrow">▼</span><span>${PHASES[i-1].id} → ${PHASES[i].id}</span><input type="number" data-simpct="${i}" min="0" max="100" step="0.5" value="${pcts[i]!==null?Math.round(pcts[i]*1000)/10:""}" placeholder="—"><span>%</span>${b.pcts[i]!==null&&pcts[i]!==null&&Math.abs(pcts[i]-b.pcts[i])>1e-9?`<span class="${pcts[i]>b.pcts[i]?"up":"down"}">${pcts[i]>b.pcts[i]?"▲":"▼"} ${num(Math.abs(pcts[i]-b.pcts[i])*100,1)} pts</span>`:""}${pr!==null&&v!==null?`<span class="euro">· ${eur(v*pr)}</span>`:""}</div>`;
+  return `<div class="frow"><div class="fid">${PHASES[i].id}</div><div>
+    <div class="fbar-wrap"><div class="base" style="width:${w(bv)}%"></div><div class="fbar" style="width:${w(v)}%"><span class="fn">${PHASES[i].name}</span><span class="fv">${v===null?"—":num(v,v<100?1:0)}</span></div></div>
+    ${pctRow}</div></div>`;
+ }).join("");
+ rows.querySelectorAll("[data-simpct]").forEach(inp=>inp.addEventListener("input",e=>{const v=n_(e.target.value);simPct[+e.target.dataset.simpct]=v===null?null:v/100;renderSim(true);}));
+ rows.querySelectorAll("[data-simalc]").forEach(inp=>inp.addEventListener("input",e=>{simAlc=n_(e.target.value);renderSim(true);}));
+ const d=(a,bb,fmt,inv)=>{if(a===null||bb===null||bb===0)return"";const ch=(a-bb)/Math.abs(bb);if(Math.abs(ch)<1e-9)return`<div class="d">igual que la base</div>`;return`<div class="d ${ch>0?"up":"down"}">${ch>0?"▲":"▼"} ${pct(Math.abs(ch))} · base ${fmt(bb)}</div>`;};
+ $("simSide").innerHTML=`
+  <div class="sim-kpi hero"><div class="k">Beneficio por persona alcanzada (CdV)</div><div class="v num">${sim.cdvB===null?"—":num(sim.cdvB,2)+" €"}</div>${d(sim.cdvB,base.cdvB,x=>num(x,2)+" €")}</div>
+  <div class="sim-kpi"><div class="k">Clientes (fase 8)</div><div class="v num">${sim.clientes===null?"—":num(sim.clientes,1)}</div>${d(sim.clientes,base.clientes,x=>num(x,1))}</div>
+  <div class="sim-kpi"><div class="k">Ventas totales</div><div class="v num">${eur(sim.ventas)}</div>${d(sim.ventas,base.ventas,eur)}</div>
+  <div class="sim-kpi"><div class="k">Beneficio</div><div class="v num">${eur(sim.benef)}</div>${d(sim.benef,base.benef,eur)}</div>
+  <div class="sim-kpi"><div class="k">Beneficio por cliente</div><div class="v num">${sim.porCliente===null?"—":eur(sim.porCliente)}</div>${d(sim.porCliente,base.porCliente,eur)}</div>`;
+ const touched=simAlc!==null||Object.keys(simPct).length>0;
+ $("simNote").textContent=touched?"Simulación activa: no cambia nada en tu embudo hasta que pulses «Usar como nuevos objetivos».":(simBase==="med"?"Base: tus porcentajes reales medidos.":"Base: tus porcentajes objetivo.");
+}
+/* Mantener el foco al re-renderizar */
+const _renderSim=renderSim;
+renderSim=function(keepFocus){
+ const a=document.activeElement; const key=a&&(a.dataset.simpct!==undefined?"p"+a.dataset.simpct:a.dataset.simalc!==undefined?"alc":null); const pos=a&&a.selectionStart;
+ _renderSim();
+ if(keepFocus&&key){const el=key==="alc"?document.querySelector("[data-simalc]"):document.querySelector(`[data-simpct="${key.slice(1)}"]`); if(el){el.focus();try{el.setSelectionRange(pos,pos);}catch(e){}}}
+};
+$("simTabs").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{simBase=b.dataset.base;simPct={};simAlc=null;$("simTabs").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));renderSim();}));
+$("simPlus2").addEventListener("click",()=>{const b=simBaseline();b.pcts.forEach((p,i)=>{if(i>0&&p!==null)simPct[i]=Math.min(1,(simPct[i]!==undefined?simPct[i]:p)+0.02);});renderSim();});
+$("simReset").addEventListener("click",()=>{simPct={};simAlc=null;renderSim();});
+$("simApply").addEventListener("click",()=>{
+ const b=simBaseline(); const alc=simAlc!==null?simAlc:b.alc; let n=0;
+ state.fases.forEach((f,i)=>{ if(i===0){ if(alc!==null){f.nuevoAlc=Math.round(alc);n++;} return; } const p=simPct[i]!==undefined?simPct[i]:b.pcts[i]; if(p!==null){f.nuevoPct=p;n++;} });
+ simPct={};simAlc=null; fill(); changed(); toast("Nuevos objetivos actualizados en la sección Optimización."); document.getElementById("optTable").scrollIntoView({behavior:"smooth",block:"start"});
+});
 
 /* Persistencia: Firestore portales/{CLIENT_ID}/datos/svd (+ copia local) */
 function setSave(kind,text){const d=$("saveState").querySelector(".dot");d.className="dot "+kind;$("saveText").textContent=text;}
