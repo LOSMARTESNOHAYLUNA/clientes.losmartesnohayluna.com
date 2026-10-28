@@ -604,6 +604,36 @@ body{font-family:Poppins,system-ui,sans-serif;background:#f5f5f5;color:#0a1a26;m
 .sec-btn.linkedin.on{background:#f6f7fb;color:#0A66C2;border-color:#0A66C2;border-bottom-color:#f6f7fb}
 .mth-accent.linkedin{background:#0A66C2}
 .prog-bar.linkedin{background:linear-gradient(90deg,#0A66C2,#5ea3e6)}
+/* ── LINKEDIN · vista de lectura ── */
+.li-card{border-left-color:#0A66C2!important}
+.li-estado{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:12px;border:1.5px solid;background:#fff}
+.li-edit-btn{padding:6px 12px;border-radius:20px;border:1.5px solid rgba(10,102,194,.35);background:#fff;color:#0A66C2;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.li-edit-btn.on{background:#0A66C2;color:#fff;border-color:#0A66C2}
+.li-form{display:flex;flex-direction:column;gap:12px}
+.li-textarea{min-height:260px;line-height:1.7;font-size:14px}
+.li-hint{font-size:11px;color:#6b7280;margin:2px 0 6px;line-height:1.5}
+.li-done-btn{align-self:flex-start;padding:9px 16px;border-radius:8px;border:none;background:#0A66C2;color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.li-read{display:flex;flex-direction:column;gap:14px}
+.li-article{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:28px 32px;max-width:720px;margin:0 auto;width:100%;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.li-h2{font-size:22px;line-height:1.3;font-weight:800;color:#111827;margin:0 0 10px;letter-spacing:-.01em}
+.li-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#6b7280;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
+.li-meta a{color:#0A66C2;text-decoration:none;font-weight:600}
+.li-body{font-size:15px;line-height:1.75;color:#1f2937}
+.li-p{margin:0 0 14px}
+.li-ul{margin:0 0 14px 20px;padding:0}
+.li-ul li{margin-bottom:6px}
+.li-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:14px;border-top:1px solid #f0f0f0}
+.li-tag{font-size:12px;font-weight:600;color:#0A66C2;background:#eaf2fb;padding:3px 10px;border-radius:12px}
+.li-empty{text-align:center;padding:28px;color:#6b7280;font-size:13px;background:#f9fafb;border:1px dashed #d1d5db;border-radius:12px}
+.li-validar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:#f0f6fd;border:1.5px solid rgba(10,102,194,.25);border-radius:12px;padding:14px 18px;max-width:720px;margin:0 auto;width:100%}
+.li-validar-txt{display:flex;flex-direction:column;gap:3px;font-size:12px;color:#374151}
+.li-validar-txt strong{font-size:14px;color:#111827}
+.li-validar-btns{display:flex;gap:8px;flex-wrap:wrap}
+.li-btn-ok{padding:10px 18px;border-radius:8px;border:none;background:#16a34a;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.li-btn-cambios{padding:10px 18px;border-radius:8px;border:1.5px solid #ea580c;background:#fff;color:#ea580c;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.li-aprobado{max-width:720px;margin:0 auto;width:100%;background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 18px;font-size:13px;font-weight:600;color:#166534}
+.li-corr .corr-title{color:#0A66C2}
+@media(max-width:600px){.li-article{padding:18px 16px}.li-h2{font-size:18px}}
 </style>
 </head>
 <body>
@@ -3388,6 +3418,7 @@ function LinkedInArticleCard({data,onUpdate,onDelete,onApprove}){
   const[nameInput,setNameInput]=useState('');
   const[histOpen,setHistOpen]=useState(false);
   const[showDel,setShowDel]=useState(false);
+  const[editing,setEditing]=useState(!(data.title||data.texto));
   const[newCorr,setNewCorr]=useState('');
   const[nudgeId,setNudgeId]=useState(null);
   const historial=data.historial||[];
@@ -3457,19 +3488,27 @@ function LinkedInArticleCard({data,onUpdate,onDelete,onApprove}){
     setConfirming(null);setNameInput('');
   }
 
+  const estados={pendiente:['⬜','Pendiente','#6b7280'],revision:['🔵','Pendiente de tu validación','#2563eb'],cambios:['🟠','Cambios solicitados','#ea580c'],aprobado:['✅','Aprobado','#16a34a']};
+  const est=estados[data.status]||estados.pendiente;
+  const fechaTxt=data.date?new Date(data.date+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}):'';
+  const hashtags=String(data.kw||'').split(/[\s,]+/).filter(function(h){return h.trim();}).map(function(h){return h[0]==='#'?h:'#'+h;});
+  const vacio=!(data.title||data.texto);
+
   return React.createElement('div',{className:'seo-card li-card'+(data.status==='aprobado'?' approved':'')},
-    React.createElement('div',{className:'card-top'},
+    // CABECERA
+    React.createElement('div',{className:'card-top li-top'},
       React.createElement('div',{className:'card-badges'},
         React.createElement('span',{className:'seo-type-badge'},'💼 LinkedIn'),
-        data.kw&&React.createElement('span',{className:'pillar-tag',style:{color:'#72AC2C'}},'# '+data.kw)
+        React.createElement('span',{className:'li-estado',style:{color:est[2],borderColor:est[2]}},est[0]+' '+est[1])
       ),
-      React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+      React.createElement('div',{style:{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}},
+        React.createElement('button',{className:'li-edit-btn'+(editing?' on':''),onClick:function(){setEditing(function(e){return !e;});}},editing?'👁 Ver como artículo':'✏️ Editar texto'),
         React.createElement('select',{
           className:'st-select',
           value:data.status||'pendiente',
           onChange:function(e){selectStatus(e.target.value);}
         },
-          React.createElement('option',{value:'pendiente'},'⬜ Pendiente de diseño'),
+          React.createElement('option',{value:'pendiente'},'⬜ Pendiente'),
           React.createElement('option',{value:'revision'},'🔵 Enviado a revisión'),
           React.createElement('option',{value:'cambios'},'🟠 Solicitud de cambios'),
           React.createElement('option',{value:'aprobado'},'✅ Aprobado')
@@ -3496,36 +3535,71 @@ function LinkedInArticleCard({data,onUpdate,onDelete,onApprove}){
       data.approvedBy&&React.createElement('div',{className:'reg-tag apr'},React.createElement('span',{className:'reg-icon'},'✅'),'Aprobado por ',React.createElement('strong',null,data.approvedBy),' · ',data.approvedAt)
     ),
     data.status==='revision'&&React.createElement(SendToClientBlock,{seccion:'rrss',titulo:data.title||'Artículo LinkedIn'}),
-    confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label',style:{color:'#1a2e3a'}},'Título del artículo'),
-      React.createElement('input',{className:'topic-input seo',type:'text',value:data.title,onChange:e=>onUpdate('title',e.target.value),placeholder:'Título del artículo de LinkedIn...'})
-    ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label',style:{color:'#1a2e3a'}},'Hashtags'),
-      React.createElement('input',{className:'topic-input seo',type:'text',value:data.kw||'',onChange:e=>onUpdate('kw',e.target.value),placeholder:'#hashtag1 #hashtag2 #hashtag3'})
-    ),
-    React.createElement('div',null,
-      React.createElement('label',{className:'field-label',style:{color:'#1a2e3a'}},'Texto del artículo'),
-      React.createElement('textarea',{className:'post-textarea',style:{borderColor:'rgba(221,222,221,.8)'},value:data.texto||'',onChange:e=>onUpdate('texto',e.target.value),placeholder:'Redacta aquí el artículo o post de LinkedIn...'})
-    ),
-    React.createElement('div',{className:'seo-links-row'},
+    editing&&confirming&&React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}}),
+
+    // ── MODO EDICIÓN (agencia)
+    editing&&React.createElement('div',{className:'li-form'},
       React.createElement('div',null,
-        React.createElement('label',{className:'field-label',style:{color:'#1a2e3a'}},'Enlace a la publicación en LinkedIn'),
-        React.createElement(UrlInput,{value:data.linkArticulo||'',onChange:v=>onUpdate('linkArticulo',v),placeholder:'https://lorenzoarquitectos.es/blog/...',className:'link-input seo',variant:'seo'})
+        React.createElement('label',{className:'field-label'},'Título del artículo'),
+        React.createElement('input',{className:'topic-input seo',type:'text',value:data.title||'',onChange:e=>onUpdate('title',e.target.value),placeholder:'Título del artículo de LinkedIn...'})
       ),
       React.createElement('div',null,
-        React.createElement('label',{className:'field-label',style:{color:'#1a2e3a'}},'Fecha de publicación'),
-        React.createElement('input',{className:'date-input',style:{borderColor:'rgba(221,222,221,.8)'},type:'date',value:data.date||'',onChange:e=>onUpdate('date',e.target.value)})
-      )
+        React.createElement('label',{className:'field-label'},'Texto del artículo'),
+        React.createElement('div',{className:'li-hint'},'Separa los párrafos con una línea en blanco. Las líneas que empiecen por "-" se mostrarán como lista.'),
+        React.createElement('textarea',{className:'post-textarea li-textarea',value:data.texto||'',onChange:e=>onUpdate('texto',e.target.value),placeholder:'Redacta aquí el artículo o post de LinkedIn...'})
+      ),
+      React.createElement('div',null,
+        React.createElement('label',{className:'field-label'},'Hashtags'),
+        React.createElement('input',{className:'topic-input seo',type:'text',value:data.kw||'',onChange:e=>onUpdate('kw',e.target.value),placeholder:'#hashtag1 #hashtag2 #hashtag3'})
+      ),
+      React.createElement('div',{className:'seo-links-row'},
+        React.createElement('div',null,
+          React.createElement('label',{className:'field-label'},'Enlace a la publicación en LinkedIn'),
+          React.createElement(UrlInput,{value:data.linkArticulo||'',onChange:v=>onUpdate('linkArticulo',v),placeholder:'https://www.linkedin.com/...',className:'link-input seo',variant:'seo'})
+        ),
+        React.createElement('div',null,
+          React.createElement('label',{className:'field-label'},'Fecha de publicación'),
+          React.createElement('input',{className:'date-input',type:'date',value:data.date||'',onChange:e=>onUpdate('date',e.target.value)})
+        )
+      ),
+      React.createElement('button',{className:'li-done-btn',onClick:function(){setEditing(false);}},'👁 Ver como lo verá el cliente')
     ),
-    // CORRECCIONES DEL CLIENTE
-    React.createElement('div',{className:'corr-section'},
+
+    // ── MODO LECTURA (cliente)
+    !editing&&React.createElement('div',{className:'li-read'},
+      vacio
+        ?React.createElement('div',{className:'li-empty'},'Este artículo aún no tiene contenido. Pulsa "Editar texto" para redactarlo.')
+        :React.createElement('article',{className:'li-article'},
+            React.createElement('h2',{className:'li-h2'},data.title||'Sin título'),
+            (fechaTxt||data.linkArticulo)&&React.createElement('div',{className:'li-meta'},
+              fechaTxt&&React.createElement('span',null,'📅 '+fechaTxt),
+              data.linkArticulo&&React.createElement('a',{href:data.linkArticulo,target:'_blank',rel:'noopener'},'🔗 Ver publicación en LinkedIn')
+            ),
+            React.createElement('div',{className:'li-body'},liRenderTexto(data.texto)),
+            hashtags.length>0&&React.createElement('div',{className:'li-tags'},hashtags.map(function(h,i){return React.createElement('span',{key:i,className:'li-tag'},h);}))
+          ),
+      !vacio&&data.status!=='aprobado'&&React.createElement('div',{className:'li-validar'},
+        React.createElement('div',{className:'li-validar-txt'},
+          React.createElement('strong',null,'¿Das el visto bueno a este artículo?'),
+          React.createElement('span',null,'Si quieres cambiar algo, anótalo abajo en "Cambios que quiero" y pulsa "Pedir cambios".')
+        ),
+        React.createElement('div',{className:'li-validar-btns'},
+          React.createElement('button',{className:'li-btn-ok',onClick:function(){selectStatus('aprobado');}},'✅ Aprobar artículo'),
+          React.createElement('button',{className:'li-btn-cambios',onClick:function(){selectStatus('cambios');}},'✏️ Pedir cambios')
+        )
+      ),
+      !editing&&confirming&&React.createElement('div',{style:{maxWidth:720,margin:'0 auto',width:'100%'}},React.createElement(ConfirmRow,{confirming,nameInput,setNameInput,onConfirm:handleConfirm,onCancel:function(){setConfirming(null);setNameInput('');}})),
+      !vacio&&data.status==='aprobado'&&React.createElement('div',{className:'li-aprobado'},'✅ Artículo aprobado',data.approvedBy?' por '+data.approvedBy:'',data.approvedAt?' · '+data.approvedAt:'')
+    ),
+
+    // CAMBIOS QUE QUIERE EL CLIENTE
+    React.createElement('div',{className:'corr-section li-corr'},
       React.createElement('div',{className:'corr-header'},
-        React.createElement('span',{className:'corr-title'},'✏️ Correcciones del cliente'),
+        React.createElement('span',{className:'corr-title'},'✏️ Cambios que quiero en este artículo'),
         correcciones.length>0&&React.createElement('span',{className:'corr-badge'+(pendientes===0?' done':'')},
-          pendientes>0?pendientes+' pendiente'+(pendientes>1?'s':''):'✓ Todas aplicadas')
+          pendientes>0?pendientes+' pendiente'+(pendientes>1?'s':''):'✓ Todos aplicados')
       ),
+      correcciones.length===0&&React.createElement('div',{className:'li-hint'},'Ejemplo: "En el segundo párrafo, cambia la cifra por 25 %" o "Quita la última frase".'),
       correcciones.map(function(c){
         return React.createElement('div',{key:c.id,className:'corr-item'+(c.done?' done':'')},
           React.createElement('button',{className:'corr-check-btn'+(c.done?' done':''),onClick:function(){toggleCorr(c.id);}},c.done?'✓ Hecho':'Hecho'),
@@ -3544,7 +3618,7 @@ function LinkedInArticleCard({data,onUpdate,onDelete,onApprove}){
       ),
       React.createElement('div',{className:'corr-add-row'},
         React.createElement('input',{className:'corr-input',type:'text',value:newCorr,
-          placeholder:'Añadir corrección del cliente...',
+          placeholder:'Escribe el cambio que quieres y pulsa Enter...',
           onChange:function(e){setNewCorr(e.target.value);},
           onKeyDown:function(e){if(e.key==='Enter')addCorreccion();}}),
         React.createElement('button',{className:'corr-add-btn',onClick:addCorreccion},'+ Añadir')
@@ -3553,6 +3627,29 @@ function LinkedInArticleCard({data,onUpdate,onDelete,onApprove}){
   );
 }
 
+function liRenderTexto(t){
+  const RE=/^\s*([-•*]|\d+[.)])\s+/;
+  const blocks=String(t||'').replace(/\r/g,'').split(/\n\s*\n/);
+  const out=[];
+  blocks.forEach(function(b,i){
+    const lines=b.split('\n').filter(function(l){return l.trim();});
+    if(!lines.length)return;
+    let run=[],runList=null;
+    function flush(){
+      if(!run.length)return;
+      if(runList){out.push(React.createElement('ul',{key:out.length,className:'li-ul'},run.map(function(l,j){return React.createElement('li',{key:j},l.replace(RE,''));})));}
+      else{const parts=[];run.forEach(function(l,j){if(j)parts.push(React.createElement('br',{key:'b'+j}));parts.push(l);});out.push(React.createElement('p',{key:out.length,className:'li-p'},parts));}
+      run=[];
+    }
+    lines.forEach(function(l){
+      const isL=RE.test(l);
+      if(runList!==null&&isL!==runList)flush();
+      runList=isL;run.push(l);
+    });
+    flush();
+  });
+  return out;
+}
 
 function LinkedInSection({articles,onUpdateArticle,onAddArticle,onDeleteArticle,onApprove}){
   return React.createElement('div',{className:'seo-body'},
